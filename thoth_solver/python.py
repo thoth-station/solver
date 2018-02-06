@@ -72,7 +72,7 @@ def get_package_names(requirements):
     return package_names
 
 
-def get_pipdeptree(pipdeptree_bin, package_names):
+def get_pipdeptree(pipdeptree_bin, package_names, exclude_packages):
     """Get pip dependency tree by executing pipdeptree tool."""
     cmd = '{} --json --packages {}'.format(pipdeptree_bin, ','.join(package_names))
     _LOGGER.debug("Obtaining pip dependency tree using: %r", cmd)
@@ -88,19 +88,25 @@ def get_pipdeptree(pipdeptree_bin, package_names):
     pipdeptree_required = 'pipdeptree' in package_names
     for entry in output:
 
+        result_dependencies = []
         entry['package'].pop('installed_version')
         for dependency in entry['dependencies']:
+            if dependency['package_name'] in exclude_packages:
+                continue
+
             dependency.pop('installed_version')
+            result_dependencies.append(dependency)
             if dependency['key'] == 'pipdeptree':
                 pipdeptree_required = True
 
+        entry['dependencies'] = result_dependencies
         if entry['package']['key'] == 'pipdeptree':
             # We will append pipdeptree if it is actually a dependency of some package or if required explicitly.
             pipdeptree_entry = entry
             continue
 
-        # TODO: excluded packages
-        result.append(entry)
+        if entry['package']['package_name'] not in exclude_packages:
+            result.append(entry)
 
     if pipdeptree_required:
         result.append(pipdeptree_entry)
@@ -122,8 +128,10 @@ def resolve_package_versions(dependency_tree, ignore_version_ranges, index_url):
                 pop(dependency['package_name'])
 
 
-def get_all_locked_stacks(dependency_tree, index_url=None):
+def get_all_locked_stacks(dependency_tree, index_url=None, exclude_packages=None):
     """Get all stacks with full locked dependencies."""
+    exclude_packages = exclude_packages or {}
+
     packages = {}
     for entry in dependency_tree:
         for dependency in entry['dependencies']:
@@ -141,6 +149,9 @@ def get_all_locked_stacks(dependency_tree, index_url=None):
     solver = get_ecosystem_solver('pypi', fetcher_kwargs={'fetch_url': index_url})
     for entry in dependency_tree:
         package_name = entry['package']['key']
+        if package_name in exclude_packages:
+            continue
+
         if package_name not in packages:
             # TODO: excluded packages
             packages[package_name] = solver.solve([package_name], all_versions=True).pop(package_name)
@@ -155,13 +166,16 @@ def get_all_locked_stacks(dependency_tree, index_url=None):
     return itertools.product(*all_requirements)
 
 
-def _do_work(requirements, ignore_version_ranges=False, index_url=None, python_version=3, tree_only=False):
+def _do_work(requirements, ignore_version_ranges=False, index_url=None, python_version=3,
+             tree_only=False, exclude_packages=None):
     """Common code abstracted for tree() and and resolve() functions."""
     assert python_version in (2, 3), "Unknown Python version"
+    exclude_packages = exclude_packages or {}
 
     with virtualenv(python_version) as venv_bin:
         install_requirements(os.path.join(venv_bin, 'pip'), requirements, index_url)
-        dependency_tree = get_pipdeptree(os.path.join(venv_bin, 'pipdeptree'), get_package_names(requirements))
+        dependency_tree = get_pipdeptree(os.path.join(venv_bin, 'pipdeptree'), get_package_names(requirements),
+                                         exclude_packages)
         resolve_package_versions(dependency_tree, ignore_version_ranges, index_url)
 
         if tree_only:
@@ -171,23 +185,25 @@ def _do_work(requirements, ignore_version_ranges=False, index_url=None, python_v
         return list(get_all_locked_stacks(dependency_tree, index_url))
 
 
-def tree(requirements, ignore_version_ranges=False, index_url=None, python_version=3):
+def tree(requirements, ignore_version_ranges=False, index_url=None, python_version=3, exclude_packages=None):
     """Get tree-like structure of dependencies specified in requirements."""
     return _do_work(
         requirements,
         ignore_version_ranges=ignore_version_ranges,
         index_url=index_url,
         python_version=python_version,
-        tree_only=True
+        tree_only=True,
+        exclude_packages=exclude_packages or {},
     )
 
 
-def resolve(requirements, ignore_version_ranges=False, index_url=None, python_version=3):
+def resolve(requirements, ignore_version_ranges=False, index_url=None, python_version=3, exclude_packages=None):
     """Get all stacks that are possible for the given requirements specification."""
     return _do_work(
         requirements,
         ignore_version_ranges=ignore_version_ranges,
         index_url=index_url,
         python_version=python_version,
-        tree_only=False
+        tree_only=False,
+        exclude_packages=exclude_packages or {},
     )

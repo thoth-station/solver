@@ -77,7 +77,10 @@ def cli(ctx=None, verbose=0, no_color=True):
               help="Set Python interpreter version to be used.")
 @click.option('--tree-only', '-t', is_flag=True,
               help="Do not create stacks, print dependency tree instead with specified versions.")
-def pypi(requirements, ignore_version_ranges, index, python_version, tree_only):
+@click.option('--exclude-packages', '-e', type=str, metavar='PKG1,PKG2',
+              help="A comma separated list of packages that should be excluded from the final listing.")
+def pypi(requirements, ignore_version_ranges=False, index=None, python_version=3,
+         tree_only=False, exclude_packages=None):
     """Manipulate with dependency requirements using PyPI."""
     requirements = [requirement.strip() for requirement in requirements.read().split('\n')]
 
@@ -86,14 +89,16 @@ def pypi(requirements, ignore_version_ranges, index, python_version, tree_only):
             requirements,
             ignore_version_ranges=ignore_version_ranges,
             index_url=index,
-            python_version=int(python_version)
+            python_version=int(python_version),
+            exclude_packages=set(map(str.strip, (exclude_packages or '').split(',')))
         )
     else:
         result = resolve_pypi(
             requirements,
             ignore_version_ranges=ignore_version_ranges,
             index_url=index,
-            python_version=int(python_version)
+            python_version=int(python_version),
+            exclude_packages=set(map(str.strip, (exclude_packages or '').split(',')))
         )
 
     _print_command_result(result)
