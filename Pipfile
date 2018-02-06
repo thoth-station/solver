@@ -1,0 +1,19 @@
+[[source]]
+
+url = "https://pypi.python.org/simple"
+verify_ssl = true
+name = "pypi"
+
+
+[packages]
+
+requests = "*"
+click = "*"
+daiquiri = "*"
+rainbow-logging-handler = "*"
+"delegator.py" = "*"
+pip = "*"
+
+
+[dev-packages]
+
