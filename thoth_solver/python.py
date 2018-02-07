@@ -124,8 +124,7 @@ def resolve_package_versions(dependency_tree, ignore_version_ranges, index_url):
                 requirement += dependency['required_version']
 
             # TODO: add possibility to specify version range explicitly
-            dependency['resolved_versions'] = solver.solve([requirement], all_versions=True).\
-                pop(dependency['package_name'])
+            dependency['resolved_versions'] = list(solver.solve([requirement], all_versions=True).values())[0]
 
 
 def get_all_locked_stacks(dependency_tree, index_url=None, exclude_packages=None):
