@@ -1,17 +1,22 @@
 #!/usr/bin/env python3
 """Thoth-solver CLI."""
 
+import datetime
 import json
+import platform
 import sys
 import typing
 
 import click
 import logging
+import requests
 from rainbow_logging_handler import RainbowLoggingHandler
 
 from thoth_solver import __version__ as thoth_solver_version
 from thoth_solver.python import resolve as resolve_pypi
 from thoth_solver.python import tree as tree_pypi
+
+_LOG = logging.getLogger(__name__)
 
 
 def _setup_logging(verbose, no_color):
@@ -40,15 +45,38 @@ def _print_version(ctx, _, value):
     ctx.exit()
 
 
-def _print_command_result(result: typing.Union[dict, list], pretty=True) -> None:
-    """Print results, nicely if requested."""
+def _print_command_result(result: typing.Union[dict, list], output: str = None,
+                          pretty: bool = True, metadata: dict = None) -> None:
+    """Print or submit results, nicely if requested."""
+    metadata = metadata or {}
+    metadata['version'] = thoth_solver_version
+    metadata['datetime'] = datetime.datetime.now().isoformat()
+    metadata['hostname'] = platform.node()
+    metadata['analyzer'] = __name__.split('.')[0]
+
+    content = {
+        'result': result,
+        'metadata': metadata
+    }
+
+    if isinstance(output, str) and output.startswith(('http://', 'https://')):
+        _LOG.info("Submitting results to %r", output)
+        requests.post(output, json=content)
+        return
+
     kwargs = {}
     if pretty:
         kwargs['sort_keys'] = True
         kwargs['separators'] = (',', ': ')
         kwargs['indent'] = 2
 
-    click.echo("{!s}".format(json.dumps(result, **kwargs)))
+    content = json.dumps(content, **kwargs)
+    if output is None or output == '-':
+        sys.stdout.write(content)
+    else:
+        _LOG.info("Writing results to %r", output)
+        with open(output, 'w') as output_file:
+            output_file.write(content)
 
 
 @click.group()
@@ -83,6 +111,7 @@ def pypi(requirements, ignore_version_ranges=False, index=None, python_version=3
          tree_only=False, exclude_packages=None):
     """Manipulate with dependency requirements using PyPI."""
     requirements = [requirement.strip() for requirement in requirements.read().split('\n')]
+    metadata = locals()
 
     if tree_only:
         result = tree_pypi(
@@ -101,7 +130,7 @@ def pypi(requirements, ignore_version_ranges=False, index=None, python_version=3
             exclude_packages=set(map(str.strip, (exclude_packages or '').split(',')))
         )
 
-    _print_command_result(result)
+    _print_command_result(result, metadata=metadata)
 
 
 if __name__ == '__main__':
