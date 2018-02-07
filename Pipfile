@@ -13,6 +13,7 @@ daiquiri = "*"
 rainbow-logging-handler = "*"
 "delegator.py" = "*"
 pip = "*"
+virtualenv = "*"
 
 
 [dev-packages]
