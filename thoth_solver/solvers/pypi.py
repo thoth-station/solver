@@ -117,8 +117,6 @@ class PypiDependencyParser(DependencyParser):
                 specs = [_extract_op_version(spec) for spec in requirements.specifier]
                 if len(specs) == 0:
                     specs = [('>=', '0.0.0')]
-                elif len(specs) > 1:
-                    specs = [specs]
                 return specs
 
         # create a temporary file and store the spec there since
