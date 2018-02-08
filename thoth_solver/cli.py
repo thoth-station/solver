@@ -110,7 +110,7 @@ def cli(ctx=None, verbose=0, no_color=True):
 def pypi(requirements, ignore_version_ranges=False, index=None, python_version=3,
          tree_only=False, exclude_packages=None):
     """Manipulate with dependency requirements using PyPI."""
-    requirements = [requirement.strip() for requirement in requirements.read().split('\n')]
+    requirements = [requirement.strip() for requirement in requirements.read().split('\n') if requirement]
     metadata = locals()
 
     if tree_only:
