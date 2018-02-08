@@ -74,7 +74,7 @@ class PypiDependencyParser(DependencyParser):
     """Pypi Dependency parsing."""
 
     @staticmethod
-    def _parse_python(spec):
+    def parse_python(spec):
         """Parse PyPI specification of a single dependency.
 
         :param spec: str, for example "Django>=1.5,<1.8"
@@ -131,7 +131,7 @@ class PypiDependencyParser(DependencyParser):
 
     def parse(self, specs):
         """Parse specs."""
-        return [self._parse_python(s) for s in specs]
+        return [self.parse_python(s) for s in specs]
 
     @staticmethod
     def compose(deps):

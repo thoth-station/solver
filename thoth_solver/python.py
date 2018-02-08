@@ -11,7 +11,7 @@ import delegator
 
 from .utils import tempdir
 from .solvers import get_ecosystem_solver
-
+from .solvers import PypiDependencyParser
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -51,25 +51,6 @@ def install_requirements(pip_bin, requirements, index_url=None):
     _LOGGER.debug("Installing pipdeptree into virtual environment: %s", command.out)
     if command.return_code != 0:
         raise RuntimeError("Failed to install pipdeptree into virtual environment: {}".format(command.err))
-
-
-def get_package_names(requirements):
-    """Get package names from a requirement specification."""
-    # Note that the order is significant - '===' should precede '=='
-    version_specifiers = ('===', '==', '<=', '>=', '!=', '~=', '>', '<')
-    package_names = []
-
-    for requirement in requirements:
-        for version_specifier in version_specifiers:
-            package_name = requirement.split(version_specifier)
-            if len(package_name) == 2:
-                package_names.append(package_name[0])
-                break
-        else:
-            # There was no version specifier, but package name only.
-            package_names.append(requirement)
-
-    return package_names
 
 
 def get_pipdeptree(pipdeptree_bin, package_names, exclude_packages):
@@ -127,7 +108,7 @@ def resolve_package_versions(dependency_tree, ignore_version_ranges, index_url):
             dependency['resolved_versions'] = list(solver.solve([requirement], all_versions=True).values())[0]
 
 
-def get_all_locked_stacks(dependency_tree, index_url=None, exclude_packages=None):
+def get_all_locked_stacks(dependency_tree, requirements_text=[], index_url=None, exclude_packages=None):
     """Get all stacks with full locked dependencies."""
     exclude_packages = exclude_packages or {}
 
@@ -152,8 +133,14 @@ def get_all_locked_stacks(dependency_tree, index_url=None, exclude_packages=None
             continue
 
         if package_name not in packages:
-            # TODO: excluded packages
-            packages[package_name] = solver.solve([package_name], all_versions=True).pop(package_name)
+            dep_spec = ''
+            # If the given package was explicitly specified with the given version range,
+            # respect it in the final output.
+            for requirement in requirements_text:
+                if package_name == requirement[0]:
+                    dep_spec = requirement[1]
+                    break
+            packages[package_name] = solver.solve([package_name + dep_spec], all_versions=True).pop(package_name)
 
     all_requirements = []
     for package_name, versions in packages.items():
@@ -162,7 +149,12 @@ def get_all_locked_stacks(dependency_tree, index_url=None, exclude_packages=None
             all_package_requirements.append("{}=={}\n".format(package_name, version))
         all_requirements.append(all_package_requirements)
 
-    return itertools.product(*all_requirements)
+    return {package_name: versions for package_name, versions in packages.items()}
+
+
+def get_dependency_specification(dep_spec):
+    """Get string representation of dependency specification as provided by PypiDependencyParser."""
+    return ",".join(dep_range[0] + dep_range[1] for dep_range in dep_spec)
 
 
 def _do_work(requirements, ignore_version_ranges=False, index_url=None, python_version=3,
@@ -170,10 +162,12 @@ def _do_work(requirements, ignore_version_ranges=False, index_url=None, python_v
     """Common code abstracted for tree() and and resolve() functions."""
     assert python_version in (2, 3), "Unknown Python version"
     exclude_packages = exclude_packages or {}
+    requirements = [PypiDependencyParser.parse_python(requirement) for requirement in requirements]
+    requirements_text = [(dep.name, get_dependency_specification(dep.spec)) for dep in requirements]
 
     with virtualenv(python_version) as venv_bin:
-        install_requirements(os.path.join(venv_bin, 'pip'), requirements, index_url)
-        dependency_tree = get_pipdeptree(os.path.join(venv_bin, 'pipdeptree'), get_package_names(requirements),
+        install_requirements(os.path.join(venv_bin, 'pip'), (req[0] + req[1] for req in requirements_text), index_url)
+        dependency_tree = get_pipdeptree(os.path.join(venv_bin, 'pipdeptree'), [req.name for req in requirements],
                                          exclude_packages)
         resolve_package_versions(dependency_tree, ignore_version_ranges, index_url)
 
@@ -181,7 +175,7 @@ def _do_work(requirements, ignore_version_ranges=False, index_url=None, python_v
             return dependency_tree
 
         _LOGGER.debug("Resolved package versions: %s", json.dumps(dependency_tree))
-        return list(get_all_locked_stacks(dependency_tree, index_url))
+        return get_all_locked_stacks(dependency_tree, requirements_text, index_url)
 
 
 def tree(requirements, ignore_version_ranges=False, index_url=None, python_version=3, exclude_packages=None):
