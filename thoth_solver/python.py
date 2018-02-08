@@ -2,7 +2,6 @@
 
 from contextlib import contextmanager
 import datetime
-import itertools
 import json
 import logging
 import os
