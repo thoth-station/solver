@@ -72,7 +72,9 @@ def _print_command_result(result: typing.Union[dict, list], output: str = None,
 
     if isinstance(output, str) and output.startswith(('http://', 'https://')):
         _LOG.info("Submitting results to %r", output)
-        requests.post(output, json=content)
+        response = requests.post(output, json=content)
+        response.raise_for_status()
+        _LOG.info(response.text)
         return
 
     kwargs = {}
