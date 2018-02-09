@@ -28,11 +28,11 @@ class _CommandError(RuntimeError):
 
     @property
     def stdout(self):
-        return self.command.stdout
+        return self.command.out
 
     @property
     def stderr(self):
-        return self.command.stderr
+        return self.command.err
 
     @property
     def return_code(self):
@@ -47,7 +47,7 @@ class _CommandError(RuntimeError):
             'stdout': self.stdout,
             'stderr': self.stderr,
             'return_code': self.return_code,
-            'command': self.command,
+            'command': self.command.cmd,
             'timeout': self.timeout,
             'message': str(self)
         }
