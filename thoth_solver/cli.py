@@ -91,7 +91,7 @@ def _print_command_result(result: typing.Union[dict, list], output: str = None,
 
 @click.group()
 @click.pass_context
-@click.option('-v', '--verbose', is_flag=True,
+@click.option('-v', '--verbose', is_flag=True, envvar='THOTH_SOLVER_DEBUG',
               help="Be verbose about what's going on.")
 @click.option('--version', is_flag=True, is_eager=True, callback=_print_version, expose_value=False,
               help="Print solver version and exit.")
@@ -104,12 +104,14 @@ def cli(ctx=None, verbose=0, no_color=True):
     _setup_logging(verbose, no_color)
 
 
+# TODO: transitive?
 @cli.command()
 @click.option('--requirements', '-r', default='-', type=click.File(), show_default=True,
+              envvar='THOTH_SOLVER_PACKAGES',
               help="Requirements file to be solved.")
 @click.option('--index', '-i', type=str,
               help="Python index to be used when resolving version ranges.")
-@click.option('--output', '-o', type=str, envvar='THOTH_SOLVER_OUTPUT', default=None,
+@click.option('--output', '-o', type=str, envvar='THOTH_SOLVER_OUTPUT', default='-',
               help="Output file or remote API to print results to, in case of URL a POST request is issued.")
 @click.option('--no-pretty', is_flag=True,
               help="Do not print results nicely.")
@@ -119,7 +121,6 @@ def cli(ctx=None, verbose=0, no_color=True):
               help="A comma separated list of packages that should be excluded from the final listing.")
 def pypi(requirements, index=None, python_version=3, exclude_packages=None, output=None, no_pretty=False):
     """Manipulate with dependency requirements using PyPI."""
-    # TODO: output
     requirements = [requirement.strip() for requirement in requirements.read().split('\n') if requirement]
     arguments = locals()
 
