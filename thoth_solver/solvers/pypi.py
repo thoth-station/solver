@@ -116,6 +116,8 @@ class PypiDependencyParser(DependencyParser):
             elif hasattr(requirements, 'specifier'):
                 specs = [_extract_op_version(spec) for spec in requirements.specifier]
                 if len(specs) == 0:
+                    # TODO: I'm not sure with this one
+                    # we should probably return None instead and let pip deal with this
                     specs = [('>=', '0.0.0')]
                 return specs
 

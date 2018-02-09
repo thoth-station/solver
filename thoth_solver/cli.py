@@ -8,13 +8,13 @@ import sys
 import typing
 
 import click
+import distro
 import logging
 import requests
 from rainbow_logging_handler import RainbowLoggingHandler
 
 from thoth_solver import __version__ as thoth_solver_version
 from thoth_solver.python import resolve as resolve_pypi
-from thoth_solver.python import tree as tree_pypi
 
 _LOG = logging.getLogger(__name__)
 
@@ -49,10 +49,20 @@ def _print_command_result(result: typing.Union[dict, list], output: str = None,
                           pretty: bool = True, metadata: dict = None) -> None:
     """Print or submit results, nicely if requested."""
     metadata = metadata or {}
-    metadata['version'] = thoth_solver_version
+    metadata['analyzer'] = __name__.split('.')[0]
+    metadata['analyzer_version'] = thoth_solver_version
     metadata['datetime'] = datetime.datetime.now().isoformat()
     metadata['hostname'] = platform.node()
-    metadata['analyzer'] = __name__.split('.')[0]
+    metadata['distribution'] = distro.info()
+    metadata['python'] = {
+        'major': sys.version_info.major,
+        'minor': sys.version_info.minor,
+        'micro': sys.version_info.micro,
+        'releaselevel': sys.version_info.releaselevel,
+        'serial': sys.version_info.serial,
+        'api_version': sys.api_version,
+        'implementation_name': sys.implementation.name
+    }
 
     content = {
         'result': result,
@@ -97,40 +107,26 @@ def cli(ctx=None, verbose=0, no_color=True):
 @cli.command()
 @click.option('--requirements', '-r', default='-', type=click.File(), show_default=True,
               help="Requirements file to be solved.")
-@click.option('--ignore-version-ranges', '-i', is_flag=True,
-              help="Resolve to all version instead of the ones that match version ranges.")
 @click.option('--index', '-i', type=str,
               help="Python index to be used when resolving version ranges.")
 @click.option('--python-version', '-p', type=click.Choice(['2', '3']), default='3', show_default=True,
               help="Set Python interpreter version to be used.")
-@click.option('--tree-only', '-t', is_flag=True,
-              help="Do not create stacks, print dependency tree instead with specified versions.")
 @click.option('--exclude-packages', '-e', type=str, metavar='PKG1,PKG2',
               help="A comma separated list of packages that should be excluded from the final listing.")
-def pypi(requirements, ignore_version_ranges=False, index=None, python_version=3,
-         tree_only=False, exclude_packages=None):
+def pypi(requirements, index=None, python_version=3, exclude_packages=None):
     """Manipulate with dependency requirements using PyPI."""
+    # TODO: output
     requirements = [requirement.strip() for requirement in requirements.read().split('\n') if requirement]
-    metadata = locals()
+    arguments = locals()
 
-    if tree_only:
-        result = tree_pypi(
-            requirements,
-            ignore_version_ranges=ignore_version_ranges,
-            index_url=index,
-            python_version=int(python_version),
-            exclude_packages=set(map(str.strip, (exclude_packages or '').split(',')))
-        )
-    else:
-        result = resolve_pypi(
-            requirements,
-            ignore_version_ranges=ignore_version_ranges,
-            index_url=index,
-            python_version=int(python_version),
-            exclude_packages=set(map(str.strip, (exclude_packages or '').split(',')))
-        )
+    result = resolve_pypi(
+        requirements,
+        index_url=index,
+        python_version=int(python_version),
+        exclude_packages=set(map(str.strip, (exclude_packages or '').split(',')))
+    )
 
-    _print_command_result(result, metadata=metadata)
+    _print_command_result(result, metadata={'arguments': arguments})
 
 
 if __name__ == '__main__':

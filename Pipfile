@@ -14,6 +14,7 @@ rainbow-logging-handler = "*"
 "delegator.py" = "*"
 pip = "*"
 virtualenv = "*"
+distro = "*"
 
 
 [dev-packages]
