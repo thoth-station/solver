@@ -3,6 +3,7 @@
 
 import datetime
 import json
+import os
 import platform
 import sys
 import typing
@@ -106,8 +107,7 @@ def cli(ctx=None, verbose=0, no_color=True):
 
 # TODO: transitive?
 @cli.command()
-@click.option('--requirements', '-r', default='-', type=click.File(), show_default=True,
-              envvar='THOTH_SOLVER_PACKAGES',
+@click.option('--requirements', '-r', type=click.File(), default=None,
               help="Requirements file to be solved.")
 @click.option('--index', '-i', type=str,
               help="Python index to be used when resolving version ranges.")
@@ -121,9 +121,17 @@ def cli(ctx=None, verbose=0, no_color=True):
               help="A comma separated list of packages that should be excluded from the final listing.")
 def pypi(requirements, index=None, python_version=3, exclude_packages=None, output=None, no_pretty=False):
     """Manipulate with dependency requirements using PyPI."""
-    requirements = [requirement.strip() for requirement in requirements.read().split('\n') if requirement]
-    arguments = locals()
+    if requirements is None:
+        requirements = [requirement.strip() for requirement in os.getenv('THOTH_SOLVER_PACKAGES', [])]
+    else:
+        requirements = [requirement.strip() for requirement in requirements.read().split('\n') if requirement]
 
+    if not requirements:
+        _LOG.error("No requirements specified via command line, no requirements available "
+                   "in THOTH_SOLVER_PACKAGES environment variable")
+        click.exit(1)
+
+    arguments = locals()
     result = resolve_pypi(
         requirements,
         index_url=index,
