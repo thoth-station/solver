@@ -109,11 +109,15 @@ def cli(ctx=None, verbose=0, no_color=True):
               help="Requirements file to be solved.")
 @click.option('--index', '-i', type=str,
               help="Python index to be used when resolving version ranges.")
+@click.option('--output', '-o', type=str, envvar='THOTH_SOLVER_OUTPUT', default=None,
+              help="Output file or remote API to print results to, in case of URL a POST request is issued.")
+@click.option('--no-pretty', is_flag=True,
+              help="Do not print results nicely.")
 @click.option('--python-version', '-p', type=click.Choice(['2', '3']), default='3', show_default=True,
               help="Set Python interpreter version to be used.")
 @click.option('--exclude-packages', '-e', type=str, metavar='PKG1,PKG2',
               help="A comma separated list of packages that should be excluded from the final listing.")
-def pypi(requirements, index=None, python_version=3, exclude_packages=None):
+def pypi(requirements, index=None, python_version=3, exclude_packages=None, output=None, no_pretty=False):
     """Manipulate with dependency requirements using PyPI."""
     # TODO: output
     requirements = [requirement.strip() for requirement in requirements.read().split('\n') if requirement]
@@ -126,7 +130,7 @@ def pypi(requirements, index=None, python_version=3, exclude_packages=None):
         exclude_packages=set(map(str.strip, (exclude_packages or '').split(',')))
     )
 
-    _print_command_result(result, metadata={'arguments': arguments})
+    _print_command_result(result, output=output or '-', pretty=not no_pretty, metadata={'arguments': arguments})
 
 
 if __name__ == '__main__':
