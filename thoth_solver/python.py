@@ -194,7 +194,9 @@ def resolve(requirements: typing.List[str], index_url: str=None, python_version:
             unresolved.append(requirement)
         else:
             for version in resolved_versions:
-                queue.append((dependency.name, version))
+                entry = (dependency.name, version)
+                packages_seen.add(entry)
+                queue.append(entry)
 
     environment_details = _get_environment_details(python_bin)
 
