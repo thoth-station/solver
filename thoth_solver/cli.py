@@ -131,7 +131,7 @@ def pypi(requirements, index=None, python_version=3, exclude_packages=None, outp
     if not requirements:
         _LOG.error("No requirements specified via command line, no requirements available "
                    "in THOTH_SOLVER_PACKAGES environment variable")
-        click.exit(1)
+        sys.exit(1)
 
     arguments = locals()
     result = resolve_pypi(
