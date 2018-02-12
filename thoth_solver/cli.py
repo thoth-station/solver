@@ -124,7 +124,8 @@ def cli(ctx=None, verbose=0, no_color=True):
 def pypi(requirements, index=None, python_version=3, exclude_packages=None, output=None, no_pretty=False):
     """Manipulate with dependency requirements using PyPI."""
     if requirements is None:
-        requirements = [requirement.strip() for requirement in os.getenv('THOTH_SOLVER_PACKAGES', "").split('\\n')]
+        requirements = [requirement.strip() for requirement in
+                        os.getenv('THOTH_SOLVER_PACKAGES', "").split('\\n') if requirement]
     else:
         requirements = [requirement.strip() for requirement in requirements.read().split('\n') if requirement]
 
