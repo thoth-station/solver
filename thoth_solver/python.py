@@ -177,7 +177,7 @@ def resolve(requirements: typing.List[str], index_url: str=None, python_version:
     python_bin = 'python3' if python_version == 3 else 'python2'
     packages_seen = set()
     packages = []
-    errors = {}
+    errors = []
     unresolved = []
     exclude_packages = exclude_packages or {}
     queue = deque()
@@ -208,32 +208,31 @@ def resolve(requirements: typing.List[str], index_url: str=None, python_version:
                 try:
                     package_info = _pipdeptree(python_bin, package_name)
                 except _CommandError as exc:
-                    if package_name not in errors:
-                        errors[package_name] = {}
-                    errors[package_name][package_version] = {
+                    errors.append({
+                        'package': package_name,
+                        'version': package_version,
                         'type': 'command_error',
                         'details': exc.as_dict()
-                    }
+                    })
                     continue
         except _CommandError as exc:
-            # TODO: errors in package_name
-            if package_name not in errors:
-                errors[package_name] = {}
-            errors[package_name][package_version] = {
+            errors.append({
+                'package_name': package_name,
+                'version': package_version,
                 'type': 'command_error',
                 'details': exc.as_dict()
-            }
+            })
             continue
 
         if package_info is None:
-            if package_name not in errors:
-                errors[package_name] = {}
-            errors[package_name][package_version] = {
+            errors.append({
+                'package_name': package_name,
+                'version': package_version,
                 'type': 'not_site_package',
                 'details': {
                     'message': 'Failed to get information about installed package, probably not site package'
                 }
-            }
+            })
             continue
 
         if package_info['package']['installed_version'] != package_version:
