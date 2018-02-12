@@ -155,7 +155,7 @@ def _resolve_versions(package_name: str, version_spec: str) -> typing.List[str]:
 
 
 def resolve(requirements: typing.List[str], index_url: str=None, python_version: int=3,
-            exclude_packages: set=None) -> dict:
+            exclude_packages: set=None, transitive: bool=True) -> dict:
     """Common code abstracted for tree() and and resolve() functions."""
     assert python_version in (2, 3), "Unknown Python version"
 
@@ -242,6 +242,10 @@ def resolve(requirements: typing.List[str], index_url: str=None, python_version:
                 packages[package_name] = {}
 
             dependencies = _filter_package_dependencies(package_info)
+            packages[package_name][package_version] = dependencies
+
+            if not transitive:
+                continue
 
             for dependency_name, dependency_range in dependencies.items():
                 resolved_versions = _resolve_versions(dependency_name, dependency_range)
@@ -251,10 +255,6 @@ def resolve(requirements: typing.List[str], index_url: str=None, python_version:
                     if (dependency_name not in packages or version not in packages[dependency_name]) \
                             and (dependency_name not in errors or version not in errors[dependency_name]):
                         queue.append((dependency_name, version))
-
-            packages[package_name][package_version] = dependencies
-
-            # We could uninstall the package here to save some disk space.
 
     return {
         'tree': packages,

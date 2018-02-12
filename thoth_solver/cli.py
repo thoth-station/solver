@@ -115,13 +115,16 @@ def cli(ctx=None, verbose=0, no_color=True):
               help="Python index to be used when resolving version ranges.")
 @click.option('--output', '-o', type=str, envvar='THOTH_SOLVER_OUTPUT', default='-',
               help="Output file or remote API to print results to, in case of URL a POST request is issued.")
-@click.option('--no-pretty', is_flag=True,
+@click.option('--no-pretty', '-P', is_flag=True,
               help="Do not print results nicely.")
 @click.option('--python-version', '-p', type=click.Choice(['2', '3']), default='3', show_default=True,
               help="Set Python interpreter version to be used.")
 @click.option('--exclude-packages', '-e', type=str, metavar='PKG1,PKG2',
               help="A comma separated list of packages that should be excluded from the final listing.")
-def pypi(requirements, index=None, python_version=3, exclude_packages=None, output=None, no_pretty=False):
+@click.option('--no-transitive', '-T', is_flag=True, envvar='THOTH_SOLVER_TRANSITIVE',
+              help="Do not check transitive dependencies, run only on provided requirements.")
+def pypi(requirements, index=None, python_version=3, exclude_packages=None, output=None,
+         no_transitive=True, no_pretty=False):
     """Manipulate with dependency requirements using PyPI."""
     if requirements is None:
         requirements = [requirement.strip() for requirement in
@@ -139,6 +142,7 @@ def pypi(requirements, index=None, python_version=3, exclude_packages=None, outp
         requirements,
         index_url=index,
         python_version=int(python_version),
+        transitive=not no_transitive,
         exclude_packages=set(map(str.strip, (exclude_packages or '').split(',')))
     )
 
