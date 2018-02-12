@@ -98,7 +98,7 @@ def _install_requirement(python_bin: str, package: str, version: str=None, index
     if not clean:
         return
 
-    _LOGGER.debug("Restoring previous environment setup after installation {}", )
+    _LOGGER.debug("Restoring previous environment setup after installation of %r", package)
 
     if previous_version:
         cmd = '{} -m pip install --force-reinstall --user ' \
