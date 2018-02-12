@@ -1,5 +1,6 @@
 """Dependency requirements solving for Python ecosystem."""
 
+from contextlib import contextmanager
 import json
 import logging
 import typing
@@ -66,15 +67,18 @@ def _get_environment_details(python_bin: str) -> list:
 
     command = delegator.run(cmd)
     if command.return_code != 0:
-        raise _CommandError("Failed to obtain information about running "
-                            "environment: {}".format(command.err), command=command)
+        error_msg = "Failed to obtain information about running environment: {}".format(command.err)
+        raise _CommandError(error_msg, command=command)
 
     output = json.loads(command.out)
     return [_filter_pipdeptree_entry(entry) for entry in output]
 
 
-def _install_requirement(python_bin: str, package: str, version: str=None, index_url: str=None) -> None:
+@contextmanager
+def _install_requirement(python_bin: str, package: str, version: str=None, index_url: str=None, clean: bool=True) -> None:
     """Install requirements specified using suggested pip binary."""
+    previous_version = _pipdeptree(python_bin, package)
+
     cmd = '{} -m pip install --force-reinstall --user --no-cache-dir --no-deps {}'.format(python_bin, package)
     if version:
         cmd += '=={}'.format(version)
@@ -85,7 +89,39 @@ def _install_requirement(python_bin: str, package: str, version: str=None, index
     command = delegator.run(cmd)
     _LOGGER.debug("Output of pip during installation: %s", command.out)
     if command.return_code != 0:
-        raise _CommandError("Failed to install requirement via pip: {}".format(command.err), command=command)
+        error_msg = "Failed to install requirement via pip: {}".format(command.err)
+        _LOGGER.error(error_msg)
+        raise _CommandError(error_msg, command=command)
+
+    yield
+
+    if not clean:
+        return
+
+    _LOGGER.debug("Restoring previous environment setup after installation {}", )
+
+    if previous_version:
+        cmd = '{} -m pip install --force-reinstall --user ' \
+              '--no-cache-dir --no-deps {}=={}'.format(python_bin,
+                                                       package,
+                                                       previous_version['package']['installed_version'])
+        _LOGGER.debug("Installing previous version %r of package %r", previous_version['package']['installed_version'])
+        command = delegator.run(cmd)
+
+        if command.return_code != 0:
+            _LOGGER.error("Failed to restore previous environment for package %r (installed version %r, "
+                          "previous version %r), the error not fatal but can affect future actions",
+                          package, version, previous_version['package']['installed_version'])
+            return
+    else:
+        _LOGGER.debug("Removing installed package %r", package)
+        cmd = '{} -m pip uninstall --yes {}'.format(python_bin, package)
+        command = delegator.run(cmd)
+
+        if command.return_code != 0:
+            _LOGGER.error("Failed to restore previous environment by removing package %r (installed version %r), "
+                          "the error not fatal but can affect future actions", package, version)
+            return
 
 
 def _pipdeptree(python_bin, package_name: str=None) -> typing.Optional[dict]:
@@ -95,8 +131,8 @@ def _pipdeptree(python_bin, package_name: str=None) -> typing.Optional[dict]:
     _LOGGER.debug("Obtaining pip dependency tree using: %r", cmd)
     command = delegator.run(cmd)
     if command.return_code != 0:
-        raise _CommandError("Failed to call pipdeptree to retrieve package information: {}".format(command.err),
-                            command=command)
+        error_msg = "Failed to call pipdeptree to retrieve package information: {}".format(command.err)
+        raise _CommandError(error_msg, command=command)
 
     output = json.loads(command.out)
 
@@ -160,32 +196,25 @@ def resolve(requirements: typing.List[str], index_url: str=None, python_version:
             for version in resolved_versions:
                 queue.append((dependency.name, version))
 
-    _install_requirement(python_bin, 'pipdeptree')
     environment_details = _get_environment_details(python_bin)
 
     while queue:
         package_name, package_version = queue.pop()
 
         try:
-            _install_requirement(
-                python_bin,
-                package_name,
-                package_version,
-                index_url
-            )
+            with _install_requirement(python_bin, package_name, package_version, index_url):
+                try:
+                    package_info = _pipdeptree(python_bin, package_name)
+                except _CommandError as exc:
+                    if package_name not in errors:
+                        errors[package_name] = {}
+                    errors[package_name][package_version] = {
+                        'type': 'command_error',
+                        'details': exc.as_dict()
+                    }
+                    continue
         except _CommandError as exc:
-            _LOGGER.error("Failed to install requirement %r in version %r", package_name, package_version)
-            if package_name not in errors:
-                errors[package_name] = {}
-            errors[package_name][package_version] = {
-                'type': 'command_error',
-                'details': exc.as_dict()
-            }
-            continue
-
-        try:
-            package_info = _pipdeptree(python_bin, package_name)
-        except _CommandError as exc:
+            # TODO: errors in package_name
             if package_name not in errors:
                 errors[package_name] = {}
             errors[package_name][package_version] = {

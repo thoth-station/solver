@@ -15,6 +15,7 @@ rainbow-logging-handler = "*"
 pip = "*"
 virtualenv = "*"
 distro = "*"
+pipdeptree = "*"
 
 
 [dev-packages]
