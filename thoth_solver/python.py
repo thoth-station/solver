@@ -1,17 +1,13 @@
 """Dependency requirements solving for Python ecosystem."""
 
-from contextlib import contextmanager
-import datetime
 import json
 import logging
-import os
 import typing
 
 import delegator
 
 from collections import deque
 
-from .utils import tempdir
 from .solvers import get_ecosystem_solver
 from .solvers import PypiDependencyParser
 
@@ -53,54 +49,37 @@ class _CommandError(RuntimeError):
         }
 
 
-def _get_virtualenv_details(venv_path: str) -> dict:
-    """Get information about created virtual environment where packages are installed."""
-    result = {}
+def _filter_pipdeptree_entry(entry: dict) ->dict:
+    """Filter and normalize the output of pipdeptree entry."""
+    entry['package_name'] = entry['package'].pop('package_name')
+    entry['installed_version'] = entry['package'].pop('installed_version')
+    entry.pop('package')
+    for dependency in entry['dependencies']:
+        dependency.pop('key', None)
 
-    venv_info = _pipdeptree(os.path.join(venv_path, 'bin', 'pipdeptree'))
-
-    for entry in venv_info:
-        package_name = entry['package']['package_name']
-        package_version = entry['package']['installed_version']
-        if package_name in result:
-            _LOGGER.error("Multiple versions of same package %r installed - version %r and %r,"
-                          "maybe bug in pipdeptree?", package_name, package_version, list(result[package_name].keys()))
-
-        result[package_name] = {}
-        result[package_name][package_version] = _filter_package_dependencies(entry)
-
-    return result
+    return entry
 
 
-@contextmanager
-def _virtualenv(python_version: int):
-    """Create a virtualenv in a temporary directory. Once context is left, all files inside virtualenv are discarded."""
-    with tempdir() as tempdir_path:
-        _LOGGER.debug("Creating virtual environment in %r", tempdir_path)
-        command = delegator.run('virtualenv -p {} venv'.format('python3' if python_version == 3 else 'python2'),
-                                timeout=datetime.timedelta(minutes=15).total_seconds())
-        _LOGGER.debug(command.out)
-        if command.return_code != 0:
-            raise _CommandError("Failed to create virtualenv: {}".format(command.err), command=command)
+def _get_environment_details(python_bin: str) -> list:
+    """Get information about packages in environment where packages get installed."""
+    cmd = '{} -m pipdeptree --json'.format(python_bin)
 
-        # Install pipdeptree into virtual environment so we can use it. Do not specify any version, if pipdeptree is a
-        # dependency of some requirement, it can be locked - reuse that version.
-        command = delegator.run('{} install pipdeptree'.format(os.path.join(tempdir_path, 'venv', 'bin', 'pip')))
-        _LOGGER.debug("Installing pipdeptree into virtual environment: %s", command.out)
-        if command.return_code != 0:
-            raise _CommandError("Failed to install pipdeptree into virtual environment: {}".format(command.err),
-                                command=command)
+    command = delegator.run(cmd)
+    if command.return_code != 0:
+        raise _CommandError("Failed to obtain information about running "
+                            "environment: {}".format(command.err), command=command)
 
-        # It's ok not to clear after yield, directory tree will be erased by tempdir()
-        yield os.path.join(tempdir_path, 'venv', 'bin'), _get_virtualenv_details(os.path.join(tempdir_path, 'venv'))
+    output = json.loads(command.out)
+    return [_filter_pipdeptree_entry(entry) for entry in output]
 
 
-def _install_requirement(pip_bin: str, package: str, version: str, index_url: str=None) -> None:
+def _install_requirement(python_bin: str, package: str, version: str=None, index_url: str=None) -> None:
     """Install requirements specified using suggested pip binary."""
-    cmd = '{} install --force-reinstall --no-cache-dir --no-deps '.format(pip_bin)
+    cmd = '{} -m pip install --force-reinstall --user --no-cache-dir --no-deps {}'.format(python_bin, package)
+    if version:
+        cmd += '=={}'.format(version)
     if index_url:
-        cmd += '--index-url "{}" '.format(index_url)
-    cmd += '{}=={}'.format(package, version)
+        cmd += ' --index-url "{}" '.format(index_url)
 
     _LOGGER.debug("Installing requirement via pip: %r" % cmd)
     command = delegator.run(cmd)
@@ -109,9 +88,9 @@ def _install_requirement(pip_bin: str, package: str, version: str, index_url: st
         raise _CommandError("Failed to install requirement via pip: {}".format(command.err), command=command)
 
 
-def _pipdeptree(pipdeptree_bin: str, package_name: str=None) -> typing.Optional[dict]:
+def _pipdeptree(python_bin, package_name: str=None) -> typing.Optional[dict]:
     """Get pip dependency tree by executing pipdeptree tool."""
-    cmd = '{} --json'.format(pipdeptree_bin)
+    cmd = '{} -m pipdeptree --json --user'.format(python_bin)
 
     _LOGGER.debug("Obtaining pip dependency tree using: %r", cmd)
     command = delegator.run(cmd)
@@ -159,7 +138,9 @@ def resolve(requirements: typing.List[str], index_url: str=None, python_version:
     """Common code abstracted for tree() and and resolve() functions."""
     assert python_version in (2, 3), "Unknown Python version"
 
-    packages = {}
+    python_bin = 'python3' if python_version == 3 else 'python2'
+    packages_seen = set()
+    packages = []
     errors = {}
     unresolved = []
     exclude_packages = exclude_packages or {}
@@ -179,86 +160,79 @@ def resolve(requirements: typing.List[str], index_url: str=None, python_version:
             for version in resolved_versions:
                 queue.append((dependency.name, version))
 
-    with _virtualenv(python_version) as (venv_bin, venv_details):
-        while queue:
-            package_name, package_version = queue.pop()
+    _install_requirement(python_bin, 'pipdeptree')
+    environment_details = _get_environment_details(python_bin)
 
-            try:
-                _install_requirement(
-                    os.path.join(venv_bin, 'pip'),
-                    package_name,
-                    package_version,
-                    index_url
-                )
-            except _CommandError as exc:
-                _LOGGER.error("Failed to install requirement %r in version %r", package_name, package_version)
-                if package_name not in errors or package_version not in errors[package_name]:
-                    if package_name not in errors:
-                        errors[package_name] = {}
-                    errors[package_name][package_version] = {
-                        'type': 'command_error',
-                        'details': exc.as_dict()
-                    }
-                continue
+    while queue:
+        package_name, package_version = queue.pop()
 
-            try:
-                package_info = _pipdeptree(os.path.join(venv_bin, 'pipdeptree'), package_name)
-            except _CommandError as exc:
-                if package_name not in errors:
-                    errors[package_name] = {}
-                errors[package_name][package_version] = {
-                    'type': 'command_error',
-                    'details': exc.as_dict()
+        try:
+            _install_requirement(
+                python_bin,
+                package_name,
+                package_version,
+                index_url
+            )
+        except _CommandError as exc:
+            _LOGGER.error("Failed to install requirement %r in version %r", package_name, package_version)
+            if package_name not in errors:
+                errors[package_name] = {}
+            errors[package_name][package_version] = {
+                'type': 'command_error',
+                'details': exc.as_dict()
+            }
+            continue
+
+        try:
+            package_info = _pipdeptree(python_bin, package_name)
+        except _CommandError as exc:
+            if package_name not in errors:
+                errors[package_name] = {}
+            errors[package_name][package_version] = {
+                'type': 'command_error',
+                'details': exc.as_dict()
+            }
+            continue
+
+        if package_info is None:
+            if package_name not in errors:
+                errors[package_name] = {}
+            errors[package_name][package_version] = {
+                'type': 'not_site_package',
+                'details': {
+                    'message': 'Failed to get information about installed package, probably not site package'
                 }
-                continue
+            }
+            continue
 
-            if package_info is None:
-                # FIXME: pipdeptree looks for packages only inside site-packages
-                # We should be fine with this approach for now, but there will be a need to fix
-                # this in future probably.
-                if package_name not in errors:
-                    errors[package_name] = {}
-                errors[package_name][package_version] = {
-                    'type': 'not_site_package',
-                    'details': {
-                        'message': 'Failed to get information about installed package, probably not site package'
-                    }
-                }
-                continue
+        if package_info['package']['installed_version'] != package_version:
+            _LOGGER.error("Requested to install version %r of package %r, but installed "
+                          "version is %r, error is not fatal",
+                          package_version, package_name, package_info['package']['installed_version'])
 
-            if package_info['package']['installed_version'] != package_version:
-                # FIXME: this can resolve in infinite loop if there will be some cyclic dependency
-                _LOGGER.error("Requested to install version %r of package %r, but installed "
-                              "version is %r, error is not fatal",
-                              package_version, package_name, package_info['package']['installed_version'])
-                package_version = package_info['package']['installed_version']
+        if package_info['package']['package_name'] != package_name:
+            _LOGGER.error("Requested to install package %r, but installed package name is %r, error is not fatal",
+                          package_name, package_info['package']['package_name'])
 
-            if package_info['package']['package_name'] != package_name:
-                _LOGGER.error("Requested to install package %r, but installed package name is %r, error is not fatal",
-                              package_name, package_info['package']['package_name'])
-                package_name = package_info['package']['package_name']
+        packages.append(_filter_pipdeptree_entry(package_info))
 
-            if package_name not in packages:
-                packages[package_name] = {}
+        if not transitive:
+            continue
 
-            dependencies = _filter_package_dependencies(package_info)
-            packages[package_name][package_version] = dependencies
+        for dependency in package_info['dependencies']:
+            dependency_name, dependency_range = dependency['package_name'], dependency['required_version']
+            resolved_versions = _resolve_versions(dependency_name, dependency_range)
 
-            if not transitive:
-                continue
-
-            for dependency_name, dependency_range in dependencies.items():
-                resolved_versions = _resolve_versions(dependency_name, dependency_range)
-
-                for version in resolved_versions:
-                    # Did we check this package already?
-                    if (dependency_name not in packages or version not in packages[dependency_name]) \
-                            and (dependency_name not in errors or version not in errors[dependency_name]):
-                        queue.append((dependency_name, version))
+            for version in resolved_versions:
+                # Did we check this package already?
+                entry = (dependency_name, version)
+                if entry not in packages_seen:
+                    packages_seen.add(entry)
+                    queue.append(entry)
 
     return {
         'tree': packages,
         'errors': errors,
         'unresolved': unresolved,
-        'virtualenv': venv_details
+        'environment': environment_details
     }
