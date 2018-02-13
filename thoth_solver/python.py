@@ -267,6 +267,7 @@ def resolve(requirements: typing.List[str], index_url: str=None, python_version:
             resolved_versions = _resolve_versions(dependency_name, dependency_range)
             _LOGGER.debug("Resolved versions for package %r with range specifier %r: %s",
                           dependency_name, dependency_range, resolved_versions)
+            dependency['resolved_versions'] = resolved_versions
 
             for version in resolved_versions:
                 # Did we check this package already?
