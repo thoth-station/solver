@@ -7,6 +7,7 @@ ENV \
 
 RUN \
  dnf update -y &&\
+ useradd thoth-user &&\
  mkdir -p ${THOTH_SOLVER_TMP_DIR}
 
 # Install thoth-solver itself
@@ -18,3 +19,5 @@ RUN \
  rm -rf ${THOTH_SOLVER_TMP_DIR} &&\
  unset THOTH_SOLVER_TMP_DIR &&\
  dnf clean all
+
+USER thoth-user
