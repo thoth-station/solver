@@ -259,22 +259,22 @@ def resolve(requirements: typing.List[str], index_url: str=None, python_version:
         entry['hash_type'] = _HASH_ALGORITHM
         packages.append(entry)
 
-        if not transitive:
-            continue
-
-        for dependency in package_info['dependencies']:
+        for dependency in entry['dependencies']:
             dependency_name, dependency_range = dependency['package_name'], dependency['required_version']
             resolved_versions = _resolve_versions(dependency_name, dependency_range)
             _LOGGER.debug("Resolved versions for package %r with range specifier %r: %s",
                           dependency_name, dependency_range, resolved_versions)
             dependency['resolved_versions'] = resolved_versions
 
+            if not transitive:
+                continue
+
             for version in resolved_versions:
                 # Did we check this package already?
-                entry = (dependency_name, version)
-                if entry not in packages_seen:
-                    packages_seen.add(entry)
-                    queue.append(entry)
+                seen_entry = (dependency_name, version)
+                if seen_entry not in packages_seen:
+                    packages_seen.add(seen_entry)
+                    queue.append(seen_entry)
 
     return {
         'tree': packages,
