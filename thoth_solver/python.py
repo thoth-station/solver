@@ -55,7 +55,7 @@ class _CommandError(RuntimeError):
 def _filter_pipdeptree_entry(entry: dict) ->dict:
     """Filter and normalize the output of pipdeptree entry."""
     entry['package_name'] = entry['package'].pop('package_name')
-    entry['installed_version'] = entry['package'].pop('installed_version')
+    entry['package_version'] = entry['package'].pop('installed_version')
     entry.pop('package')
     for dependency in entry['dependencies']:
         dependency.pop('key', None)
