@@ -59,6 +59,7 @@ def _filter_pipdeptree_entry(entry: dict) ->dict:
     entry.pop('package')
     for dependency in entry['dependencies']:
         dependency.pop('key', None)
+        dependency.pop('installed_version', None)
 
     return entry
 
