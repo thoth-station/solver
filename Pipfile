@@ -16,6 +16,7 @@ pip = "*"
 virtualenv = "*"
 distro = "*"
 pipdeptree = "*"
+hashin = "*"
 
 
 [dev-packages]
