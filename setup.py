@@ -26,7 +26,7 @@ def get_long_description():
 
 
 setup(
-    name='thoth_solver',
+    name='thoth-solver',
     version=get_version(),
     entry_points={
         'console_scripts': ['thoth-solver=thoth_solver.cli:cli']
