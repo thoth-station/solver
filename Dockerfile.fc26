@@ -18,3 +18,4 @@ RUN \
  rm -rf ${THOTH_SOLVER_TMP_DIR} &&\
  unset THOTH_SOLVER_TMP_DIR &&\
  dnf clean all
+ mkdir -p /.local && chmod 777 /.local
