@@ -8,8 +8,7 @@ name = "pypi"
 [packages]
 
 click = "*"
-rainbow-logging-handler = "*"
-"delegator.py" = "*"
+rainbow_logging_handler = "*"
 pip = "*"
 virtualenv = "*"
 pipdeptree = "*"
