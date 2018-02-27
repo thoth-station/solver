@@ -1,14 +1,15 @@
 """Dependency requirements solving for Python ecosystem."""
 
+from collections import deque
 from contextlib import contextmanager
 import json
 import logging
 import typing
 
-import delegator
 import hashin
 
-from collections import deque
+from thoth.analyzer import CommandError
+from thoth.analyzer import run_command
 
 from .solvers import get_ecosystem_solver
 from .solvers import PypiDependencyParser
@@ -16,40 +17,6 @@ from .solvers import PypiDependencyParser
 _LOGGER = logging.getLogger(__name__)
 _PYPI_SOLVER = get_ecosystem_solver('pypi')
 _HASH_ALGORITHM = 'sha512'
-
-
-class _CommandError(RuntimeError):
-    """Exception raised on error when calling commands."""
-
-    def __init__(self, *args, command: delegator.Command):
-        super().__init__(self, *args)
-        self.command = command
-
-    @property
-    def stdout(self):
-        return self.command.out
-
-    @property
-    def stderr(self):
-        return self.command.err
-
-    @property
-    def return_code(self):
-        return self.command.return_code
-
-    @property
-    def timeout(self):
-        return self.command.timeout
-
-    def as_dict(self):
-        return {
-            'stdout': self.stdout,
-            'stderr': self.stderr,
-            'return_code': self.return_code,
-            'command': self.command.cmd,
-            'timeout': self.timeout,
-            'message': str(self)
-        }
 
 
 def _filter_pipdeptree_entry(entry: dict) ->dict:
@@ -67,13 +34,7 @@ def _filter_pipdeptree_entry(entry: dict) ->dict:
 def _get_environment_details(python_bin: str) -> list:
     """Get information about packages in environment where packages get installed."""
     cmd = '{} -m pipdeptree --json'.format(python_bin)
-
-    command = delegator.run(cmd)
-    if command.return_code != 0:
-        error_msg = "Failed to obtain information about running environment: {}".format(command.err)
-        raise _CommandError(error_msg, command=command)
-
-    output = json.loads(command.out)
+    output = run_command(cmd, is_json=True).stdout
     return [_filter_pipdeptree_entry(entry) for entry in output]
 
 
@@ -88,13 +49,8 @@ def _install_requirement(python_bin: str, package: str, version: str=None, index
     if index_url:
         cmd += ' --index-url "{}" '.format(index_url)
 
-    _LOGGER.debug("Installing requirement via pip: %r" % cmd)
-    command = delegator.run(cmd)
-    _LOGGER.debug("Output of pip during installation: %s", command.out)
-    if command.return_code != 0:
-        error_msg = "Failed to install requirement via pip: {}".format(command.err)
-        _LOGGER.error(error_msg)
-        raise _CommandError(error_msg, command=command)
+    _LOGGER.debug("Installing requirement %r in version %r", package, version)
+    run_command(cmd)
 
     yield
 
@@ -108,20 +64,21 @@ def _install_requirement(python_bin: str, package: str, version: str=None, index
               '--no-cache-dir --no-deps {}=={}'.format(python_bin,
                                                        package,
                                                        previous_version['package']['installed_version'])
-        _LOGGER.debug("Installing previous version %r of package %r", previous_version['package']['installed_version'])
-        command = delegator.run(cmd)
+        _LOGGER.debug("Installing previous version %r of package %r",
+                      package, previous_version['package']['installed_version'])
+        result = run_command(cmd, raise_on_error=False)
 
-        if command.return_code != 0:
+        if result.return_code != 0:
             _LOGGER.error("Failed to restore previous environment for package %r (installed version %r, "
-                          "previous version %r), the error not fatal but can affect future actions",
+                          "previous version %r), the error is not fatal but can affect future actions",
                           package, version, previous_version['package']['installed_version'])
             return
     else:
         _LOGGER.debug("Removing installed package %r", package)
         cmd = '{} -m pip uninstall --yes {}'.format(python_bin, package)
-        command = delegator.run(cmd)
+        result = run_command(cmd, raise_on_error=False)
 
-        if command.return_code != 0:
+        if result.return_code != 0:
             _LOGGER.error("Failed to restore previous environment by removing package %r (installed version %r), "
                           "the error not fatal but can affect future actions", package, version)
             return
@@ -132,12 +89,7 @@ def _pipdeptree(python_bin, package_name: str=None) -> typing.Optional[dict]:
     cmd = '{} -m pipdeptree --json --user'.format(python_bin)
 
     _LOGGER.debug("Obtaining pip dependency tree using: %r", cmd)
-    command = delegator.run(cmd)
-    if command.return_code != 0:
-        error_msg = "Failed to call pipdeptree to retrieve package information: {}".format(command.err)
-        raise _CommandError(error_msg, command=command)
-
-    output = json.loads(command.out)
+    output = run_command(cmd, is_json=True).stdout
 
     if not package_name:
         return output
@@ -210,20 +162,20 @@ def resolve(requirements: typing.List[str], index_url: str=None, python_version:
             with _install_requirement(python_bin, package_name, package_version, index_url):
                 try:
                     package_info = _pipdeptree(python_bin, package_name)
-                except _CommandError as exc:
+                except CommandError as exc:
                     errors.append({
                         'package': package_name,
                         'version': package_version,
                         'type': 'command_error',
-                        'details': exc.as_dict()
+                        'details': exc.to_dict()
                     })
                     continue
-        except _CommandError as exc:
+        except CommandError as exc:
             errors.append({
                 'package_name': package_name,
                 'version': package_version,
                 'type': 'command_error',
-                'details': exc.as_dict()
+                'details': exc.to_dict()
             })
             continue
 
