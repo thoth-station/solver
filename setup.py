@@ -2,7 +2,7 @@
 
 import sys
 import os
-from setuptools import setup, find_packages
+from setuptools import setup
 
 
 def get_requirements():
@@ -11,13 +11,15 @@ def get_requirements():
 
 
 def get_version():
-    with open(os.path.join('thoth_solver', '__init__.py')) as f:
-        content = f.readline()
+    with open(os.path.join('thoth', 'solver', '__init__.py')) as f:
+        content = f.readlines()
 
     for line in content:
         if line.startswith('__version__ ='):
             # dirty, remove trailing and leading chars
             return line.split(' = ')[1][1:-2]
+
+    raise ValueError("No package version found")
 
 
 def get_long_description():
@@ -29,9 +31,12 @@ setup(
     name='thoth-solver',
     version=get_version(),
     entry_points={
-        'console_scripts': ['thoth-solver=thoth_solver.cli:cli']
+        'console_scripts': ['thoth-solver=thoth.solver.cli:cli']
     },
-    packages=find_packages(),
+    packages=[
+        'thoth.solver',
+        'thoth.solver.solvers'
+    ],
     install_requires=get_requirements(),
     author='Fridolin Pokorny',
     author_email='fridolin@redhat.com',

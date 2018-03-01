@@ -9,9 +9,9 @@ from rainbow_logging_handler import RainbowLoggingHandler
 
 from thoth.analyzer import print_command_result
 
-from thoth_solver import __title__ as analyzer_name
-from thoth_solver import __version__ as analyzer_version
-from thoth_solver.python import resolve as resolve_pypi
+from thoth.solver import __title__ as analyzer_name
+from thoth.solver import __version__ as analyzer_version
+from thoth.solver.python import resolve as resolve_pypi
 
 _LOG = logging.getLogger(__name__)
 
