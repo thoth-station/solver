@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "8e9eb30cadf0e00a88302c36cb6afe05534b8c5bd459c592f47665cc0d311b6c"
+            "sha256": "89971fdb1fc43f61758632fa89402090e3c5f7da074f1ff345ffef2dfb892bef"
         },
         "host-environment-markers": {
             "implementation_name": "cpython",
@@ -57,10 +57,10 @@
         },
         "delegator.py": {
             "hashes": [
-                "sha256:b2552a818ec078f017688adb2044a86514d014d5854e5ac641ad614c357fa60b",
-                "sha256:27eb1585935ee5dd297a133bf0d91edb4fe84cc5615750fbfbcd6222cc66cc2b"
+                "sha256:58f3ea6fe36680e1d828e2e66e52844b826f186409dfee4436e42351b0e699fe",
+                "sha256:2d46966a7f484d271b09e2646eae1e9acadc4fdf2cb760c142f073e81c927d8d"
             ],
-            "version": "==0.0.14"
+            "version": "==0.1.0"
         },
         "distro": {
             "hashes": [
@@ -126,10 +126,10 @@
         },
         "thoth-analyzer": {
             "hashes": [
-                "sha256:42ff0ebad0c9f097c115a707e892c4ed53894d01efca72f83dc2a4c1efb3c72a",
-                "sha256:5efa3a8b4cdaa940066325d0bb391cec56f7b7131541d104d9aa1670d4020e29"
+                "sha256:b53c4f5f95e2b3c5afc5ec70948576175d910655d36e0db6029080acd233f714",
+                "sha256:0a86103a9ef062ea9c082eb5d7506470d32bf3af8c4e4fd85e96bc28dbd0b0e4"
             ],
-            "version": "==0.0.2"
+            "version": "==0.0.4"
         },
         "urllib3": {
             "hashes": [

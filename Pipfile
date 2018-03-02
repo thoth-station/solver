@@ -8,7 +8,7 @@ name = "pypi"
 [packages]
 
 click = "*"
-rainbow_logging_handler = "*"
+rainbow-logging-handler = "*"
 pip = "*"
 virtualenv = "*"
 pipdeptree = "*"
@@ -18,3 +18,8 @@ thoth-analyzer = ">=0.0.2"
 
 [dev-packages]
 
+
+
+[pipenv]
+
+keep_outdated = true
