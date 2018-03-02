@@ -47,6 +47,7 @@ setup(
     url='https://github.com/fridex/thoth-solver',
     license='ASL v2.0',
     keywords='python dependency pypi dependencies tool library',
+    zip_safe=False,
     classifiers=[
         "Development Status :: 4 - Beta",
         "Programming Language :: Python :: 3",
