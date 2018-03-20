@@ -71,7 +71,7 @@ def cli(ctx=None, verbose=0, no_color=True):
               help="Do not print results nicely.")
 @click.option('--exclude-packages', '-e', type=str, metavar='PKG1,PKG2',
               help="A comma separated list of packages that should be excluded from the final listing.")
-@click.option('--no-transitive', '-T', is_flag=True, envvar='THOTH_SOLVER_TRANSITIVE',
+@click.option('--no-transitive', '-T', is_flag=True, envvar='THOTH_SOLVER_NO_TRANSITIVE',
               help="Do not check transitive dependencies, run only on provided requirements.")
 def pypi(click_ctx, requirements, index=None, python_version=3, exclude_packages=None, output=None,
          no_transitive=True, no_pretty=False):
