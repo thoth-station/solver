@@ -6,6 +6,7 @@ ENV \
  THOTH_SOLVER_TMP_DIR='/tmp/thoth-solver-install'
 
 RUN \
+ useradd -m solver &&\
  dnf update -y &&\
  mkdir -p ${THOTH_SOLVER_TMP_DIR}
 
@@ -18,4 +19,7 @@ RUN \
  rm -rf ${THOTH_SOLVER_TMP_DIR} &&\
  unset THOTH_SOLVER_TMP_DIR &&\
  dnf clean all &&\
- mkdir -p /.local && chmod 777 /.local
+ chmod 777 /home/solver
+
+WORKDIR /home/solver
+USER solver
