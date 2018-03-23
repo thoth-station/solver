@@ -43,7 +43,7 @@ def _install_requirement(python_bin: str, package: str, version: str=None, index
     """Install requirements specified using suggested pip binary."""
     previous_version = _pipdeptree(python_bin, package)
 
-    cmd = '{} -m pip install --force-reinstall --user --no-cache-dir --no-deps {}'.format(python_bin, package)
+    cmd = '{} -m pip install --force-reinstall --no-cache-dir --no-deps {}'.format(python_bin, package)
     if version:
         cmd += '=={}'.format(version)
     if index_url:
@@ -60,7 +60,7 @@ def _install_requirement(python_bin: str, package: str, version: str=None, index
     _LOGGER.debug("Restoring previous environment setup after installation of %r", package)
 
     if previous_version:
-        cmd = '{} -m pip install --force-reinstall --user ' \
+        cmd = '{} -m pip install --force-reinstall ' \
               '--no-cache-dir --no-deps {}=={}'.format(python_bin,
                                                        package,
                                                        previous_version['package']['installed_version'])
@@ -84,9 +84,9 @@ def _install_requirement(python_bin: str, package: str, version: str=None, index
             return
 
 
-def _pipdeptree(python_bin, package_name: str=None) -> typing.Optional[dict]:
+def _pipdeptree(python_bin, package_name: str=None, warn: bool=False) -> typing.Optional[dict]:
     """Get pip dependency tree by executing pipdeptree tool."""
-    cmd = '{} -m pipdeptree --json --user'.format(python_bin)
+    cmd = '{} -m pipdeptree --json'.format(python_bin)
 
     _LOGGER.debug("Obtaining pip dependency tree using: %r", cmd)
     output = run_command(cmd, is_json=True).stdout
@@ -96,10 +96,13 @@ def _pipdeptree(python_bin, package_name: str=None) -> typing.Optional[dict]:
 
     for entry in output:
         # In some versions pipdeptree does not work with --packages flag, do the logic on out own.
-        if entry['package']['package_name'] == package_name:
+        # TODO: we should probably do difference of reference this output and original environment
+        if entry['package']['key'].lower() == package_name.lower():
             return entry
 
     # The given package was not found.
+    if warn:
+        _LOGGER.warning("Package %r was not found in pipdeptree output %r", package_name, output)
     return None
 
 
@@ -130,6 +133,10 @@ def resolve(requirements: typing.List[str], index_url: str=None, python_version:
     assert python_version in (2, 3), "Unknown Python version"
 
     python_bin = 'python3' if python_version == 3 else 'python2'
+    run_command('virtualenv -p python3 venv')
+    python_bin = 'venv/bin/' + python_bin
+    run_command('{} -m pip install pipdeptree'.format(python_bin))
+
     packages_seen = set()
     packages = []
     errors = []
@@ -161,7 +168,7 @@ def resolve(requirements: typing.List[str], index_url: str=None, python_version:
         try:
             with _install_requirement(python_bin, package_name, package_version, index_url):
                 try:
-                    package_info = _pipdeptree(python_bin, package_name)
+                    package_info = _pipdeptree(python_bin, package_name, warn=True)
                 except CommandError as exc:
                     errors.append({
                         'package': package_name,
