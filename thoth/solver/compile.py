@@ -15,21 +15,20 @@ def pip_compile(*packages: str):
     result = None
     packages = "\n".join(packages)
 
-    with tempfile.TemporaryDirectory() as tmp_dirname:
-        with cwd(tmp_dirname):
-            with open('requirements.in', 'w') as requirements_file:
-                requirements_file.write(packages)
+    with tempfile.TemporaryDirectory() as tmp_dirname, cwd(tmp_dirname):
+        with open('requirements.in', 'w') as requirements_file:
+            requirements_file.write(packages)
 
-            runner = CliRunner()
+        runner = CliRunner()
 
-            try:
-                result = runner.invoke(cli, ['requirements.in'], catch_exceptions=False)
-            except Exception as exc:
-                raise ThothPipCompileError(str(exc)) from exc
+        try:
+            result = runner.invoke(cli, ['requirements.in'], catch_exceptions=False)
+        except Exception as exc:
+            raise ThothPipCompileError(str(exc)) from exc
 
-            if result.exit_code != 0:
-                error_msg = "pip-compile returned non-zero " \
-                            "({:d}) exit code: %s".format(result.exit_code, result.output_bytes.decode())
-                raise ThothPipCompileError(error_msg)
+        if result.exit_code != 0:
+            error_msg = "pip-compile returned non-zero " \
+                        "({:d}) exit code: %s".format(result.exit_code, result.output_bytes.decode())
+            raise ThothPipCompileError(error_msg)
 
     return result.output_bytes.decode()
