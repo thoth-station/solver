@@ -1,6 +1,6 @@
 """Thoth's solver package."""
 
-__version__ = '1.0.0rc2'
+__version__ = '1.0.0'
 __title__ = 'thoth-solver'
 __author__ = 'Fridolin Pokorny'
 
