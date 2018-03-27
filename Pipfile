@@ -8,11 +8,10 @@ name = "pypi"
 [packages]
 
 click = "*"
-rainbow-logging-handler = "*"
+rainbow_logging_handler = "*"
 pip = "*"
 virtualenv = "*"
 pipdeptree = "*"
-hashin = "*"
 thoth-analyzer = ">=0.0.2"
 
 

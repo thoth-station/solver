@@ -2,11 +2,8 @@
 
 from collections import deque
 from contextlib import contextmanager
-import json
 import logging
 import typing
-
-import hashin
 
 from thoth.analyzer import CommandError
 from thoth.analyzer import run_command
@@ -16,7 +13,6 @@ from .solvers import PypiDependencyParser
 
 _LOGGER = logging.getLogger(__name__)
 _PYPI_SOLVER = get_ecosystem_solver('pypi')
-_HASH_ALGORITHM = 'sha512'
 
 
 def _filter_pipdeptree_entry(entry: dict) ->dict:
@@ -206,16 +202,7 @@ def resolve(requirements: typing.List[str], index_url: str=None, python_version:
             _LOGGER.error("Requested to install package %r, but installed package name is %r, error is not fatal",
                           package_name, package_info['package']['package_name'])
 
-        hashes = None
-        try:
-            # TODO: we should check the hash of the downloaded artifact via `pip hash` and install it afterwards
-            hashes = hashin.get_package_hashes(package_name, version=package_version, algorithm=_HASH_ALGORITHM)
-        except Exception as exc:
-            _LOGGER.error("Failed to obtain hashes for %r in version %r: %s", package_name, package_version, str(exc))
-
         entry = _filter_pipdeptree_entry(package_info)
-        entry['hashes'] = hashes
-        entry['hash_type'] = _HASH_ALGORITHM
         packages.append(entry)
 
         for dependency in entry['dependencies']:
