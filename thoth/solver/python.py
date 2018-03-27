@@ -4,6 +4,7 @@ from collections import deque
 from contextlib import contextmanager
 import logging
 import typing
+from shlex import quote
 
 from thoth.analyzer import CommandError
 from thoth.analyzer import run_command
@@ -39,11 +40,11 @@ def _install_requirement(python_bin: str, package: str, version: str=None, index
     """Install requirements specified using suggested pip binary."""
     previous_version = _pipdeptree(python_bin, package)
 
-    cmd = '{} -m pip install --force-reinstall --no-cache-dir --no-deps {}'.format(python_bin, package)
+    cmd = '{} -m pip install --force-reinstall --no-cache-dir --no-deps {}'.format(python_bin, quote(package))
     if version:
-        cmd += '=={}'.format(version)
+        cmd += '=={}'.format(quote(version))
     if index_url:
-        cmd += ' --index-url "{}" '.format(index_url)
+        cmd += ' --index-url "{}" '.format(quote(index_url))
 
     _LOGGER.debug("Installing requirement %r in version %r", package, version)
     run_command(cmd)
@@ -58,8 +59,8 @@ def _install_requirement(python_bin: str, package: str, version: str=None, index
     if previous_version:
         cmd = '{} -m pip install --force-reinstall ' \
               '--no-cache-dir --no-deps {}=={}'.format(python_bin,
-                                                       package,
-                                                       previous_version['package']['installed_version'])
+                                                       quote(package),
+                                                       quote(previous_version['package']['installed_version']))
         _LOGGER.debug("Installing previous version %r of package %r",
                       package, previous_version['package']['installed_version'])
         result = run_command(cmd, raise_on_error=False)
@@ -71,7 +72,7 @@ def _install_requirement(python_bin: str, package: str, version: str=None, index
             return
     else:
         _LOGGER.debug("Removing installed package %r", package)
-        cmd = '{} -m pip uninstall --yes {}'.format(python_bin, package)
+        cmd = '{} -m pip uninstall --yes {}'.format(python_bin, quote(package))
         result = run_command(cmd, raise_on_error=False)
 
         if result.return_code != 0:
