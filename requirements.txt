@@ -1,7 +1,9 @@
 click
 rainbow-logging-handler
 pip
-virtualenv
 pipdeptree
+pip-tools
+virtualenv
 hashin
 thoth-analyzer>=0.0.2
+thoth-common>=0.0.1
