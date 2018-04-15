@@ -30,6 +30,6 @@ Installation
 
 .. code-block:: console
 
-  $ git clone git@github.com:fridex/thoth-solver.git
+  $ git clone git@github.com:thoth-station/solver.git
   $ cd thoth-solver && export PYTHONPATH='.'
   $ ./thoth-solver --help

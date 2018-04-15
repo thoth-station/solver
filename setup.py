@@ -43,7 +43,7 @@ setup(
     maintainer_email='fridolin@redhat.com',
     description='Tool and library for discovering package dependencies in PyPI world',
     long_description=get_long_description(),
-    url='https://github.com/fridex/thoth-solver',
+    url='https://github.com/thoth-station/solver',
     license='ASL v2.0',
     keywords='python dependency pypi dependencies tool library',
     zip_safe=False,
