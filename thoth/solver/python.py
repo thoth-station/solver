@@ -4,7 +4,6 @@ from collections import deque
 from contextlib import contextmanager
 import logging
 import typing
-from shlex import quote
 
 from thoth.analyzer import CommandError
 from thoth.analyzer import run_command
@@ -30,7 +29,7 @@ def _filter_pipdeptree_entry(entry: dict) ->dict:
 
 def _get_environment_details(python_bin: str) -> list:
     """Get information about packages in environment where packages get installed."""
-    cmd = '{} -m pipdeptree --json'.format(python_bin)
+    cmd = [python_bin, '-m', 'pipdeptree', '--json']
     output = run_command(cmd, is_json=True).stdout
     return [_filter_pipdeptree_entry(entry) for entry in output]
 
@@ -40,11 +39,14 @@ def _install_requirement(python_bin: str, package: str, version: str=None, index
     """Install requirements specified using suggested pip binary."""
     previous_version = _pipdeptree(python_bin, package)
 
-    cmd = '{} -m pip install --force-reinstall --no-cache-dir --no-deps {}'.format(python_bin, quote(package))
+    cmd = [python_bin, '-m', 'pip', 'install', '--force-reinstall', '--no-cache-dir', '--no-deps']
     if version:
-        cmd += '=={}'.format(quote(version))
+        cmd.append('{}=={}'.format(package, version))
+    else:
+        cmd.append(package)
     if index_url:
-        cmd += ' --index-url "{}" '.format(quote(index_url))
+        cmd.append('--index_url')
+        cmd.append(index_url)
 
     _LOGGER.debug("Installing requirement %r in version %r", package, version)
     run_command(cmd)
@@ -57,10 +59,8 @@ def _install_requirement(python_bin: str, package: str, version: str=None, index
     _LOGGER.debug("Restoring previous environment setup after installation of %r", package)
 
     if previous_version:
-        cmd = '{} -m pip install --force-reinstall ' \
-              '--no-cache-dir --no-deps {}=={}'.format(python_bin,
-                                                       quote(package),
-                                                       quote(previous_version['package']['installed_version']))
+        cmd = [python_bin, '-m', 'pip', 'install', '--force-reinstall', '--no-cache-dir', '--no-deps',
+               '{}=={}'.format(package, previous_version['package']['installed_version'])]
         _LOGGER.debug("Installing previous version %r of package %r",
                       package, previous_version['package']['installed_version'])
         result = run_command(cmd, raise_on_error=False)
@@ -72,7 +72,7 @@ def _install_requirement(python_bin: str, package: str, version: str=None, index
             return
     else:
         _LOGGER.debug("Removing installed package %r", package)
-        cmd = '{} -m pip uninstall --yes {}'.format(python_bin, quote(package))
+        cmd = [python_bin, '-m', 'pip', 'uninstall', '--yes', package]
         result = run_command(cmd, raise_on_error=False)
 
         if result.return_code != 0:
@@ -83,7 +83,7 @@ def _install_requirement(python_bin: str, package: str, version: str=None, index
 
 def _pipdeptree(python_bin, package_name: str=None, warn: bool=False) -> typing.Optional[dict]:
     """Get pip dependency tree by executing pipdeptree tool."""
-    cmd = '{} -m pipdeptree --json'.format(python_bin)
+    cmd = [python_bin, '-m', 'pipdeptree', '--json']
 
     _LOGGER.debug("Obtaining pip dependency tree using: %r", cmd)
     output = run_command(cmd, is_json=True).stdout
