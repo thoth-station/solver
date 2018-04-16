@@ -27,8 +27,8 @@ def pip_compile(*packages: str):
             raise ThothPipCompileError(str(exc)) from exc
 
         if result.exit_code != 0:
-            error_msg = "pip-compile returned non-zero " \
-                        "({:d}) exit code: %s".format(result.exit_code, result.output_bytes.decode())
+            error_msg = f"pip-compile returned non-zero ({result.exit_code:d}) " \
+                        f"output: {result.output_bytes.decode():s}"
             raise ThothPipCompileError(error_msg)
 
     return result.output_bytes.decode()
