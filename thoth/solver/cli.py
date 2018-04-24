@@ -5,35 +5,17 @@ import sys
 
 import click
 import logging
-from rainbow_logging_handler import RainbowLoggingHandler
 
 from thoth.analyzer import print_command_result
+from thoth.common import init_logging
 
 from thoth.solver import __title__ as analyzer_name
 from thoth.solver import __version__ as analyzer_version
 from thoth.solver.python import resolve as resolve_pypi
 
+init_logging()
+
 _LOG = logging.getLogger(__name__)
-
-
-def _setup_logging(verbose, no_color):
-    """Set up Python logging based on verbosity level.
-
-    :param verbose: verbosity level
-    :param no_color: do not use colorized output
-    """
-    # TODO: move this logic to thoth-analyzer or thoth-common
-
-    level = logging.INFO if not verbose else logging.DEBUG
-    logger = logging.getLogger()
-    logger.setLevel(level)
-
-    if not no_color:
-        formatter = logging.Formatter("%(process)d: [%(asctime)s] %(name)s %(funcName)s:%(lineno)d: %(message)s")
-        # setup RainbowLoggingHandler
-        handler = RainbowLoggingHandler(sys.stderr)
-        handler.setFormatter(formatter)
-        logger.addHandler(handler)
 
 
 def _print_version(ctx, _, value):
@@ -50,13 +32,15 @@ def _print_version(ctx, _, value):
               help="Be verbose about what's going on.")
 @click.option('--version', is_flag=True, is_eager=True, callback=_print_version, expose_value=False,
               help="Print solver version and exit.")
-@click.option('--no-color', is_flag=True,
-              help="Suppress colorized logging output.")
-def cli(ctx=None, verbose=0, no_color=True):
+def cli(ctx=None, verbose=0):
     """Thoth solver command line interface."""
     if ctx:
         ctx.auto_envvar_prefix = 'THOTH_SOLVER'
-    _setup_logging(verbose, no_color)
+
+    if verbose:
+        _LOG.setLevel(logging.DEBUG)
+
+    _LOG.debug("Debug mode is on")
 
 
 @cli.command()
