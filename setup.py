@@ -44,7 +44,7 @@ setup(
     description='Tool and library for discovering package dependencies in PyPI world',
     long_description=get_long_description(),
     url='https://github.com/thoth-station/solver',
-    license='ASL v2.0',
+    license='GPLv3+',
     keywords='python dependency pypi dependencies tool library',
     zip_safe=False,
     classifiers=[
