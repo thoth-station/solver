@@ -136,7 +136,12 @@ def _filter_package_dependencies(package_info: dict) -> dict:
 
 
 def _resolve_versions(package_name: str, version_spec: str) -> typing.List[str]:
-    resolved_versions = _PYPI_SOLVER.solve([package_name + (version_spec or '')], all_versions=True)
+    try:
+        resolved_versions = _PYPI_SOLVER.solve([package_name + (version_spec or '')], all_versions=True)
+    except Exception:  # pylint: disable=broad-except
+        _LOGGER.exception("Failed to resolve versions for %r with version spec %r", package_name, version_spec)
+        return []
+
     assert len(resolved_versions.keys()) == 1,\
         "Resolution of one package version ended with multiple packages."
     return list(resolved_versions.values())[0]
@@ -167,8 +172,11 @@ def resolve(requirements: typing.List[str], index_url: str=None, python_version:
         version_spec = _get_dependency_specification(dependency.spec)
         resolved_versions = _resolve_versions(dependency.name, version_spec)
         if not resolved_versions:
-            _LOGGER.error("No versions were resolved for dependency %r in version %r", dependency.name, version_spec)
-            unresolved.append(requirement)
+            _LOGGER.warning("No versions were resolved for dependency %r in version %r", dependency.name, version_spec)
+            unresolved.append({
+                'package_name': dependency.name,
+                'version_spec': version_spec
+            })
         else:
             for version in resolved_versions:
                 entry = (dependency.name, version)
