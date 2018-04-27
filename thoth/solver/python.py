@@ -200,16 +200,7 @@ def resolve(requirements: typing.List[str], index_url: str=None, python_version:
 
         try:
             with _install_requirement(python_bin, package_name, package_version, index_url):
-                try:
-                    package_info = _pipdeptree(python_bin, package_name, warn=True)
-                except CommandError as exc:
-                    errors.append({
-                        'package': package_name,
-                        'version': package_version,
-                        'type': 'command_error',
-                        'details': exc.to_dict()
-                    })
-                    continue
+                package_info = _pipdeptree(python_bin, package_name, warn=True)
         except CommandError as exc:
             errors.append({
                 'package_name': package_name,
