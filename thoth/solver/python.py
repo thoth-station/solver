@@ -161,12 +161,21 @@ def resolve(requirements: typing.List[str], index_url: str=None, python_version:
     packages = []
     errors = []
     unresolved = []
+    unparsed = []
     exclude_packages = exclude_packages or {}
     queue = deque()
 
     for requirement in requirements:
         _LOGGER.debug("Parsing requirement %r", requirement)
-        dependency = PypiDependencyParser.parse_python(requirement)
+        try:
+            dependency = PypiDependencyParser.parse_python(requirement)
+        except Exception as exc:
+            unparsed.append({
+                'requirement': requirement,
+                'details': str(exc)
+            })
+            continue
+
         if dependency.name in exclude_packages:
             continue
 
@@ -253,6 +262,7 @@ def resolve(requirements: typing.List[str], index_url: str=None, python_version:
     return {
         'tree': packages,
         'errors': errors,
+        'unparsed': unparsed,
         'unresolved': unresolved,
         'environment': environment_details
     }
