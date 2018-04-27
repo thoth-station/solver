@@ -165,6 +165,7 @@ def resolve(requirements: typing.List[str], index_url: str=None, python_version:
     queue = deque()
 
     for requirement in requirements:
+        _LOGGER.debug("Parsing requirement %r", requirement)
         dependency = PypiDependencyParser.parse_python(requirement)
         if dependency.name in exclude_packages:
             continue
@@ -172,8 +173,11 @@ def resolve(requirements: typing.List[str], index_url: str=None, python_version:
         version_spec = _get_dependency_specification(dependency.spec)
         resolved_versions = _resolve_versions(dependency.name, version_spec)
         if not resolved_versions:
-            _LOGGER.error("No versions were resolved for dependency %r in version %r", dependency.name, version_spec)
-            unresolved.append(requirement)
+            _LOGGER.warning("No versions were resolved for dependency %r in version %r", dependency.name, version_spec)
+            unresolved.append({
+                'package_name': dependency.name,
+                'version_spec': version_spec
+            })
         else:
             for version in resolved_versions:
                 entry = (dependency.name, version)
