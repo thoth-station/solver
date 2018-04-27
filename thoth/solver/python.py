@@ -165,6 +165,7 @@ def resolve(requirements: typing.List[str], index_url: str=None, python_version:
     queue = deque()
 
     for requirement in requirements:
+        _LOGGER.debug("Parsing requirement %r", requirement)
         dependency = PypiDependencyParser.parse_python(requirement)
         if dependency.name in exclude_packages:
             continue
