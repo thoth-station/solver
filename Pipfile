@@ -1,12 +1,9 @@
 [[source]]
-
 url = "https://pypi.python.org/simple"
 verify_ssl = true
 name = "pypi"
 
-
 [packages]
-
 click = "*"
 rainbow-logging-handler = "*"
 pip = "*"
@@ -16,11 +13,11 @@ thoth-analyzer = ">=0.0.2"
 pip-tools = "*"
 thoth-common = ">=0.0.3"
 
-
 [dev-packages]
-
-
+coala = "*"
+pycodestylebear = "*"
+yamllintbear = "*"
+pydocstylebear = "*"
 
 [pipenv]
-
 keep_outdated = true

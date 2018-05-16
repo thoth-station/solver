@@ -176,6 +176,7 @@ class DependencyParser(object):
     """Base class for Dependency parsing."""
 
     def __init__(self, **parser_kwargs):
+        """Construct dependency parser."""
         if parser_kwargs:
             raise NotImplementedError
 
