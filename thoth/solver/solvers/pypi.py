@@ -128,7 +128,7 @@ class PypiDependencyParser(DependencyParser):
                 return spec.operator, spec.version
 
         def _get_pip_spec(requirements):
-            """There's no `specs` field In Pip 8+, take info from `specifier` field."""
+            """There is no `specs` field In Pip 8+, take info from `specifier` field."""
             if hasattr(requirements, 'specs'):
                 return requirements.specs
             elif hasattr(requirements, 'specifier'):

@@ -54,7 +54,8 @@ def _get_environment_details(python_bin: str) -> list:
 
 
 @contextmanager
-def _install_requirement(python_bin: str, package: str, version: str=None, index_url: str=None, clean: bool=True) -> None:
+def _install_requirement(python_bin: str, package: str, version: str=None,
+                         index_url: str=None, clean: bool=True) -> None:
     """Install requirements specified using suggested pip binary."""
     previous_version = _pipdeptree(python_bin, package)
 
@@ -149,7 +150,7 @@ def _resolve_versions(package_name: str, version_spec: str) -> typing.List[str]:
 
 def resolve(requirements: typing.List[str], index_url: str=None, python_version: int=3,
             exclude_packages: set=None, transitive: bool=True) -> dict:
-    """Common code abstracted for tree() and and resolve() functions."""
+    """Resolve given requirements for the given Python version."""
     assert python_version in (2, 3), "Unknown Python version"
 
     python_bin = 'python3' if python_version == 3 else 'python2'
