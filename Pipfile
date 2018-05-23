@@ -11,7 +11,7 @@ virtualenv = "*"
 pipdeptree = "*"
 thoth-analyzer = ">=0.0.2"
 pip-tools = "*"
-thoth-common = ">=0.0.3"
+thoth-common = ">=0.0.6"
 
 [dev-packages]
 coala = "*"
