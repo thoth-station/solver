@@ -6,7 +6,6 @@ name = "pypi"
 [packages]
 click = "*"
 rainbow-logging-handler = "*"
-pip = "*"
 virtualenv = "*"
 pipdeptree = "*"
 thoth-analyzer = ">=0.0.2"
