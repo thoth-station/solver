@@ -8,9 +8,9 @@ click = "*"
 rainbow-logging-handler = "*"
 virtualenv = "*"
 pipdeptree = "*"
-thoth-analyzer = ">=0.0.2"
+thoth-analyzer = "*"
 pip-tools = "*"
-thoth-common = ">=0.0.6"
+thoth-common = "*"
 
 [dev-packages]
 coala = "*"
