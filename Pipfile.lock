@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "da99424dc6090fb28a48cafd97590fb4c7f2c3743b86f991ba85019b42710d9a"
+            "sha256": "bc467c8f99ab93f151aa2ea020863796a342e2c98b49e312c6d3d34961364fe4"
         },
         "pipfile-spec": 6,
         "requires": {},
@@ -107,10 +107,10 @@
         },
         "ptyprocess": {
             "hashes": [
-                "sha256:e64193f0047ad603b71f202332ab5527c5e52aa7c8b609704fc28c0dc20c4365",
-                "sha256:e8c43b5eee76b2083a9badde89fd1bbce6c8942d1045146e100b7b5e014f4f1a"
+                "sha256:923f299cc5ad920c68f2bc0bc98b75b9f838b93b599941a6b63ddbc2476394c0",
+                "sha256:d7cc528d76e76342423ca640335bd3633420dc1366f258cb31d05e865ef5ca1f"
             ],
-            "version": "==0.5.2"
+            "version": "==0.6.0"
         },
         "pytz": {
             "hashes": [
@@ -156,11 +156,11 @@
         },
         "thoth-common": {
             "hashes": [
-                "sha256:240ae0e63be934f82e9397ad71696f61af3e885db41ebd75e354ff810138f8c5",
-                "sha256:76eb432c81cf7c0c73f6bbc1d280624fda6d49f40704a2ed3767bd5252acf6c3"
+                "sha256:ef3f70c3c48b1fe9cd7fa8b895a9ba7c88ffb3e54c860d568c4b41169b01a198",
+                "sha256:f6f8ecfcb18011cd8d4d2c0d799b0585e606372251dda10a716ed6b447a114a8"
             ],
             "index": "pypi",
-            "version": "==0.0.7"
+            "version": "==0.0.8"
         },
         "tzlocal": {
             "hashes": [
