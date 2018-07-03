@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "f733e6d98b06a1844400be1bc7a79ce69010a270db985915085fb97751d742d5"
+            "sha256": "6a31f0fffa7c861c450d782a7b8dd7389677e4df4f35a204c29fec2bb2b30228"
         },
         "pipfile-spec": 6,
         "requires": {},
@@ -132,6 +132,7 @@
                 "sha256:63b52e3c866428a224f97cab011de738c36aec0185aa91cfacd418b5d58911d1",
                 "sha256:ec22d826a36ed72a7358ff3fe56cbd4ba69dd7a6718ffd450ff0e9df7a47ce6a"
             ],
+            "markers": "python_version != '3.3.*' and python_version >= '2.6' and python_version < '4' and python_version != '3.2.*' and python_version != '3.0.*' and python_version != '3.1.*'",
             "version": "==2.19.1"
         },
         "rfc5424-logging-handler": {
@@ -150,11 +151,11 @@
         },
         "thoth-analyzer": {
             "hashes": [
-                "sha256:b09cdb3f3131e38c2f3bffc211bbe43a99f4c8f8216835b1c14ffb2711beb6e4",
-                "sha256:efe584720e24973d53e993c8a29e26e5a6a4c4c4d0b43896630bccb044341db4"
+                "sha256:097d537bc21904c41d16c22bd389f909c2c5f397570696558de4baefa79d09f8",
+                "sha256:66e3561ae1ba01ef7ad15a255b866c5eccce6f445a5bef21096dcbc756d65be6"
             ],
             "index": "pypi",
-            "version": "==0.0.6"
+            "version": "==0.0.7"
         },
         "thoth-common": {
             "hashes": [
@@ -316,6 +317,7 @@
                 "sha256:63b52e3c866428a224f97cab011de738c36aec0185aa91cfacd418b5d58911d1",
                 "sha256:ec22d826a36ed72a7358ff3fe56cbd4ba69dd7a6718ffd450ff0e9df7a47ce6a"
             ],
+            "markers": "python_version != '3.3.*' and python_version >= '2.6' and python_version < '4' and python_version != '3.2.*' and python_version != '3.0.*' and python_version != '3.1.*'",
             "version": "==2.19.1"
         },
         "sarge": {
