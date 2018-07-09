@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "4a3e1f9c8d0bb359a167a82713f1c1650a402a8d28ed5f249f8df1e2ba1ef22a"
+            "sha256": "f816b4f0389d0b31fe75ba4d99e1ea7b0a4449169eaf758efb9457ff3a17ca16"
         },
         "pipfile-spec": 6,
         "requires": {},
@@ -132,7 +132,7 @@
                 "sha256:63b52e3c866428a224f97cab011de738c36aec0185aa91cfacd418b5d58911d1",
                 "sha256:ec22d826a36ed72a7358ff3fe56cbd4ba69dd7a6718ffd450ff0e9df7a47ce6a"
             ],
-            "markers": "python_version != '3.3.*' and python_version < '4' and python_version != '3.1.*' and python_version >= '2.6' and python_version != '3.2.*' and python_version != '3.0.*'",
+            "markers": "python_version != '3.3.*' and python_version != '3.2.*' and python_version != '3.1.*' and python_version != '3.0.*' and python_version < '4' and python_version >= '2.6'",
             "version": "==2.19.1"
         },
         "rfc5424-logging-handler": {
@@ -159,11 +159,11 @@
         },
         "thoth-common": {
             "hashes": [
-                "sha256:7ec69b1828a9a231a85f31371ff212e69d56b1850b88f5ce164cb06246f5c2f1",
-                "sha256:9c176ec6b6c884c3af8bfff843d04e9d728a310b4a95ec3f9e970e8327182836"
+                "sha256:03e4094d15910e60f38b0da5778ea9f4173311633cdd29aaffd93a1d938dc790",
+                "sha256:bc7d0c47624f3c9df177fe839d7ee3e90ebe9bf82fc3996da83aa70c6ba95bee"
             ],
             "index": "pypi",
-            "version": "==0.1.0"
+            "version": "==0.2.0"
         },
         "tzlocal": {
             "hashes": [
@@ -176,7 +176,7 @@
                 "sha256:a68ac5e15e76e7e5dd2b8f94007233e01effe3e50e8daddf69acfd81cb686baf",
                 "sha256:b5725a0bd4ba422ab0e66e89e030c806576753ea3ee08554382c14e685d117b5"
             ],
-            "markers": "python_version != '3.3.*' and python_version < '4' and python_version != '3.1.*' and python_version >= '2.6' and python_version != '3.2.*' and python_version != '3.0.*'",
+            "markers": "python_version != '3.3.*' and python_version != '3.2.*' and python_version != '3.1.*' and python_version != '3.0.*' and python_version < '4' and python_version >= '2.6'",
             "version": "==1.23"
         },
         "virtualenv": {
@@ -321,7 +321,7 @@
                 "sha256:63b52e3c866428a224f97cab011de738c36aec0185aa91cfacd418b5d58911d1",
                 "sha256:ec22d826a36ed72a7358ff3fe56cbd4ba69dd7a6718ffd450ff0e9df7a47ce6a"
             ],
-            "markers": "python_version != '3.3.*' and python_version < '4' and python_version != '3.1.*' and python_version >= '2.6' and python_version != '3.2.*' and python_version != '3.0.*'",
+            "markers": "python_version != '3.3.*' and python_version != '3.2.*' and python_version != '3.1.*' and python_version != '3.0.*' and python_version < '4' and python_version >= '2.6'",
             "version": "==2.19.1"
         },
         "sarge": {
@@ -355,7 +355,7 @@
                 "sha256:a68ac5e15e76e7e5dd2b8f94007233e01effe3e50e8daddf69acfd81cb686baf",
                 "sha256:b5725a0bd4ba422ab0e66e89e030c806576753ea3ee08554382c14e685d117b5"
             ],
-            "markers": "python_version != '3.3.*' and python_version < '4' and python_version != '3.1.*' and python_version >= '2.6' and python_version != '3.2.*' and python_version != '3.0.*'",
+            "markers": "python_version != '3.3.*' and python_version != '3.2.*' and python_version != '3.1.*' and python_version != '3.0.*' and python_version < '4' and python_version >= '2.6'",
             "version": "==1.23"
         },
         "yamllint": {
