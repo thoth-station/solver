@@ -11,12 +11,10 @@ pipdeptree = "*"
 thoth-analyzer = "*"
 pip-tools = "*"
 thoth-common = "*"
+"autopep8" = "*"
 
 [dev-packages]
-coala = "*"
-pycodestylebear = "*"
-yamllintbear = "*"
-pydocstylebear = "*"
+coala-bears = "*"
 
 [pipenv]
 keep_outdated = true

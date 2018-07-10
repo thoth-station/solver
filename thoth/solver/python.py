@@ -54,12 +54,13 @@ def _get_environment_details(python_bin: str) -> list:
 
 
 @contextmanager
-def _install_requirement(python_bin: str, package: str, version: str=None,
-                         index_url: str=None, clean: bool=True) -> None:
+def _install_requirement(python_bin: str, package: str, version: str = None,
+                         index_url: str = None, clean: bool = True) -> None:
     """Install requirements specified using suggested pip binary."""
     previous_version = _pipdeptree(python_bin, package)
 
-    cmd = '{} -m pip install --force-reinstall --no-cache-dir --no-deps {}'.format(python_bin, quote(package))
+    cmd = '{} -m pip install --force-reinstall --no-cache-dir --no-deps {}'.format(
+        python_bin, quote(package))
     if version:
         cmd += '=={}'.format(quote(version))
     if index_url:
@@ -73,7 +74,8 @@ def _install_requirement(python_bin: str, package: str, version: str=None,
     if not clean:
         return
 
-    _LOGGER.debug("Restoring previous environment setup after installation of %r", package)
+    _LOGGER.debug(
+        "Restoring previous environment setup after installation of %r", package)
 
     if previous_version:
         cmd = '{} -m pip install --force-reinstall ' \
@@ -100,7 +102,7 @@ def _install_requirement(python_bin: str, package: str, version: str=None,
             return
 
 
-def _pipdeptree(python_bin, package_name: str=None, warn: bool=False) -> typing.Optional[dict]:
+def _pipdeptree(python_bin, package_name: str = None, warn: bool = False) -> typing.Optional[dict]:
     """Get pip dependency tree by executing pipdeptree tool."""
     cmd = '{} -m pipdeptree --json'.format(python_bin)
 
@@ -118,7 +120,8 @@ def _pipdeptree(python_bin, package_name: str=None, warn: bool=False) -> typing.
 
     # The given package was not found.
     if warn:
-        _LOGGER.warning("Package %r was not found in pipdeptree output %r", package_name, output)
+        _LOGGER.warning(
+            "Package %r was not found in pipdeptree output %r", package_name, output)
     return None
 
 
@@ -131,16 +134,19 @@ def _filter_package_dependencies(package_info: dict) -> dict:
     dependencies = {}
 
     for dependency in package_info['dependencies']:
-        dependencies[dependency['package_name']] = dependency['required_version']
+        dependencies[dependency['package_name']
+                     ] = dependency['required_version']
 
     return dependencies
 
 
 def _resolve_versions(package_name: str, version_spec: str) -> typing.List[str]:
     try:
-        resolved_versions = _PYPI_SOLVER.solve([package_name + (version_spec or '')], all_versions=True)
+        resolved_versions = _PYPI_SOLVER.solve(
+            [package_name + (version_spec or '')], all_versions=True)
     except Exception:  # pylint: disable=broad-except
-        _LOGGER.exception("Failed to resolve versions for %r with version spec %r", package_name, version_spec)
+        _LOGGER.exception(
+            "Failed to resolve versions for %r with version spec %r", package_name, version_spec)
         return []
 
     assert len(resolved_versions.keys()) == 1,\
@@ -148,8 +154,8 @@ def _resolve_versions(package_name: str, version_spec: str) -> typing.List[str]:
     return list(resolved_versions.values())[0]
 
 
-def resolve(requirements: typing.List[str], index_url: str=None, python_version: int=3,
-            exclude_packages: set=None, transitive: bool=True) -> dict:
+def resolve(requirements: typing.List[str], index_url: str = None, python_version: int = 3,
+            exclude_packages: set = None, transitive: bool = True) -> dict:
     """Resolve given requirements for the given Python version."""
     assert python_version in (2, 3), "Unknown Python version"
 
@@ -183,7 +189,8 @@ def resolve(requirements: typing.List[str], index_url: str=None, python_version:
         version_spec = _get_dependency_specification(dependency.spec)
         resolved_versions = _resolve_versions(dependency.name, version_spec)
         if not resolved_versions:
-            _LOGGER.warning("No versions were resolved for dependency %r in version %r", dependency.name, version_spec)
+            _LOGGER.warning(
+                "No versions were resolved for dependency %r in version %r", dependency.name, version_spec)
             unresolved.append({
                 'package_name': dependency.name,
                 'version_spec': version_spec
@@ -236,7 +243,8 @@ def resolve(requirements: typing.List[str], index_url: str=None, python_version:
 
         for dependency in entry['dependencies']:
             dependency_name, dependency_range = dependency['package_name'], dependency['required_version']
-            resolved_versions = _resolve_versions(dependency_name, dependency_range)
+            resolved_versions = _resolve_versions(
+                dependency_name, dependency_range)
             _LOGGER.debug("Resolved versions for package %r with range specifier %r: %s",
                           dependency_name, dependency_range, resolved_versions)
             dependency['resolved_versions'] = resolved_versions

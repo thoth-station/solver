@@ -6,136 +6,140 @@ labels:
 metadata:
   name: solver-buildconfig
   annotations:
-    description: This is Thoth Solver Fedora 26+ BuildConfig, this template is meant to be used by Jenkins, but could also be used by humans...
+    description: >
+      This is Thoth Solver Fedora 26+ BuildConfig, this template is meant to
+      be used by Bots, but could also be used by humans...
     openshift.io/display-name: 'Thoth Core: Solver Fedora 26+ BuildConfig'
-    version: 0.1.0
+    version: 0.2.0
     tags: poc,thoth,solver,ai-stacks
     template.openshift.io/documentation-url: https://github.com/Thoth-Station/
-    template.openshift.io/long-description: This is Thoth Solver Fedora 26+ BuildConfig, this template is meant to be used by Jenkins, but could also be used by humans...
+    template.openshift.io/long-description: >
+      This is Thoth Solver Fedora 26+ BuildConfig, this template is meant to
+      be used by Bots, but could also be used by humans...
     template.openshift.io/provider-display-name: Red Hat, Inc.
 
 objects:
-- kind: BuildConfig
-  apiVersion: v1
-  metadata:
-    name: solver-f27-job
-    labels:
-      app: thoth-core
-      component: solver
-  spec:
-    output:
-      to:
-        kind: ImageStreamTag
-        name: "solver-f27-job:${IMAGE_STREAM_TAG}"
-    source:
-      dockerfile: |
-        FROM fedora:27
-        CMD ["pypi"]
-        ENTRYPOINT ["thoth-solver"]
-        ENV \
-         LANG=en_US.UTF-8 \
-         THOTH_SOLVER_TMP_DIR='/tmp/thoth-solver-install'
-
-        RUN \
-         useradd -m solver &&\
-         dnf update -y &&\
-         mkdir -p ${THOTH_SOLVER_TMP_DIR}
-
-        # Install thoth-solver itself
-        COPY ./ ${THOTH_SOLVER_TMP_DIR}
-        RUN \
-         cd ${THOTH_SOLVER_TMP_DIR} &&\
-         pip3 install . &&\
-         cd / &&\
-         rm -rf ${THOTH_SOLVER_TMP_DIR} &&\
-         unset THOTH_SOLVER_TMP_DIR &&\
-         dnf clean all &&\
-         chmod 777 /home/solver
-
-        WORKDIR /home/solver
-        USER solver
-      type: Git
-      git:
-        uri: ${GITHUB_URL}
-        ref: ${GITHUB_REF}
-    strategy:
-      dockerStrategy:
-        from:
+  - kind: BuildConfig
+    apiVersion: v1
+    metadata:
+      name: solver-f27-job
+      labels:
+        app: thoth-core
+        component: solver
+    spec:
+      output:
+        to:
           kind: ImageStreamTag
-          name: fedora:27
-      type: Docker
-    triggers:
-    - type: ImageChange
-      imageChange: {}
+          name: "solver-f27-job:${IMAGE_STREAM_TAG}"
+      source:
+        dockerfile: |
+          FROM fedora:27
+          CMD ["pypi"]
+          ENTRYPOINT ["thoth-solver"]
+          ENV \
+          LANG=en_US.UTF-8 \
+          THOTH_SOLVER_TMP_DIR='/tmp/thoth-solver-install'
 
-- kind: BuildConfig
-  apiVersion: v1
-  metadata:
-    name: solver-f26-job
-    labels:
-      app: thoth-core
-      component: solver
-  spec:
-    output:
-      to:
-        kind: ImageStreamTag
-        name: "solver-f26-job:${IMAGE_STREAM_TAG}"
-    source:
-      dockerfile: |
-        FROM fedora:26
-        CMD ["pypi"]
-        ENTRYPOINT ["thoth-solver"]
-        ENV \
-         LANG=en_US.UTF-8 \
-         THOTH_SOLVER_TMP_DIR='/tmp/thoth-solver-install'
+          RUN \
+          useradd -m solver &&\
+          dnf update -y &&\
+          mkdir -p ${THOTH_SOLVER_TMP_DIR}
 
-        RUN \
-         useradd -m solver &&\
-         dnf update -y &&\
-         mkdir -p ${THOTH_SOLVER_TMP_DIR}
+          # Install thoth-solver itself
+          COPY ./ ${THOTH_SOLVER_TMP_DIR}
+          RUN \
+          cd ${THOTH_SOLVER_TMP_DIR} &&\
+          pip3 install . &&\
+          cd / &&\
+          rm -rf ${THOTH_SOLVER_TMP_DIR} &&\
+          unset THOTH_SOLVER_TMP_DIR &&\
+          dnf clean all &&\
+          chmod 777 /home/solver
 
-        # Install thoth-solver itself
-        COPY ./ ${THOTH_SOLVER_TMP_DIR}
-        RUN \
-         cd ${THOTH_SOLVER_TMP_DIR} &&\
-         pip3 install . &&\
-         cd / &&\
-         rm -rf ${THOTH_SOLVER_TMP_DIR} &&\
-         unset THOTH_SOLVER_TMP_DIR &&\
-         dnf clean all &&\
-         chmod 777 /home/solver
+          WORKDIR /home/solver
+          USER solver
+        type: Git
+        git:
+          uri: ${GITHUB_URL}
+          ref: ${GITHUB_REF}
+      strategy:
+        dockerStrategy:
+          from:
+            kind: ImageStreamTag
+            name: fedora:27
+        type: Docker
+      triggers:
+        - type: ImageChange
+          imageChange: {}
 
-        WORKDIR /home/solver
-        USER solver
-      type: Git
-      git:
-        uri: ${GITHUB_URL}
-        ref: ${GITHUB_REF}
-    strategy:
-      dockerStrategy:
-        from:
+  - kind: BuildConfig
+    apiVersion: v1
+    metadata:
+      name: solver-f26-job
+      labels:
+        app: thoth-core
+        component: solver
+    spec:
+      output:
+        to:
           kind: ImageStreamTag
-          name: fedora:26
-      type: Docker
-    triggers:
-    - type: ImageChange
-      imageChange: {}
+          name: "solver-f26-job:${IMAGE_STREAM_TAG}"
+      source:
+        dockerfile: |
+          FROM fedora:26
+          CMD ["pypi"]
+          ENTRYPOINT ["thoth-solver"]
+          ENV \
+          LANG=en_US.UTF-8 \
+          THOTH_SOLVER_TMP_DIR='/tmp/thoth-solver-install'
+
+          RUN \
+          useradd -m solver &&\
+          dnf update -y &&\
+          mkdir -p ${THOTH_SOLVER_TMP_DIR}
+
+          # Install thoth-solver itself
+          COPY ./ ${THOTH_SOLVER_TMP_DIR}
+          RUN \
+          cd ${THOTH_SOLVER_TMP_DIR} &&\
+          pip3 install . &&\
+          cd / &&\
+          rm -rf ${THOTH_SOLVER_TMP_DIR} &&\
+          unset THOTH_SOLVER_TMP_DIR &&\
+          dnf clean all &&\
+          chmod 777 /home/solver
+
+          WORKDIR /home/solver
+          USER solver
+        type: Git
+        git:
+          uri: ${GITHUB_URL}
+          ref: ${GITHUB_REF}
+      strategy:
+        dockerStrategy:
+          from:
+            kind: ImageStreamTag
+            name: fedora:26
+        type: Docker
+      triggers:
+        - type: ImageChange
+          imageChange: {}
 
 parameters:
-- description: Name of the github repository
-  displayName: Git Repository
-  required: true
-  name: GITHUB_URL
-  value: 'https://github.com/thoth-station/solver'
+  - description: Name of the github repository
+    displayName: Git Repository
+    required: true
+    name: GITHUB_URL
+    value: 'https://github.com/thoth-station/solver'
 
-- description: Git reference to be used
-  displayName: Git Reference
-  required: true
-  name: GITHUB_REF
-  value: 'master'
+  - description: Git reference to be used
+    displayName: Git Reference
+    required: true
+    name: GITHUB_REF
+    value: 'master'
 
-- description: Tag of the output ImageStream the resulting container image should go to
-  displayName: ImageStream Tag
-  required: true
-  name: IMAGE_STREAM_TAG
-  value: 'latest'
+  - description: Tag of the output ImageStream the resulting container image should go to
+    displayName: ImageStream Tag
+    required: true
+    name: IMAGE_STREAM_TAG
+    value: 'latest'
