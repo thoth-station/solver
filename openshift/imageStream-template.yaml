@@ -6,37 +6,41 @@ labels:
 metadata:
   name: solver-imagestream
   annotations:
-    description: This is Thoth Solver Fedora 26+ ImageStream, this template is meant to be used by Jenkins, but could also be used by humans...
+    description: >
+      This is Thoth Solver Fedora 26+ ImageStream, this template is meant to
+      be used by Bots, but could also be used by humans...
     openshift.io/display-name: 'Thoth Core: Solver Fedora 26+ ImageStream'
-    version: 0.1.0
+    version: 0.2.0
     tags: poc,thoth,solver,ai-stacks
     template.openshift.io/documentation-url: https://github.com/Thoth-Station/
-    template.openshift.io/long-description: This is Thoth Solver Fedora 26+ ImageStream, this template is meant to be used by Jenkins, but could also be used by humans...
+    template.openshift.io/long-description: >
+      This is Thoth Solver Fedora 26+ ImageStream, this template is meant to
+      be used by Bots, but could also be used by humans...
     template.openshift.io/provider-display-name: Red Hat, Inc.
 
 objects:
-- kind: ImageStream
-  apiVersion: v1
-  metadata:
-    labels:
-      build: solver-f26-job
-      app: thoth-core
-      component: solver
-    name: solver-f26-job
-  spec:
-    name: latest  
-    lookupPolicy:
-      local: true
+  - kind: ImageStream
+    apiVersion: v1
+    metadata:
+      labels:
+        build: solver-f26-job
+        app: thoth-core
+        component: solver
+      name: solver-f26-job
+    spec:
+      name: latest
+      lookupPolicy:
+        local: true
 
-- kind: ImageStream
-  apiVersion: v1
-  metadata:
-    labels:
-      build: solver-f27-job
-      app: thoth-core
-      component: solver
-    name: solver-f27-job
-  spec:
-    name: latest  
-    lookupPolicy:
-      local: true
+  - kind: ImageStream
+    apiVersion: v1
+    metadata:
+      labels:
+        build: solver-f27-job
+        app: thoth-core
+        component: solver
+      name: solver-f27-job
+    spec:
+      name: latest
+      lookupPolicy:
+        local: true
