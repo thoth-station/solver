@@ -1,0 +1,58 @@
+apiVersion: v1
+kind: Template
+labels:
+  template: solver-pod
+  thoth: 0.1.0
+metadata:
+  name: solver
+  annotations:
+    description: This is Thoth Core - Solver
+    openshift.io/display-name: 'Thoth: Solver'
+    version: 0.3.0
+    tags: poc,thoth,ai-stacks,solver
+    template.openshift.io/documentation-url: https://github.com/Thoth-Station/
+    template.openshift.io/long-description: >
+      This template defines resources needed to run solver in Thoth to OpenShift.
+    template.openshift.io/provider-display-name: Red Hat, Inc.
+    labels:
+      thoth-template: solver
+
+objects:
+  - apiVersion: v1
+    kind: Pod
+    metadata:
+      generateName: solver-
+      labels:
+        app: thoth
+        thoth-pod: solver
+    spec:
+      restartPolicy: Never
+      automountServiceAccountToken: false
+      containers:
+        - name: solver
+          image: solver
+          livenessProbe:
+            # Give solver 1 hour to compute results, kill it if it was not able result anything.
+            tcpSocket:
+              port: 80
+            initialDelaySeconds: 3600
+            failureThreshold: 1
+            periodSeconds: 10
+          env:
+            - name: THOTH_LOG_SOLVER
+              value: 'INFO'
+            # These are intentionally empty - they will be provided on pod run request.
+            # TODO: move to parameters?
+            - name: THOTH_SOLVER_NO_TRANSITIVE
+              value: '0'
+            - name": THOTH_SOLVER_PACKAGES
+              value: ''
+            - name: THOTH_SOLVER_OUTPUT
+              value: ''
+          resources:
+            limits:
+              memory: '256Mi'
+              cpu: '750m'
+            requests:
+              memory: '256Mi'
+              cpu: '750m'
