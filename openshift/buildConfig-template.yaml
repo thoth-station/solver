@@ -1,8 +1,5 @@
 apiVersion: v1
 kind: Template
-labels:
-  template: solver-buildconfig
-  thoth: 0.1.0
 metadata:
   name: solver-buildconfig
   annotations:
@@ -17,6 +14,10 @@ metadata:
       This is Thoth Solver Fedora 26+ BuildConfig, this template is meant to
       be used by Bots, but could also be used by humans...
     template.openshift.io/provider-display-name: Red Hat, Inc.
+  labels:
+    template: solver-buildconfig
+    app: thoth
+    component: solver
 
 objects:
   - kind: BuildConfig
@@ -24,7 +25,7 @@ objects:
     metadata:
       name: solver-f27-job
       labels:
-        app: thoth-core
+        app: thoth
         component: solver
     spec:
       output:
@@ -77,7 +78,7 @@ objects:
     metadata:
       name: solver-f26-job
       labels:
-        app: thoth-core
+        app: thoth
         component: solver
     spec:
       output:
