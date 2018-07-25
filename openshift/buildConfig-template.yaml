@@ -63,6 +63,13 @@ objects:
         git:
           uri: ${GITHUB_URL}
           ref: ${GITHUB_REF}
+      resources:
+        limits:
+          memory: '256Mi'
+          cpu: '500m'
+        requests:
+          memory: '256Mi'
+          cpu: '500m'
       strategy:
         dockerStrategy:
           from:
@@ -116,6 +123,13 @@ objects:
         git:
           uri: ${GITHUB_URL}
           ref: ${GITHUB_REF}
+      resources:
+        limits:
+          memory: '512Mi'
+          cpu: '500m'
+        requests:
+          memory: '512Mi'
+          cpu: '500m'
       strategy:
         dockerStrategy:
           from:
