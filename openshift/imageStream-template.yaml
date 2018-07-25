@@ -1,8 +1,5 @@
 apiVersion: v1
 kind: Template
-labels:
-  template: solver-imagestream
-  thoth: 0.1.0
 metadata:
   name: solver-imagestream
   annotations:
@@ -17,6 +14,10 @@ metadata:
       This is Thoth Solver Fedora 26+ ImageStream, this template is meant to
       be used by Bots, but could also be used by humans...
     template.openshift.io/provider-display-name: Red Hat, Inc.
+  labels:
+    template: solver-imagestream
+    app: thoth
+    component: solver
 
 objects:
   - kind: ImageStream
@@ -24,7 +25,7 @@ objects:
     metadata:
       labels:
         build: solver-f26-job
-        app: thoth-core
+        app: thoth
         component: solver
       name: solver-f26-job
     spec:
@@ -37,7 +38,7 @@ objects:
     metadata:
       labels:
         build: solver-f27-job
-        app: thoth-core
+        app: thoth
         component: solver
       name: solver-f27-job
     spec:

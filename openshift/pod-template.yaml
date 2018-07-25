@@ -13,6 +13,8 @@ metadata:
     template.openshift.io/provider-display-name: Red Hat, Inc.
   labels:
     thoth-template: solver
+    app: thoth
+    component: solver
 
 objects:
   - apiVersion: v1
@@ -22,6 +24,7 @@ objects:
       labels:
         app: thoth
         thoth-pod: solver
+        component: solver
     spec:
       restartPolicy: Never
       automountServiceAccountToken: false
