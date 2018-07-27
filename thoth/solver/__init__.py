@@ -21,6 +21,6 @@
 from .python import resolve
 from .compile import pip_compile
 
-__version__ = '1.0.2'
+__version__ = "1.0.3"
 __title__ = 'thoth-solver'
 __author__ = 'Fridolin Pokorny'
