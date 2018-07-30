@@ -24,10 +24,10 @@ objects:
     apiVersion: v1
     metadata:
       labels:
-        build: solver-f26-job
+        build: solver-f26
         app: thoth
         component: solver
-      name: solver-f26-job
+      name: solver-f26
     spec:
       name: latest
       lookupPolicy:
@@ -37,10 +37,10 @@ objects:
     apiVersion: v1
     metadata:
       labels:
-        build: solver-f27-job
+        build: solver-f27
         app: thoth
         component: solver
-      name: solver-f27-job
+      name: solver-f27
     spec:
       name: latest
       lookupPolicy:
