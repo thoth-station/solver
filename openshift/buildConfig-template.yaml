@@ -23,7 +23,7 @@ objects:
   - kind: BuildConfig
     apiVersion: v1
     metadata:
-      name: solver-f27-job
+      name: solver-f27
       labels:
         app: thoth
         component: solver
@@ -31,7 +31,7 @@ objects:
       output:
         to:
           kind: ImageStreamTag
-          name: "solver-f27-job:${IMAGE_STREAM_TAG}"
+          name: "solver-f27:${IMAGE_STREAM_TAG}"
       source:
         dockerfile: |
           FROM fedora:27
@@ -83,7 +83,7 @@ objects:
   - kind: BuildConfig
     apiVersion: v1
     metadata:
-      name: solver-f26-job
+      name: solver-f26
       labels:
         app: thoth
         component: solver
@@ -91,7 +91,7 @@ objects:
       output:
         to:
           kind: ImageStreamTag
-          name: "solver-f26-job:${IMAGE_STREAM_TAG}"
+          name: "solver-f26:${IMAGE_STREAM_TAG}"
       source:
         dockerfile: |
           FROM fedora:26

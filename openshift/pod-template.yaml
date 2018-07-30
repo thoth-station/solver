@@ -12,7 +12,7 @@ metadata:
       This template defines resources needed to run solver in Thoth to OpenShift.
     template.openshift.io/provider-display-name: Red Hat, Inc.
   labels:
-    thoth-template: solver
+    template: solver
     app: thoth
     component: solver
 
