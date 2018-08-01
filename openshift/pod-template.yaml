@@ -20,30 +20,93 @@ objects:
   - apiVersion: v1
     kind: Pod
     metadata:
-      generateName: 'solver-'
+      generateName: solver-f26-
       labels:
         app: thoth
-        thoth-pod: solver
-        component: solver
+        component: solver-f26
     spec:
-      restartPolicy: Never
       automountServiceAccountToken: false
       containers:
         - name: solver
-          image: solver
+          env:
+            - name: THOTH_SOLVER
+              value: solver-f26
+            - name: THOTH_LOG_SOLVER
+              value: "${THOTH_LOG_SOLVER}"
+            - name: THOTH_SOLVER_NO_TRANSITIVE
+              value: "${THOTH_SOLVER_NO_TRANSITIVE}"
+            - name: THOTH_SOLVER_PACKAGES
+              value: "${THOTH_SOLVER_PACKAGES}"
+            - name: THOTH_SOLVER_OUTPUT
+              value: "${THOTH_SOLVER_OUTPUT}"
+          image: solver-f26
           livenessProbe:
+            failureThreshold: 1
+            initialDelaySeconds: 3600
+            periodSeconds: 10
             tcpSocket:
               port: 80
-            initialDelaySeconds: 3600
-            failureThreshold: 1
-            periodSeconds: 10
-          env:
-            - name: THOTH_LOG_SOLVER
-              value: INFO
           resources:
             limits:
-              memory: '256Mi'
-              cpu: '750m'
+              cpu: 750m
+              memory: 256Mi
             requests:
-              memory: '256Mi'
-              cpu: '750m'
+              cpu: 750m
+              memory: 256Mi
+          restartPolicy: Never
+
+  - apiVersion: v1
+    kind: Pod
+    metadata:
+      generateName: solver-f27-
+      labels:
+        app: thoth
+        component: solver-f27
+    spec:
+      containers:
+        - name: solver
+          env:
+            - name: THOTH_SOLVER
+              value: solver-f27
+            - name: THOTH_LOG_SOLVER
+              value: "${THOTH_LOG_SOLVER}"
+            - name: THOTH_SOLVER_NO_TRANSITIVE
+              value: "${THOTH_SOLVER_NO_TRANSITIVE}"
+            - name: THOTH_SOLVER_PACKAGES
+              value: "${THOTH_SOLVER_PACKAGES}"
+            - name: THOTH_SOLVER_OUTPUT
+              value: "${THOTH_SOLVER_OUTPUT}"
+          image: solver-f27
+          livenessProbe:
+            failureThreshold: 1
+            initialDelaySeconds: 3600
+            periodSeconds: 10
+            tcpSocket:
+              port: 80
+          resources:
+            limits:
+              cpu: 750m
+              memory: 256Mi
+            requests:
+              cpu: 750m
+              memory: 256Mi
+          restartPolicy: Never
+
+parameters:
+  - name: THOTH_SOLVER_NO_TRANSITIVE
+    description: Do not resolve transitive dependencies
+    displayName: No transitive dependencies
+    required: true
+  - name: THOTH_SOLVER_PACKAGES
+    description: Packages to be resolved
+    displayName: Packages to be analyzed by solver
+    required: true
+  - name: THOTH_SOLVER_OUTPUT
+    description: Output to send solver results to
+    displayName: Solver output
+    required: true
+  - name: THOTH_LOG_SOLVER
+    description: Log solver actions
+    displayName: Log solver actions
+    required: true
+    value: INFO
