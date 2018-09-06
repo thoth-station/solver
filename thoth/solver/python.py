@@ -142,15 +142,13 @@ def _filter_package_dependencies(package_info: dict) -> dict:
 
 def _resolve_versions(package_name: str, version_spec: str) -> typing.List[str]:
     try:
-        resolved_versions = _PYPI_SOLVER.solve(
-            [package_name + (version_spec or '')], all_versions=True)
+        resolved_versions = _PYPI_SOLVER.solve([package_name + (version_spec or '')], all_versions=True)
     except Exception:  # pylint: disable=broad-except
         _LOGGER.exception(
             "Failed to resolve versions for %r with version spec %r", package_name, version_spec)
         return []
 
-    assert len(resolved_versions.keys()) == 1,\
-        "Resolution of one package version ended with multiple packages."
+    assert len(resolved_versions.keys()) == 1, "Resolution of one package version ended with multiple packages."
     return list(resolved_versions.values())[0]
 
 
