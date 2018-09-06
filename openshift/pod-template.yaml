@@ -26,6 +26,7 @@ objects:
         component: solver-f26
     spec:
       automountServiceAccountToken: false
+      restartPolicy: Never
       containers:
         - name: solver
           env:
@@ -53,7 +54,6 @@ objects:
             requests:
               cpu: 750m
               memory: 256Mi
-          restartPolicy: Never
 
   - apiVersion: v1
     kind: Pod
@@ -63,6 +63,7 @@ objects:
         app: thoth
         component: solver-f27
     spec:
+      restartPolicy: Never
       containers:
         - name: solver
           env:
@@ -90,7 +91,6 @@ objects:
             requests:
               cpu: 750m
               memory: 256Mi
-          restartPolicy: Never
 
 parameters:
   - name: THOTH_SOLVER_NO_TRANSITIVE
