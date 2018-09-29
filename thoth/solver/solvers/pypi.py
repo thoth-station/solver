@@ -77,6 +77,7 @@ class PypiReleasesFetcher(ReleasesFetcher):
         if not package:
             raise ValueError("package")
 
+        _LOGGER.info("Fetching releases for %r", package)
         releases = self._rpc.package_releases(package, True)
         if not releases:
             # try again with swapped case of first character
@@ -118,7 +119,7 @@ class PypiDependencyParser(DependencyParser):
                     gte, lt = result.split()
                     return [('>=', gte.lstrip('>=')), ('<', lt.lstrip('<'))]
                 except ValueError:
-                    _LOGGER.info("couldn't resolve ==%s", spec.version)
+                    _LOGGER.warning("couldn't resolve ==%s", spec.version)
                     return spec.operator, spec.version
             # https://www.python.org/dev/peps/pep-0440/#arbitrary-equality
             # Use of this operator is heavily discouraged, so just convert it to 'Version matching'
@@ -139,6 +140,7 @@ class PypiDependencyParser(DependencyParser):
                     specs = [('>=', '0.0.0')]
                 return specs
 
+        _LOGGER.info("Parsing dependency %r", spec)
         # create a temporary file and store the spec there since
         # `parse_requirements` requires a file
         with NamedTemporaryFile(mode='w+', suffix='pysolve') as f:
