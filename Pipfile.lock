@@ -45,10 +45,10 @@
         },
         "colorama": {
             "hashes": [
-                "sha256:463f8483208e921368c9f306094eb6f725c6ca42b0f97e313cb5d5512459feda",
-                "sha256:48eb22f4f8461b1df5734a074b57042430fb06e1d61bd1e11b078c0fe6d7a1f1"
+                "sha256:a3d89af5db9e9806a779a50296b5fdb466e281147c2c235e8225ecc6dbf7bbf3",
+                "sha256:c9b54bebe91a6a803e0772c8561d53f2926bfeb17cd141fbabcb08424086595c"
             ],
-            "version": "==0.3.9"
+            "version": "==0.4.0"
         },
         "daiquiri": {
             "hashes": [
@@ -174,11 +174,11 @@
         },
         "thoth-common": {
             "hashes": [
-                "sha256:2532b52a93e28382a22b862a5e83d8d8c4cb45070528e327c1c2748d1dc5e226",
-                "sha256:52dbdb02e87b2950270686dd913f7e1a53c35785b5184aaf7c06bbe4f95c00bc"
+                "sha256:67231bdb42b45ce60e1baebce35aa5653e6c5ab6bd160e5c4bee0b6d9f7695d7",
+                "sha256:f9c591bb0eab1005056d0716052756e3456ed5e60904b34b264df8ce19107f8e"
             ],
             "index": "pypi",
-            "version": "==0.3.9"
+            "version": "==0.3.10"
         },
         "tzlocal": {
             "hashes": [
@@ -302,10 +302,10 @@
         },
         "colorama": {
             "hashes": [
-                "sha256:463f8483208e921368c9f306094eb6f725c6ca42b0f97e313cb5d5512459feda",
-                "sha256:48eb22f4f8461b1df5734a074b57042430fb06e1d61bd1e11b078c0fe6d7a1f1"
+                "sha256:a3d89af5db9e9806a779a50296b5fdb466e281147c2c235e8225ecc6dbf7bbf3",
+                "sha256:c9b54bebe91a6a803e0772c8561d53f2926bfeb17cd141fbabcb08424086595c"
             ],
-            "version": "==0.3.9"
+            "version": "==0.4.0"
         },
         "colorlog": {
             "hashes": [
