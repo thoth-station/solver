@@ -35,7 +35,7 @@ parameters:
     displayName: "Log solver actions"
     required: true
     value: INFO
-    
+
 objects:
   - apiVersion: batch/v1
     kind: Job
@@ -85,4 +85,3 @@ objects:
                 requests:
                   cpu: 750m
                   memory: 256Mi
-
