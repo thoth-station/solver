@@ -3,65 +3,40 @@ kind: Template
 metadata:
   name: solver
   annotations:
-    description: This is Thoth Core - Solver
+    description: "Thoth: Solver Job Template"
     openshift.io/display-name: 'Thoth: Solver'
-    version: 0.3.0
-    tags: poc,thoth,ai-stacks,solver
+    version: 0.4.0
+    tags: thoth,ai-stacks,aistacks,solver
     template.openshift.io/documentation-url: https://github.com/Thoth-Station/
     template.openshift.io/long-description: >
-      This template defines resources needed to run solver in Thoth to OpenShift.
+      This template defines resources needed to run solvers in Thoth, it is used
+      to create new OpenShift Jobs running the analyzer.
     template.openshift.io/provider-display-name: Red Hat, Inc.
   labels:
     template: solver
     app: thoth
     component: solver
 
-objects:
-  - apiVersion: batch/v1
-    kind: Job
-    metadata:
-      generateName: solver-f26-
-      labels:
-        app: thoth
-        component: solver-f26
-    spec:
-      backoffLimit: 0
-      template:
-        metadata:
-          labels:
-            app: thoth
-            component: solver-26
-        spec:
-          automountServiceAccountToken: false
-          restartPolicy: Never
-          containers:
-            - name: solver
-              env:
-                - name: THOTH_SOLVER
-                  value: solver-f26
-                - name: THOTH_LOG_SOLVER
-                  value: "${THOTH_LOG_SOLVER}"
-                - name: THOTH_SOLVER_NO_TRANSITIVE
-                  value: "${THOTH_SOLVER_NO_TRANSITIVE}"
-                - name: THOTH_SOLVER_PACKAGES
-                  value: "${THOTH_SOLVER_PACKAGES}"
-                - name: THOTH_SOLVER_OUTPUT
-                  value: "${THOTH_SOLVER_OUTPUT}"
-              image: solver-f26
-              livenessProbe:
-                failureThreshold: 1
-                initialDelaySeconds: 3600
-                periodSeconds: 10
-                tcpSocket:
-                  port: 80
-              resources:
-                limits:
-                  cpu: 750m
-                  memory: 256Mi
-                requests:
-                  cpu: 750m
-                  memory: 256Mi
+parameters:
+  - name: THOTH_SOLVER_NO_TRANSITIVE
+    description: "Do not resolve transitive dependencies"
+    displayName: "No transitive dependencies"
+    required: true
+  - name: THOTH_SOLVER_PACKAGES
+    description: "Packages to be resolved"
+    displayName: "Packages to be analyzed by solver"
+    required: true
+  - name: THOTH_SOLVER_OUTPUT
+    description: "Output to send solver results to"
+    displayName: "Solver output"
+    required: true
+  - name: THOTH_LOG_SOLVER
+    description: "Log solver actions"
+    displayName: "Log solver actions"
+    required: true
+    value: INFO
 
+objects:
   - apiVersion: batch/v1
     kind: Job
     metadata:
@@ -91,6 +66,11 @@ objects:
                   value: "${THOTH_SOLVER_PACKAGES}"
                 - name: THOTH_SOLVER_OUTPUT
                   value: "${THOTH_SOLVER_OUTPUT}"
+                - name: SENTRY_DSN
+                  valueFrom:
+                    secretKeyRef:
+                      name: thoth
+                      key: sentry-dsn
               image: solver-f27
               livenessProbe:
                 failureThreshold: 1
@@ -105,22 +85,3 @@ objects:
                 requests:
                   cpu: 750m
                   memory: 256Mi
-
-parameters:
-  - name: THOTH_SOLVER_NO_TRANSITIVE
-    description: Do not resolve transitive dependencies
-    displayName: No transitive dependencies
-    required: true
-  - name: THOTH_SOLVER_PACKAGES
-    description: Packages to be resolved
-    displayName: Packages to be analyzed by solver
-    required: true
-  - name: THOTH_SOLVER_OUTPUT
-    description: Output to send solver results to
-    displayName: Solver output
-    required: true
-  - name: THOTH_LOG_SOLVER
-    description: Log solver actions
-    displayName: Log solver actions
-    required: true
-    value: INFO
