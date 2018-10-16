@@ -23,10 +23,10 @@
         },
         "certifi": {
             "hashes": [
-                "sha256:376690d6f16d32f9d1fe8932551d80b23e9d393a8578c5633a2ed39a64861638",
-                "sha256:456048c7e371c089d0a77a5212fb37a2c2dce1e24146e3b7e0261736aaeaa22a"
+                "sha256:339dc09518b07e2fa7eda5450740925974815557727d6bd35d319c1524a04a4c",
+                "sha256:6d58c986d22b038c8c0df30d639f23a3e6d172a05c3583e766f4c0b785c0986a"
             ],
-            "version": "==2018.8.24"
+            "version": "==2018.10.15"
         },
         "chardet": {
             "hashes": [
@@ -152,10 +152,10 @@
         },
         "sentry-sdk": {
             "hashes": [
-                "sha256:47e612413dd9ce247b6383f8eddb405c02411f152694aadea56640713bae0eed",
-                "sha256:f8f302e186076b8cfe80472ac7da93d06325dd446d7bb0ed60e867a4fcb808d9"
+                "sha256:4a021782d74c35bd35ca90f25f9c1c14ae45137f496c5835d361cd02a637a45a",
+                "sha256:68091ad8200dac306052e389705357b6758744253951f05496284e21284f3194"
             ],
-            "version": "==0.4.0"
+            "version": "==0.4.1"
         },
         "six": {
             "hashes": [
@@ -166,11 +166,11 @@
         },
         "thoth-analyzer": {
             "hashes": [
-                "sha256:097d537bc21904c41d16c22bd389f909c2c5f397570696558de4baefa79d09f8",
-                "sha256:66e3561ae1ba01ef7ad15a255b866c5eccce6f445a5bef21096dcbc756d65be6"
+                "sha256:607b050b84fb21cafae56c29703e179b9326d63f76f87e20b25c7e708f3dcf30",
+                "sha256:f9cda99a582fab64924a4b8bd5dae3b47349ae3486d37023147235a22e896e56"
             ],
             "index": "pypi",
-            "version": "==0.0.7"
+            "version": "==0.1.0"
         },
         "thoth-common": {
             "hashes": [
@@ -253,10 +253,10 @@
         },
         "certifi": {
             "hashes": [
-                "sha256:376690d6f16d32f9d1fe8932551d80b23e9d393a8578c5633a2ed39a64861638",
-                "sha256:456048c7e371c089d0a77a5212fb37a2c2dce1e24146e3b7e0261736aaeaa22a"
+                "sha256:339dc09518b07e2fa7eda5450740925974815557727d6bd35d319c1524a04a4c",
+                "sha256:6d58c986d22b038c8c0df30d639f23a3e6d172a05c3583e766f4c0b785c0986a"
             ],
-            "version": "==2018.8.24"
+            "version": "==2018.10.15"
         },
         "chardet": {
             "hashes": [
@@ -375,10 +375,10 @@
         },
         "gitdb2": {
             "hashes": [
-                "sha256:87783b7f4a8f6b71c7fe81d32179b3c8781c1a7d6fa0c69bff2f315b00aff4f8",
-                "sha256:bb4c85b8a58531c51373c89f92163b92f30f81369605a67cd52d1fc21246c044"
+                "sha256:83361131a1836661a155172932a13c08bda2db3674e4caa32368aa6eb02f38c2",
+                "sha256:e3a0141c5f2a3f635c7209d56c496ebe1ad35da82fe4d3ec4aaa36278d70648a"
             ],
-            "version": "==2.0.4"
+            "version": "==2.0.5"
         },
         "gitpython": {
             "hashes": [
@@ -695,10 +695,10 @@
         },
         "smmap2": {
             "hashes": [
-                "sha256:0dd53d991af487f9b22774fa89451358da3607c02b9b886a54736c6a313ece0b",
-                "sha256:dc216005e529d57007ace27048eb336dcecb7fc413cfb3b2f402bb25972b69c6"
+                "sha256:0555a7bf4df71d1ef4218e4807bbf9b201f910174e6e08af2e138d4e517b4dde",
+                "sha256:29a9ffa0497e7f2be94ca0ed1ca1aa3cd4cf25a1f6b4f5f87f74b46ed91d609a"
             ],
-            "version": "==2.0.4"
+            "version": "==2.0.5"
         },
         "snowballstemmer": {
             "hashes": [
