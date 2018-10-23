@@ -50,7 +50,7 @@ objects:
         metadata:
           labels:
             app: thoth
-            component: solver-27
+            component: solver-f27
         spec:
           restartPolicy: Never
           containers:
