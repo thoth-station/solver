@@ -77,7 +77,7 @@ def cli(ctx=None, verbose=0):
 def pypi(click_ctx, requirements, index=None, python_version=3, exclude_packages=None, output=None,
          no_transitive=True, no_pretty=False):
     """Manipulate with dependency requirements using PyPI."""
-    requirements = [requirement.strip() for requirement in requirements.split('\n') if requirement]
+    requirements = [requirement.strip() for requirement in requirements.split('\\n') if requirement]
 
     if not requirements:
         _LOG.error("No requirements specified, exiting")
