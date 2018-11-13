@@ -87,9 +87,9 @@ def _install_requirement(python_bin: str, package: str, version: str = None,
         result = run_command(cmd, raise_on_error=False)
 
         if result.return_code != 0:
-            _LOGGER.error("Failed to restore previous environment for package %r (installed version %r, "
-                          "previous version %r), the error is not fatal but can affect future actions",
-                          package, version, previous_version['package']['installed_version'])
+            _LOGGER.warning("Failed to restore previous environment for package %r (installed version %r, "
+                            "previous version %r), the error is not fatal but can affect future actions",
+                            package, version, previous_version['package']['installed_version'])
             return
     else:
         _LOGGER.debug("Removing installed package %r", package)
@@ -97,8 +97,8 @@ def _install_requirement(python_bin: str, package: str, version: str = None,
         result = run_command(cmd, raise_on_error=False)
 
         if result.return_code != 0:
-            _LOGGER.error("Failed to restore previous environment by removing package %r (installed version %r), "
-                          "the error not fatal but can affect future actions", package, version)
+            _LOGGER.warning("Failed to restore previous environment by removing package %r (installed version %r), "
+                            "the error is not fatal but can affect future actions", package, version)
             return
 
 
@@ -228,13 +228,13 @@ def resolve(requirements: typing.List[str], index_url: str = None, python_versio
             continue
 
         if package_info['package']['installed_version'] != package_version:
-            _LOGGER.error("Requested to install version %r of package %r, but installed "
-                          "version is %r, error is not fatal",
-                          package_version, package_name, package_info['package']['installed_version'])
+            _LOGGER.warning("Requested to install version %r of package %r, but installed "
+                            "version is %r, error is not fatal",
+                            package_version, package_name, package_info['package']['installed_version'])
 
         if package_info['package']['package_name'] != package_name:
-            _LOGGER.error("Requested to install package %r, but installed package name is %r, error is not fatal",
-                          package_name, package_info['package']['package_name'])
+            _LOGGER.warning("Requested to install package %r, but installed package name is %r, error is not fatal",
+                            package_name, package_info['package']['package_name'])
 
         entry = _filter_pipdeptree_entry(package_info)
         packages.append(entry)
