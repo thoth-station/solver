@@ -26,18 +26,27 @@ from shlex import quote
 
 from thoth.analyzer import CommandError
 from thoth.analyzer import run_command
+from thoth.python import Source
+from thoth.python.exceptions import NotFound
 
 from .solvers import get_ecosystem_solver
-from .solvers import PypiDependencyParser
+from .solvers import PythonDependencyParser
+from .solvers import PythonSolver
 
 _LOGGER = logging.getLogger(__name__)
-_PYPI_SOLVER = get_ecosystem_solver('pypi')
 
 
-def _filter_pipdeptree_entry(entry: dict) ->dict:
+def _create_entry(entry: dict, source: Source = None) ->dict:
     """Filter and normalize the output of pipdeptree entry."""
     entry['package_name'] = entry['package'].pop('package_name')
     entry['package_version'] = entry['package'].pop('installed_version')
+
+    if source:
+        entry['index_url'] = source.url
+        entry['hashes'] = []
+        for item in source.get_package_hashes(entry['package_name'], entry['package_version']):
+            entry['hashes'].append('sha256:' + item['sha256'])
+
     entry.pop('package')
     for dependency in entry['dependencies']:
         dependency.pop('key', None)
@@ -50,7 +59,7 @@ def _get_environment_details(python_bin: str) -> list:
     """Get information about packages in environment where packages get installed."""
     cmd = '{} -m pipdeptree --json'.format(python_bin)
     output = run_command(cmd, is_json=True).stdout
-    return [_filter_pipdeptree_entry(entry) for entry in output]
+    return [_create_entry(entry) for entry in output]
 
 
 @contextmanager
@@ -120,13 +129,12 @@ def _pipdeptree(python_bin, package_name: str = None, warn: bool = False) -> typ
 
     # The given package was not found.
     if warn:
-        _LOGGER.warning(
-            "Package %r was not found in pipdeptree output %r", package_name, output)
+        _LOGGER.warning("Package %r was not found in pipdeptree output %r", package_name, output)
     return None
 
 
 def _get_dependency_specification(dep_spec: typing.List[tuple]) -> str:
-    """Get string representation of dependency specification as provided by PypiDependencyParser."""
+    """Get string representation of dependency specification as provided by PythonDependencyParser."""
     return ",".join(dep_range[0] + dep_range[1] for dep_range in dep_spec)
 
 
@@ -140,9 +148,12 @@ def _filter_package_dependencies(package_info: dict) -> dict:
     return dependencies
 
 
-def _resolve_versions(package_name: str, version_spec: str) -> typing.List[str]:
+def _resolve_versions(solver: PythonSolver, source: Source, package_name: str, version_spec: str) -> typing.List[str]:
     try:
-        resolved_versions = _PYPI_SOLVER.solve([package_name + (version_spec or '')], all_versions=True)
+        resolved_versions = solver.solve([package_name + (version_spec or '')], all_versions=True)
+    except NotFound:
+        _LOGGER.info("No versions were resovled for %r with version specification %r for package index %r", package_name, version_spec, source.url)
+        return []
     except Exception:  # pylint: disable=broad-except
         _LOGGER.exception(
             "Failed to resolve versions for %r with version spec %r", package_name, version_spec)
@@ -152,11 +163,9 @@ def _resolve_versions(package_name: str, version_spec: str) -> typing.List[str]:
     return list(resolved_versions.values())[0]
 
 
-def resolve(requirements: typing.List[str], index_url: str = None, python_version: int = 3,
-            exclude_packages: set = None, transitive: bool = True) -> dict:
-    """Resolve given requirements for the given Python version."""
-    assert python_version in (2, 3), "Unknown Python version"
-
+def _do_resolve_index(solver: PythonSolver, all_solvers: typing.List[PythonSolver], index_urls: typing.List[str],
+                      source: Source, requirements: typing.List[str], index_url: list = None, python_version: int = 3,
+                      exclude_packages: set = None, transitive: bool = True) -> dict:
     python_bin = 'python3' if python_version == 3 else 'python2'
     run_command('virtualenv -p python3 venv')
     python_bin = 'venv/bin/' + python_bin
@@ -173,7 +182,7 @@ def resolve(requirements: typing.List[str], index_url: str = None, python_versio
     for requirement in requirements:
         _LOGGER.debug("Parsing requirement %r", requirement)
         try:
-            dependency = PypiDependencyParser.parse_python(requirement)
+            dependency = PythonDependencyParser.parse_python(requirement)
         except Exception as exc:
             unparsed.append({
                 'requirement': requirement,
@@ -185,10 +194,9 @@ def resolve(requirements: typing.List[str], index_url: str = None, python_versio
             continue
 
         version_spec = _get_dependency_specification(dependency.spec)
-        resolved_versions = _resolve_versions(dependency.name, version_spec)
+        resolved_versions = _resolve_versions(solver, source, dependency.name, version_spec)
         if not resolved_versions:
-            _LOGGER.warning(
-                "No versions were resolved for dependency %r in version %r", dependency.name, version_spec)
+            _LOGGER.warning("No versions were resolved for dependency %r in version %r", dependency.name, version_spec)
             unresolved.append({
                 'package_name': dependency.name,
                 'version_spec': version_spec
@@ -204,12 +212,18 @@ def resolve(requirements: typing.List[str], index_url: str = None, python_versio
     while queue:
         package_name, package_version = queue.pop()
 
+        _LOGGER.info("Using index %r to discover package %r in version %r", index_url, package_name, package_version)
         try:
             with _install_requirement(python_bin, package_name, package_version, index_url):
                 package_info = _pipdeptree(python_bin, package_name, warn=True)
         except CommandError as exc:
+            _LOGGER.debug(
+                "There was an error during package %r in version %r discovery from %r: %s",
+                package_name, package_version, index_url, exc
+            )
             errors.append({
                 'package_name': package_name,
+                'index': index_url,
                 'version': package_version,
                 'type': 'command_error',
                 'details': exc.to_dict()
@@ -219,6 +233,7 @@ def resolve(requirements: typing.List[str], index_url: str = None, python_versio
         if package_info is None:
             errors.append({
                 'package_name': package_name,
+                'index': index_url,
                 'version': package_version,
                 'type': 'not_site_package',
                 'details': {
@@ -228,34 +243,49 @@ def resolve(requirements: typing.List[str], index_url: str = None, python_versio
             continue
 
         if package_info['package']['installed_version'] != package_version:
-            _LOGGER.warning("Requested to install version %r of package %r, but installed "
-                            "version is %r, error is not fatal",
-                            package_version, package_name, package_info['package']['installed_version'])
+            _LOGGER.warning(
+                "Requested to install version %r of package %r, but installed version is %r, error is not fatal",
+                package_version, package_name, package_info['package']['installed_version']
+            )
 
         if package_info['package']['package_name'] != package_name:
-            _LOGGER.warning("Requested to install package %r, but installed package name is %r, error is not fatal",
-                            package_name, package_info['package']['package_name'])
+            _LOGGER.warning(
+                "Requested to install package %r, but installed package name is %r, error is not fatal",
+                package_name, package_info['package']['package_name']
+            )
 
-        entry = _filter_pipdeptree_entry(package_info)
+        entry = _create_entry(package_info, source)
         packages.append(entry)
 
         for dependency in entry['dependencies']:
             dependency_name, dependency_range = dependency['package_name'], dependency['required_version']
-            resolved_versions = _resolve_versions(
-                dependency_name, dependency_range)
-            _LOGGER.debug("Resolved versions for package %r with range specifier %r: %s",
-                          dependency_name, dependency_range, resolved_versions)
-            dependency['resolved_versions'] = resolved_versions
+            dependency['resolved_versions'] = []
 
-            if not transitive:
-                continue
+            for dep_solver in all_solvers:
+                _LOGGER.info(
+                    "Resolving dependency versions for %r with range %r from %r",
+                    dependency_name, dependency_range, dep_solver._release_fetcher.source.url
+                )
+                resolved_versions = _resolve_versions(dep_solver, source, dependency_name, dependency_range)
+                _LOGGER.debug(
+                    "Resolved versions for package %r with range specifier %r: %s",
+                    dependency_name, dependency_range, resolved_versions
+                )
+                dependency['resolved_versions'].append({
+                    'versions': resolved_versions,
+                    'index': dep_solver._release_fetcher.source.url
+                })
 
-            for version in resolved_versions:
-                # Did we check this package already?
-                seen_entry = (dependency_name, version)
-                if seen_entry not in packages_seen:
-                    packages_seen.add(seen_entry)
-                    queue.append(seen_entry)
+                if not transitive:
+                    continue
+
+                for version in resolved_versions:
+                    # Did we check this package already - do not check indexes, we manually insert them.
+                    seen_entry = (dependency_name, version)
+                    if seen_entry not in packages_seen:
+                        packages_seen.add(seen_entry)
+                        for index_url in index_urls:
+                            queue.append((dependency_name, version))
 
     return {
         'tree': packages,
@@ -264,3 +294,31 @@ def resolve(requirements: typing.List[str], index_url: str = None, python_versio
         'unresolved': unresolved,
         'environment': environment_details
     }
+
+
+def resolve(requirements: typing.List[str], index_urls: list = None, python_version: int = 3,
+            exclude_packages: set = None, transitive: bool = True) -> dict:
+    """Resolve given requirements for the given Python version."""
+    assert python_version in (2, 3), "Unknown Python version"
+
+    result = []
+    all_solvers = []
+    for index_url in index_urls:
+        source = Source(index_url)
+        all_solvers.append(PythonSolver(fetcher_kwargs={'source': source}))
+
+    for solver in all_solvers:
+        result.append(_do_resolve_index(
+            solver,
+            all_solvers,
+            index_urls,
+            source,
+            requirements,
+            solver._release_fetcher.source.url,
+            python_version,
+            exclude_packages,
+            transitive
+        ))
+
+    return result
+
