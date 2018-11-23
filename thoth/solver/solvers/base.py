@@ -265,7 +265,7 @@ class Solver(object):
                                for release in releases
                                if release in dep], key=cmp_to_key(compare_version))
 
-            _LOGGER.debug("  matching:\n   {}".format(matching))
+            _LOGGER.debug("  matching: %s", matching)
 
             if all_versions:
                 solved[name] = matching
