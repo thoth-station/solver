@@ -201,7 +201,8 @@ def _do_resolve_index(solver: PythonSolver, all_solvers: typing.List[PythonSolve
             _LOGGER.warning("No versions were resolved for dependency %r in version %r", dependency.name, version_spec)
             unresolved.append({
                 'package_name': dependency.name,
-                'version_spec': version_spec
+                'version_spec': version_spec,
+                'index': index_url
             })
         else:
             for version in resolved_versions:
