@@ -29,9 +29,9 @@ from thoth.analyzer import run_command
 from thoth.python import Source
 from thoth.python.exceptions import NotFound
 
-from .solvers import get_ecosystem_solver
-from .solvers import PythonDependencyParser
-from .solvers import PythonSolver
+from .base import get_ecosystem_solver
+from .python_solver import PythonDependencyParser
+from .python_solver import PythonSolver
 
 _LOGGER = logging.getLogger(__name__)
 
@@ -43,9 +43,9 @@ def _create_entry(entry: dict, source: Source = None) ->dict:
 
     if source:
         entry['index_url'] = source.url
-        entry['hashes'] = []
+        entry['sha256'] = []
         for item in source.get_package_hashes(entry['package_name'], entry['package_version']):
-            entry['hashes'].append('sha256:' + item['sha256'])
+            entry['sha256'].append(item['sha256'])
 
     entry.pop('package')
     for dependency in entry['dependencies']:
@@ -163,9 +163,10 @@ def _resolve_versions(solver: PythonSolver, source: Source, package_name: str, v
     return list(resolved_versions.values())[0]
 
 
-def _do_resolve_index(solver: PythonSolver, all_solvers: typing.List[PythonSolver], index_urls: typing.List[str],
-                      source: Source, requirements: typing.List[str], index_url: list = None, python_version: int = 3,
+def _do_resolve_index(solver: PythonSolver, all_solvers: typing.List[PythonSolver],
+                      source: Source, requirements: typing.List[str], python_version: int = 3,
                       exclude_packages: set = None, transitive: bool = True) -> dict:
+    index_url = solver.release_fetcher.source.url
     python_bin = 'python3' if python_version == 3 else 'python2'
     run_command('virtualenv -p python3 venv')
     python_bin = 'venv/bin/' + python_bin
@@ -211,7 +212,6 @@ def _do_resolve_index(solver: PythonSolver, all_solvers: typing.List[PythonSolve
 
     while queue:
         package_name, package_version = queue.pop()
-
         _LOGGER.info("Using index %r to discover package %r in version %r", index_url, package_name, package_version)
         try:
             with _install_requirement(python_bin, package_name, package_version, index_url):
@@ -284,8 +284,7 @@ def _do_resolve_index(solver: PythonSolver, all_solvers: typing.List[PythonSolve
                     seen_entry = (dependency_name, version)
                     if seen_entry not in packages_seen:
                         packages_seen.add(seen_entry)
-                        for index_url in index_urls:
-                            queue.append((dependency_name, version))
+                        queue.append((dependency_name, version))
 
     return {
         'tree': packages,
@@ -311,10 +310,8 @@ def resolve(requirements: typing.List[str], index_urls: list = None, python_vers
         result.append(_do_resolve_index(
             solver,
             all_solvers,
-            index_urls,
             source,
             requirements,
-            solver._release_fetcher.source.url,
             python_version,
             exclude_packages,
             transitive
