@@ -311,7 +311,6 @@ def resolve(requirements: typing.List[str], index_urls: list = None, python_vers
         'environment': environment_details
     }
 
-    result = []
     all_solvers = []
     for index_url in index_urls:
         source = Source(index_url)
