@@ -170,7 +170,6 @@ def _do_resolve_index(python_bin: str, solver: PythonSolver, all_solvers: typing
                       requirements: typing.List[str], exclude_packages: set = None, transitive: bool = True) -> dict:
     index_url = solver.release_fetcher.source.url
     source = solver.release_fetcher.source
-    run_command('{} -m pip install pipdeptree'.format(python_bin))
 
     packages_seen = set()
     packages = []
@@ -302,7 +301,9 @@ def resolve(requirements: typing.List[str], index_urls: list = None, python_vers
     run_command('virtualenv -p python3 venv')
     python_bin = 'venv/bin/' + python_bin
 
+    run_command('{} -m pip install pipdeptree'.format(python_bin))
     environment_details = _get_environment_details(python_bin)
+
     result = {
         'tree': [],
         'errors': [],
