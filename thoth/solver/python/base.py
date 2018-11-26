@@ -21,6 +21,9 @@
 from functools import cmp_to_key
 import logging
 
+from thoth.python import Source
+
+
 _LOGGER = logging.getLogger(__name__)
 
 
@@ -289,9 +292,14 @@ def get_ecosystem_solver(ecosystem_name, parser_kwargs=None, fetcher_kwargs=None
     :param fetcher_kwargs: fetcher key-value arguments for constructor
     :return: Solver
     """
-    from .pypi import PypiSolver
+    from .python import PythonSolver
 
     if ecosystem_name.lower() == 'pypi':
-        return PypiSolver(parser_kwargs, fetcher_kwargs)
+        source = Source(
+            url='https://pypi.org/simple',
+            warehouse_api_url='https://pypi.org/pypi',
+            warehouse=True
+        )
+        return PythonSolver(parser_kwargs, fetcher_kwargs={'source': source})
 
     raise NotImplementedError('Unknown ecosystem: {}'.format(ecosystem_name))

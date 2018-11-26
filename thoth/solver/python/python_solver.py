@@ -20,77 +20,31 @@
 
 import logging
 from pip.req.req_file import parse_requirements
-from xmlrpc.client import ServerProxy
 from subprocess import check_output
 from tempfile import NamedTemporaryFile
+
+from thoth.python import Source
 
 from .base import Dependency
 from .base import DependencyParser
 from .base import ReleasesFetcher
 from .base import Solver
 
+
 _LOGGER = logging.getLogger(__name__)
 
 
-class PypiReleasesFetcher(ReleasesFetcher):
-    """Releases fetcher for Pypi."""
+class PythonReleasesFetcher(ReleasesFetcher):
+    def __init__(self, source: Source):
+        self.source = source
 
-    _DEFAULT_FETCH_URL = 'https://pypi.python.org/pypi'
-
-    def __init__(self, fetch_url=None):
-        """Initialize instance."""
-        super().__init__()
-        self._rpc = ServerProxy(fetch_url or self._DEFAULT_FETCH_URL)
-
-    def _search_package_name(self, package):
-        """Case insensitive search.
-
-        :param package: str, Name of the package
-        :return:
-        """
-        def find_pypi_pkg(package):
-            packages = self._rpc.search({'name': package})
-            if packages:
-                exact_match = [p['name']
-                               for p in packages
-                               if p['name'].lower() == package.lower()]
-                if exact_match:
-                    return exact_match.pop()
-        res = find_pypi_pkg(package)
-        if res is None and '-' in package:
-            # this is soooo annoying; you can `pip3 install argon2-cffi and it installs
-            #  argon2_cffi (underscore instead of dash), but searching through XMLRPC
-            #  API doesn't find it... so we try to search for underscore variant
-            #  if the dash variant isn't found
-            res = find_pypi_pkg(package.replace('-', '_'))
-        if res:
-            return res
-
-        raise ValueError("Package {} not found".format(package))
-
-    def fetch_releases(self, package):
-        """Fetch package releases versions.
-
-        XML-RPC API Documentation: https://wiki.python.org/moin/PyPIXmlRpc
-        Signature: package_releases(package_name, show_hidden=False)
-        """
-        if not package:
-            raise ValueError("package")
-
-        _LOGGER.info("Fetching releases for %r", package)
-        releases = self._rpc.package_releases(package, True)
-        if not releases:
-            # try again with swapped case of first character
-            releases = self._rpc.package_releases(package[0].swapcase() + package[1:], True)
-        if not releases:
-            # if nothing was found then do case-insensitive search
-            return self.fetch_releases(self._search_package_name(package))
-
-        return package.lower(), releases
+    def fetch_releases(self, package_name):
+        package_name = self.source.normalize_package_name(package_name)
+        return package_name, self.source.get_package_versions(package_name)
 
 
-class PypiDependencyParser(DependencyParser):
-    """Pypi Dependency parsing."""
+class PythonDependencyParser(DependencyParser):
+    """Python Dependency parsing."""
 
     @staticmethod
     def parse_python(spec):
@@ -166,11 +120,11 @@ class PypiDependencyParser(DependencyParser):
         return deps  # TODO
 
 
-class PypiSolver(Solver):
+class PythonSolver(Solver):
     """Pypi dependencies solver."""
 
     def __init__(self, parser_kwargs=None, fetcher_kwargs=None, solver_kwargs=None):
         """Initialize instance."""
-        super().__init__(PypiDependencyParser(**(parser_kwargs or {})),
-                         PypiReleasesFetcher(**(fetcher_kwargs or {})),
+        super().__init__(PythonDependencyParser(**(parser_kwargs or {})),
+                         PythonReleasesFetcher(**(fetcher_kwargs or {})),
                          **(solver_kwargs or {}))
