@@ -35,6 +35,11 @@ parameters:
     displayName: "Log solver actions"
     required: true
     value: INFO
+  - name: THOTH_SOLVER_INDEXES
+    description: "A comma separated list of indexes to scan during solver run"
+    displayName: "Python Package Indexes"
+    value: ''
+
 
 objects:
   - apiVersion: batch/v1
@@ -66,6 +71,8 @@ objects:
                   value: "${THOTH_SOLVER_PACKAGES}"
                 - name: THOTH_SOLVER_OUTPUT
                   value: "${THOTH_SOLVER_OUTPUT}"
+                - name: THOTH_SOLVER_INDEXES
+                  value: "${THOTH_SOLVER_INDEXES}"
                 - name: SENTRY_DSN
                   valueFrom:
                     secretKeyRef:
