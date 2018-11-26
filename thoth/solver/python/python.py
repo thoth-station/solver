@@ -164,9 +164,10 @@ def _resolve_versions(solver: PythonSolver, source: Source, package_name: str, v
 
 
 def _do_resolve_index(solver: PythonSolver, all_solvers: typing.List[PythonSolver],
-                      source: Source, requirements: typing.List[str], python_version: int = 3,
+                      requirements: typing.List[str], python_version: int = 3,
                       exclude_packages: set = None, transitive: bool = True) -> dict:
     index_url = solver.release_fetcher.source.url
+    source = solver.release_fetcher.source
     python_bin = 'python3' if python_version == 3 else 'python2'
     run_command('virtualenv -p python3 venv')
     python_bin = 'venv/bin/' + python_bin
@@ -310,7 +311,6 @@ def resolve(requirements: typing.List[str], index_urls: list = None, python_vers
         result.append(_do_resolve_index(
             solver,
             all_solvers,
-            source,
             requirements,
             python_version,
             exclude_packages,
