@@ -40,10 +40,11 @@ objects:
   - apiVersion: batch/v1
     kind: Job
     metadata:
+      name: solver-f28
       generateName: solver-f28-
       labels:
         app: thoth
-        component: solver-f28
+        component: solver
     spec:
       backoffLimit: 0
       template:
