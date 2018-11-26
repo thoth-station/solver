@@ -87,8 +87,7 @@ def _install_requirement(python_bin: str, package: str, version: str = None,
     if not clean:
         return
 
-    _LOGGER.debug(
-        "Restoring previous environment setup after installation of %r", package)
+    _LOGGER.debug("Restoring previous environment setup after installation of %r", package)
 
     if previous_version:
         cmd = '{} -m pip install --force-reinstall ' \
@@ -167,14 +166,10 @@ def _resolve_versions(solver: PythonSolver, source: Source, package_name: str, v
     return list(resolved_versions.values())[0]
 
 
-def _do_resolve_index(solver: PythonSolver, all_solvers: typing.List[PythonSolver],
-                      requirements: typing.List[str], python_version: int = 3,
-                      exclude_packages: set = None, transitive: bool = True) -> dict:
+def _do_resolve_index(python_bin: str, solver: PythonSolver, all_solvers: typing.List[PythonSolver],
+                      requirements: typing.List[str], exclude_packages: set = None, transitive: bool = True) -> dict:
     index_url = solver.release_fetcher.source.url
     source = solver.release_fetcher.source
-    python_bin = 'python3' if python_version == 3 else 'python2'
-    run_command('virtualenv -p python3 venv')
-    python_bin = 'venv/bin/' + python_bin
     run_command('{} -m pip install pipdeptree'.format(python_bin))
 
     packages_seen = set()
@@ -213,8 +208,6 @@ def _do_resolve_index(solver: PythonSolver, all_solvers: typing.List[PythonSolve
                 entry = (dependency.name, version)
                 packages_seen.add(entry)
                 queue.append(entry)
-
-    environment_details = _get_environment_details(python_bin)
 
     while queue:
         package_name, package_version = queue.pop()
@@ -297,7 +290,6 @@ def _do_resolve_index(solver: PythonSolver, all_solvers: typing.List[PythonSolve
         'errors': errors,
         'unparsed': unparsed,
         'unresolved': unresolved,
-        'environment': environment_details
     }
 
 
@@ -306,6 +298,19 @@ def resolve(requirements: typing.List[str], index_urls: list = None, python_vers
     """Resolve given requirements for the given Python version."""
     assert python_version in (2, 3), "Unknown Python version"
 
+    python_bin = 'python3' if python_version == 3 else 'python2'
+    run_command('virtualenv -p python3 venv')
+    python_bin = 'venv/bin/' + python_bin
+
+    environment_details = _get_environment_details(python_bin)
+    result = {
+        'tree': [],
+        'errors': [],
+        'unparsed': [],
+        'unresolved': [],
+        'environment': environment_details
+    }
+
     result = []
     all_solvers = []
     for index_url in index_urls:
@@ -313,14 +318,19 @@ def resolve(requirements: typing.List[str], index_urls: list = None, python_vers
         all_solvers.append(PythonSolver(fetcher_kwargs={'source': source}))
 
     for solver in all_solvers:
-        result.append(_do_resolve_index(
+        solver_result = _do_resolve_index(
+            python_bin,
             solver,
             all_solvers,
             requirements,
-            python_version,
             exclude_packages,
             transitive
-        ))
+        )
+
+        result['tree'].extend(solver_result['tree'])
+        result['errors'].extend(solver_result['errors'])
+        result['unparsed'].extend(solver_result['unparsed'])
+        result['unresolved'].extend(solver_result['unresolved'])
 
     return result
 
