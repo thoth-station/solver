@@ -5,4 +5,5 @@ pipdeptree
 rainbow-logging-handler
 thoth-analyzer
 thoth-common
+thoth-python
 virtualenv
