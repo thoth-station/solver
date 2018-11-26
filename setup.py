@@ -30,7 +30,7 @@ setup(
     },
     packages=[
         'thoth.solver',
-        'thoth.solver.solvers'
+        'thoth.solver.python'
     ],
     install_requires=get_requirements(),
     author='Fridolin Pokorny',
