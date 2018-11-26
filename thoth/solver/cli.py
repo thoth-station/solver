@@ -64,9 +64,9 @@ def cli(ctx=None, verbose=0):
 @click.pass_context
 @click.option('--requirements', '-r', type=str, envvar='THOTH_SOLVER_PACKAGES', required=True,
               help="Requirements to be solved.")
-@click.option('--index', '-i', type=str, envvar='THOTH_SOLVER_INDEXES', multiple=True,
-              show_default=True, default=('https://pypi.org/simple',),
-              help="Python index to be used when resolving version ranges.")
+@click.option('--index', '-i', type=str, envvar='THOTH_SOLVER_INDEXES',
+              show_default=True, default='https://pypi.org/simple',
+              help="A comma separated list of Python indexes to be used when resolving version ranges.")
 @click.option('--output', '-o', type=str, envvar='THOTH_SOLVER_OUTPUT', default='-',
               help="Output file or remote API to print results to, in case of URL a POST request is issued.")
 @click.option('--no-pretty', '-P', is_flag=True,
@@ -86,7 +86,7 @@ def pypi(click_ctx, requirements, index=None, python_version=3, exclude_packages
 
     result = resolve_python(
         requirements,
-        index_urls=index,
+        index_urls=index.split(',') if index else ('https://pypi.org/simple',),
         python_version=int(python_version),
         transitive=not no_transitive,
         exclude_packages=set(map(str.strip, (exclude_packages or '').split(',')))
