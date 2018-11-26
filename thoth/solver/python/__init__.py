@@ -20,5 +20,7 @@
 
 from .base import get_ecosystem_solver
 from .base import SolverException
-from .pypi import PypiDependencyParser
-from .pypi import PypiReleasesFetcher
+from .python_solver import PythonDependencyParser
+from .python_solver import PythonReleasesFetcher
+from .python_solver import PythonSolver
+from .python import resolve
