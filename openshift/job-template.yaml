@@ -5,7 +5,7 @@ metadata:
   annotations:
     description: "Thoth: Solver Job Template"
     openshift.io/display-name: 'Thoth: Solver'
-    version: 0.4.0
+    version: 0.5.0
     tags: thoth,ai-stacks,aistacks,solver
     template.openshift.io/documentation-url: https://github.com/Thoth-Station/
     template.openshift.io/long-description: >
@@ -45,24 +45,25 @@ objects:
   - apiVersion: batch/v1
     kind: Job
     metadata:
-      generateName: solver-f27-
+      name: solver-f28
+      generateName: solver-f28-
       labels:
         app: thoth
-        component: solver-f27
+        component: solver
     spec:
       backoffLimit: 0
       template:
         metadata:
           labels:
             app: thoth
-            component: solver-f27
+            component: solver-28
         spec:
           restartPolicy: Never
           containers:
             - name: solver
               env:
                 - name: THOTH_SOLVER
-                  value: solver-f27
+                  value: solver-f28
                 - name: THOTH_LOG_SOLVER
                   value: "${THOTH_LOG_SOLVER}"
                 - name: THOTH_SOLVER_NO_TRANSITIVE
@@ -78,7 +79,7 @@ objects:
                     secretKeyRef:
                       name: thoth
                       key: sentry-dsn
-              image: solver-f27
+              image: solver-f28
               livenessProbe:
                 failureThreshold: 1
                 initialDelaySeconds: 21600

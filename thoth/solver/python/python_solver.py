@@ -36,10 +36,13 @@ _LOGGER = logging.getLogger(__name__)
 
 class PythonReleasesFetcher(ReleasesFetcher):
     """A releases fetcher based on PEP compatible simple API (also supporting Warehouse API)."""
+
     def __init__(self, source: Source):
+        """Initialize an instance of this class."""
         self.source = source
 
     def fetch_releases(self, package_name):
+        """Fetch package and index_url for a package_name."""
         package_name = self.source.normalize_package_name(package_name)
         releases = self.source.get_package_versions(package_name)
         releases_with_index_url = [(item, self.index_url) for item in releases]
@@ -47,7 +50,7 @@ class PythonReleasesFetcher(ReleasesFetcher):
 
     @property
     def index_url(self):
-        """An URL to package source index from where releases are fetched."""
+        """Get URL to package source index from where releases are fetched."""
         return self.source.url
 
 
@@ -55,57 +58,57 @@ class PythonDependencyParser(DependencyParser):
     """Python Dependency parsing."""
 
     @staticmethod
-    def parse_python(spec):
+    def parse_python(spec):  # Ignore PyDocStyleBear
         """Parse PyPI specification of a single dependency.
 
         :param spec: str, for example "Django>=1.5,<1.8"
         :return: [Django [[('>=', '1.5'), ('<', '1.8')]]]
         """
+
         def _extract_op_version(spec):
             # https://www.python.org/dev/peps/pep-0440/#compatible-release
-            if spec.operator == '~=':
-                version = spec.version.split('.')
+            if spec.operator == "~=":
+                version = spec.version.split(".")
                 if len(version) in {2, 3, 4}:
                     if len(version) in {3, 4}:
                         del version[-1]  # will increase the last but one in next line
                     version[-1] = str(int(version[-1]) + 1)
                 else:
-                    raise ValueError('%r must not be used with %r' % (spec.operator, spec.version))
-                return [('>=', spec.version), ('<', '.'.join(version))]
+                    raise ValueError("%r must not be used with %r" % (spec.operator, spec.version))
+                return [(">=", spec.version), ("<", ".".join(version))]
             # Trailing .* is permitted per
             # https://www.python.org/dev/peps/pep-0440/#version-matching
-            elif spec.operator == '==' and spec.version.endswith('.*'):
+            elif spec.operator == "==" and spec.version.endswith(".*"):
                 try:
-                    result = check_output(['/usr/bin/semver-ranger', spec.version],
-                                          universal_newlines=True).strip()
+                    result = check_output(["/usr/bin/semver-ranger", spec.version], universal_newlines=True).strip()
                     gte, lt = result.split()
-                    return [('>=', gte.lstrip('>=')), ('<', lt.lstrip('<'))]
+                    return [(">=", gte.lstrip(">=")), ("<", lt.lstrip("<"))]
                 except ValueError:
                     _LOGGER.warning("couldn't resolve ==%s", spec.version)
                     return spec.operator, spec.version
             # https://www.python.org/dev/peps/pep-0440/#arbitrary-equality
             # Use of this operator is heavily discouraged, so just convert it to 'Version matching'
-            elif spec.operator == '===':
-                return '==', spec.version
+            elif spec.operator == "===":
+                return "==", spec.version
             else:
                 return spec.operator, spec.version
 
         def _get_pip_spec(requirements):
             """There is no `specs` field In Pip 8+, take info from `specifier` field."""
-            if hasattr(requirements, 'specs'):
+            if hasattr(requirements, "specs"):
                 return requirements.specs
-            elif hasattr(requirements, 'specifier'):
+            elif hasattr(requirements, "specifier"):
                 specs = [_extract_op_version(spec) for spec in requirements.specifier]
                 if len(specs) == 0:
                     # TODO: I'm not sure with this one
                     # we should probably return None instead and let pip deal with this
-                    specs = [('>=', '0.0.0')]
+                    specs = [(">=", "0.0.0")]
                 return specs
 
         _LOGGER.info("Parsing dependency %r", spec)
         # create a temporary file and store the spec there since
         # `parse_requirements` requires a file
-        with NamedTemporaryFile(mode='w+', suffix='pysolve') as f:
+        with NamedTemporaryFile(mode="w+", suffix="pysolve") as f:
             f.write(spec)
             f.flush()
             parsed = parse_requirements(f.name, session=f.name)
@@ -120,7 +123,7 @@ class PythonDependencyParser(DependencyParser):
     @staticmethod
     def compose(deps):
         """Compose deps."""
-        return DependencyParser.compose_sep(deps, ',')
+        return DependencyParser.compose_sep(deps, ",")
 
     @staticmethod
     def restrict_versions(deps):
@@ -133,6 +136,8 @@ class PythonSolver(Solver):
 
     def __init__(self, parser_kwargs=None, fetcher_kwargs=None, solver_kwargs=None):
         """Initialize instance."""
-        super().__init__(PythonDependencyParser(**(parser_kwargs or {})),
-                         PythonReleasesFetcher(**(fetcher_kwargs or {})),
-                         **(solver_kwargs or {}))
+        super().__init__(
+            PythonDependencyParser(**(parser_kwargs or {})),
+            PythonReleasesFetcher(**(fetcher_kwargs or {})),
+            **(solver_kwargs or {}),
+        )
