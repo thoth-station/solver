@@ -35,12 +35,20 @@ _LOGGER = logging.getLogger(__name__)
 
 
 class PythonReleasesFetcher(ReleasesFetcher):
+    """A releases fetcher based on PEP compatible simple API (also supporting Warehouse API)."""
     def __init__(self, source: Source):
         self.source = source
 
     def fetch_releases(self, package_name):
         package_name = self.source.normalize_package_name(package_name)
-        return package_name, self.source.get_package_versions(package_name)
+        releases = self.source.get_package_versions(package_name)
+        releases_with_index_url = [(item, self.index_url) for item in releases]
+        return package_name, releases_with_index_url
+
+    @property
+    def index_url(self):
+        """An URL to package source index from where releases are fetched."""
+        return self.source.url
 
 
 class PythonDependencyParser(DependencyParser):
