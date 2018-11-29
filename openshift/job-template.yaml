@@ -82,14 +82,14 @@ objects:
               image: solver-f28
               livenessProbe:
                 failureThreshold: 1
-                initialDelaySeconds: 3600
+                initialDelaySeconds: 21600
                 periodSeconds: 10
                 tcpSocket:
                   port: 80
               resources:
                 limits:
-                  cpu: 750m
-                  memory: 256Mi
+                  cpu: 1
+                  memory: 1Gi
                 requests:
-                  cpu: 750m
-                  memory: 256Mi
+                  cpu: 1
+                  memory: 1Gi

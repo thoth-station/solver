@@ -23,6 +23,7 @@ from contextlib import contextmanager
 import logging
 import typing
 from shlex import quote
+from urllib.parse import urlparse
 
 from thoth.analyzer import CommandError
 from thoth.analyzer import run_command
@@ -68,12 +69,15 @@ def _install_requirement(python_bin: str, package: str, version: str = None,
     """Install requirements specified using suggested pip binary."""
     previous_version = _pipdeptree(python_bin, package)
 
-    cmd = '{} -m pip install --force-reinstall --no-cache-dir --no-deps {}'.format(
-        python_bin, quote(package))
+    cmd = '{} -m pip install --force-reinstall --no-cache-dir --no-deps {}'.format(python_bin, quote(package))
     if version:
         cmd += '=={}'.format(quote(version))
     if index_url:
         cmd += ' --index-url "{}" '.format(quote(index_url))
+        # Supply trusted host by default so we do not get errors - it safe to
+        # do it here as package indexes are managed by Thoth.
+        trusted_host = urlparse(index_url).netloc
+        cmd += ' --trusted-host {}'.format(trusted_host)
 
     _LOGGER.debug("Installing requirement %r in version %r", package, version)
     run_command(cmd)
@@ -83,8 +87,7 @@ def _install_requirement(python_bin: str, package: str, version: str = None,
     if not clean:
         return
 
-    _LOGGER.debug(
-        "Restoring previous environment setup after installation of %r", package)
+    _LOGGER.debug("Restoring previous environment setup after installation of %r", package)
 
     if previous_version:
         cmd = '{} -m pip install --force-reinstall ' \
@@ -163,15 +166,10 @@ def _resolve_versions(solver: PythonSolver, source: Source, package_name: str, v
     return list(resolved_versions.values())[0]
 
 
-def _do_resolve_index(solver: PythonSolver, all_solvers: typing.List[PythonSolver],
-                      requirements: typing.List[str], python_version: int = 3,
-                      exclude_packages: set = None, transitive: bool = True) -> dict:
+def _do_resolve_index(python_bin: str, solver: PythonSolver, all_solvers: typing.List[PythonSolver],
+                      requirements: typing.List[str], exclude_packages: set = None, transitive: bool = True) -> dict:
     index_url = solver.release_fetcher.source.url
     source = solver.release_fetcher.source
-    python_bin = 'python3' if python_version == 3 else 'python2'
-    run_command('virtualenv -p python3 venv')
-    python_bin = 'venv/bin/' + python_bin
-    run_command('{} -m pip install pipdeptree'.format(python_bin))
 
     packages_seen = set()
     packages = []
@@ -209,8 +207,6 @@ def _do_resolve_index(solver: PythonSolver, all_solvers: typing.List[PythonSolve
                 entry = (dependency.name, version)
                 packages_seen.add(entry)
                 queue.append(entry)
-
-    environment_details = _get_environment_details(python_bin)
 
     while queue:
         package_name, package_version = queue.pop()
@@ -293,7 +289,6 @@ def _do_resolve_index(solver: PythonSolver, all_solvers: typing.List[PythonSolve
         'errors': errors,
         'unparsed': unparsed,
         'unresolved': unresolved,
-        'environment': environment_details
     }
 
 
@@ -302,21 +297,40 @@ def resolve(requirements: typing.List[str], index_urls: list = None, python_vers
     """Resolve given requirements for the given Python version."""
     assert python_version in (2, 3), "Unknown Python version"
 
-    result = []
+    python_bin = 'python3' if python_version == 3 else 'python2'
+    run_command('virtualenv -p python3 venv')
+    python_bin = 'venv/bin/' + python_bin
+
+    run_command('{} -m pip install pipdeptree'.format(python_bin))
+    environment_details = _get_environment_details(python_bin)
+
+    result = {
+        'tree': [],
+        'errors': [],
+        'unparsed': [],
+        'unresolved': [],
+        'environment': environment_details
+    }
+
     all_solvers = []
     for index_url in index_urls:
         source = Source(index_url)
         all_solvers.append(PythonSolver(fetcher_kwargs={'source': source}))
 
     for solver in all_solvers:
-        result.append(_do_resolve_index(
+        solver_result = _do_resolve_index(
+            python_bin,
             solver,
             all_solvers,
             requirements,
-            python_version,
             exclude_packages,
             transitive
-        ))
+        )
+
+        result['tree'].extend(solver_result['tree'])
+        result['errors'].extend(solver_result['errors'])
+        result['unparsed'].extend(solver_result['unparsed'])
+        result['unresolved'].extend(solver_result['unresolved'])
 
     return result
 
