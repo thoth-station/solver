@@ -38,9 +38,11 @@ class PythonReleasesFetcher(ReleasesFetcher):
     """A releases fetcher based on PEP compatible simple API (also supporting Warehouse API)."""
 
     def __init__(self, source: Source):
+        """initialize an instance of this class."""
         self.source = source
 
     def fetch_releases(self, package_name):
+        """Fetch package and index_url for a package_name."""
         package_name = self.source.normalize_package_name(package_name)
         releases = self.source.get_package_versions(package_name)
         releases_with_index_url = [(item, self.index_url) for item in releases]

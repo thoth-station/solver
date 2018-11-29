@@ -34,7 +34,7 @@ class SolverException(Exception):
 class Tokens(object):
     """Comparison token representation."""
 
-    operators = ['>=', '<=', '==', '>', '<', '=', '!=']
+    operators = [">=", "<=", "==", ">", "<", "=", "!="]
     (GTE, LTE, EQ1, GT, LT, EQ2, NEQ) = range(len(operators))
 
 
@@ -45,6 +45,7 @@ def compare_version(a, b):
     :param b: str
     :return: -1 / 0 / 1
     """
+
     def _range(q):
         """Convert a version string to array of integers.
 
@@ -54,7 +55,7 @@ def compare_version(a, b):
         :return: List[int]
         """
         r = []
-        for n in q.replace('-', '.').split('.'):
+        for n in q.replace("-", ".").split("."):
             try:
                 r.append(int(n))
             except ValueError:
@@ -146,9 +147,10 @@ class Dependency(object):
         :param version: str
         :return: bool
         """
+
         def _compare_spec(spec):
             if len(spec) == 1:
-                spec = ('=', spec[0])
+                spec = ("=", spec[0])
 
             token = Tokens.operators.index(spec[0])
             comparison = compare_version(version, spec[1])
@@ -165,7 +167,7 @@ class Dependency(object):
             elif token == Tokens.NEQ:
                 return comparison != 0
             else:
-                raise ValueError('Invalid comparison token')
+                raise ValueError("Invalid comparison token")
 
         results, intermediaries = False, False
         for spec in self.spec:
@@ -214,12 +216,12 @@ class NoOpDependencyParser(DependencyParser):
 
     def parse(self, specs):
         """Transform list of dependencies (strings) to list of Dependency."""
-        return [Dependency(*x.split(' ')) for x in specs]
+        return [Dependency(*x.split(" ")) for x in specs]
 
     @staticmethod
     def compose(deps):
         """Opposite of parse()."""
-        return DependencyParser.compose_sep(deps, ' ')
+        return DependencyParser.compose_sep(deps, " ")
 
     @staticmethod
     def restrict_versions(deps):
@@ -254,6 +256,7 @@ class Solver(object):
         :param all_versions: bool, Return all matched versions instead of the latest
         :return: Dict[str, str], Matched versions
         """
+
         def _compare_version_index_url(v1, v2):
             """A wrapper around compare version to omit index url when sorting."""
             return compare_version(v1[0], v2[0])
@@ -302,12 +305,9 @@ def get_ecosystem_solver(ecosystem_name, parser_kwargs=None, fetcher_kwargs=None
     """
     from .python import PythonSolver
 
-    if ecosystem_name.lower() == 'pypi':
-        source = Source(
-            url='https://pypi.org/simple',
-            warehouse_api_url='https://pypi.org/pypi',
-            warehouse=True
-        )
-        return PythonSolver(parser_kwargs, fetcher_kwargs={'source': source})
+    if ecosystem_name.lower() == "pypi":
+        source = Source(url="https://pypi.org/simple", warehouse_api_url="https://pypi.org/pypi", warehouse=True)
+        return PythonSolver(parser_kwargs, fetcher_kwargs={"source": source})
 
-    raise NotImplementedError('Unknown ecosystem: {}'.format(ecosystem_name))
+    raise NotImplementedError("Unknown ecosystem: {}".format(ecosystem_name))
+
