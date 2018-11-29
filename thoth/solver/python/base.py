@@ -101,6 +101,11 @@ class ReleasesFetcher(object):
         """Abstract method for getting list of releases versions."""
         raise NotImplementedError
 
+    @property
+    def index_url(self):
+        """An URL to index from where releases are fetched."""
+        raise NotImplementedError
+
 
 class Dependency(object):
     """A Dependency consists of (package) name and version spec."""
@@ -125,7 +130,7 @@ class Dependency(object):
 
     def __contains__(self, item):
         """Implement 'in' operator."""
-        return self.check(item)
+        return self.check(item[0])
 
     def __repr__(self):
         """Return string representation of this instance."""
@@ -249,6 +254,10 @@ class Solver(object):
         :param all_versions: bool, Return all matched versions instead of the latest
         :return: Dict[str, str], Matched versions
         """
+        def _compare_version_index_url(v1, v2):
+            """A wrapper around compare version to omit index url when sorting."""
+            return compare_version(v1[0], v2[0])
+
         solved = {}
         for dep in self.dependency_parser.parse(dependencies):
             _LOGGER.debug("Fetching releases for: {}".format(dep))
@@ -264,9 +273,8 @@ class Solver(object):
                 else:
                     raise SolverException("No releases found for package {}".format(dep.name))
 
-            matching = sorted([release
-                               for release in releases
-                               if release in dep], key=cmp_to_key(compare_version))
+            releases = [release for release in releases if release in dep]
+            matching = sorted(releases, key=cmp_to_key(_compare_version_index_url))
 
             _LOGGER.debug("  matching: %s", matching)
 

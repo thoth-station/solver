@@ -141,16 +141,6 @@ def _get_dependency_specification(dep_spec: typing.List[tuple]) -> str:
     return ",".join(dep_range[0] + dep_range[1] for dep_range in dep_spec)
 
 
-def _filter_package_dependencies(package_info: dict) -> dict:
-    dependencies = {}
-
-    for dependency in package_info['dependencies']:
-        dependencies[dependency['package_name']
-                     ] = dependency['required_version']
-
-    return dependencies
-
-
 def _resolve_versions(solver: PythonSolver, source: Source, package_name: str, version_spec: str) -> typing.List[str]:
     try:
         resolved_versions = solver.solve([package_name + (version_spec or '')], all_versions=True)
@@ -163,12 +153,17 @@ def _resolve_versions(solver: PythonSolver, source: Source, package_name: str, v
         return []
 
     assert len(resolved_versions.keys()) == 1, "Resolution of one package version ended with multiple packages."
-    return list(resolved_versions.values())[0]
+
+    result = []
+    for item in list(resolved_versions.values())[0]:
+        result.append(item[0])   # We remove information about indexes.
+
+    return result
 
 
 def _do_resolve_index(python_bin: str, solver: PythonSolver, all_solvers: typing.List[PythonSolver],
                       requirements: typing.List[str], exclude_packages: set = None, transitive: bool = True) -> dict:
-    index_url = solver.release_fetcher.source.url
+    index_url = solver.release_fetcher.index_url
     source = solver.release_fetcher.source
 
     packages_seen = set()
@@ -262,7 +257,7 @@ def _do_resolve_index(python_bin: str, solver: PythonSolver, all_solvers: typing
             for dep_solver in all_solvers:
                 _LOGGER.info(
                     "Resolving dependency versions for %r with range %r from %r",
-                    dependency_name, dependency_range, dep_solver._release_fetcher.source.url
+                    dependency_name, dependency_range, dep_solver.release_fetcher.index_url
                 )
                 resolved_versions = _resolve_versions(dep_solver, source, dependency_name, dependency_range)
                 _LOGGER.debug(
@@ -271,7 +266,7 @@ def _do_resolve_index(python_bin: str, solver: PythonSolver, all_solvers: typing
                 )
                 dependency['resolved_versions'].append({
                     'versions': resolved_versions,
-                    'index': dep_solver._release_fetcher.source.url
+                    'index': dep_solver.release_fetcher.index_url
                 })
 
                 if not transitive:
