@@ -38,7 +38,7 @@ class PythonReleasesFetcher(ReleasesFetcher):
     """A releases fetcher based on PEP compatible simple API (also supporting Warehouse API)."""
 
     def __init__(self, source: Source):
-        """initialize an instance of this class."""
+        """Initialize an instance of this class."""
         self.source = source
 
     def fetch_releases(self, package_name):
@@ -50,7 +50,7 @@ class PythonReleasesFetcher(ReleasesFetcher):
 
     @property
     def index_url(self):
-        """An URL to package source index from where releases are fetched."""
+        """Get URL to package source index from where releases are fetched."""
         return self.source.url
 
 
@@ -58,7 +58,7 @@ class PythonDependencyParser(DependencyParser):
     """Python Dependency parsing."""
 
     @staticmethod
-    def parse_python(spec):
+    def parse_python(spec):  # Ignore PyDocStyleBear
         """Parse PyPI specification of a single dependency.
 
         :param spec: str, for example "Django>=1.5,<1.8"

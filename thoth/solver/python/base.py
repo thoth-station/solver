@@ -38,7 +38,7 @@ class Tokens(object):
     (GTE, LTE, EQ1, GT, LT, EQ2, NEQ) = range(len(operators))
 
 
-def compare_version(a, b):
+def compare_version(a, b):  # Ignore PyDocStyleBear
     """Compare two version strings.
 
     :param a: str
@@ -104,7 +104,7 @@ class ReleasesFetcher(object):
 
     @property
     def index_url(self):
-        """An URL to index from where releases are fetched."""
+        """Get URL to index from where releases are fetched."""
         raise NotImplementedError
 
 
@@ -141,7 +141,7 @@ class Dependency(object):
         """Implement '==' operator."""
         return self.name == other.name and self.spec == other.spec
 
-    def check(self, version):
+    def check(self, version):  # Ignore PyDocStyleBear
         """Check if `version` fits into our dependency specification.
 
         :param version: str
@@ -248,7 +248,7 @@ class Solver(object):
         """Return ReleasesFetcher instance used by this solver."""
         return self._release_fetcher
 
-    def solve(self, dependencies, graceful=True, all_versions=False):
+    def solve(self, dependencies, graceful=True, all_versions=False):  # Ignore PyDocStyleBear
         """Solve `dependencies` against upstream repository.
 
         :param dependencies: List, List of dependencies in native format
@@ -258,7 +258,7 @@ class Solver(object):
         """
 
         def _compare_version_index_url(v1, v2):
-            """A wrapper around compare version to omit index url when sorting."""
+            """Get a wrapper around compare version to omit index url when sorting."""
             return compare_version(v1[0], v2[0])
 
         solved = {}
@@ -310,4 +310,3 @@ def get_ecosystem_solver(ecosystem_name, parser_kwargs=None, fetcher_kwargs=None
         return PythonSolver(parser_kwargs, fetcher_kwargs={"source": source})
 
     raise NotImplementedError("Unknown ecosystem: {}".format(ecosystem_name))
-

@@ -340,4 +340,3 @@ def resolve(
         result["unresolved"].extend(solver_result["unresolved"])
 
     return result
-
