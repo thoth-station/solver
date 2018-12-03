@@ -70,57 +70,53 @@ def _install_requirement(
     """Install requirements specified using suggested pip binary."""
     previous_version = _pipdeptree(python_bin, package)
 
-    cmd = "{} -m pip install --force-reinstall --no-cache-dir --no-deps {}".format(python_bin, quote(package))
-    if version:
-        cmd += "=={}".format(quote(version))
-    if index_url:
-        cmd += ' --index-url "{}" '.format(quote(index_url))
-        # Supply trusted host by default so we do not get errors - it safe to
-        # do it here as package indexes are managed by Thoth.
-        trusted_host = urlparse(index_url).netloc
-        cmd += " --trusted-host {}".format(trusted_host)
+    try:
+        cmd = "{} -m pip install --force-reinstall --no-cache-dir --no-deps {}".format(python_bin, quote(package))
+        if version:
+            cmd += "=={}".format(quote(version))
+        if index_url:
+            cmd += ' --index-url "{}" '.format(quote(index_url))
+            # Supply trusted host by default so we do not get errors - it safe to
+            # do it here as package indexes are managed by Thoth.
+            trusted_host = urlparse(index_url).netloc
+            cmd += " --trusted-host {}".format(trusted_host)
 
-    _LOGGER.debug("Installing requirement %r in version %r", package, version)
-    run_command(cmd)
+        _LOGGER.debug("Installing requirement %r in version %r", package, version)
+        run_command(cmd)
+        yield
+    finally:
+        if clean:
+            _LOGGER.debug("Removing installed package %r", package)
+            cmd = "{} -m pip uninstall --yes {}".format(python_bin, quote(package))
+            result = run_command(cmd, raise_on_error=False)
 
-    yield
+            if result.return_code != 0:
+                _LOGGER.warning(
+                    "Failed to restore previous environment by removing package %r (installed version %r), "
+                    "the error is not fatal but can affect future actions: %s",
+                    package,
+                    version,
+                    result.stderr
+                )
 
-    if not clean:
-        return
-
-    _LOGGER.debug("Restoring previous environment setup after installation of %r", package)
-
-    if previous_version:
-        cmd = "{} -m pip install --force-reinstall " "--no-cache-dir --no-deps {}=={}".format(
-            python_bin, quote(package), quote(previous_version["package"]["installed_version"])
-        )
-        _LOGGER.debug(
-            "Installing previous version %r of package %r", package, previous_version["package"]["installed_version"]
-        )
-        result = run_command(cmd, raise_on_error=False)
-
-        if result.return_code != 0:
-            _LOGGER.warning(
-                "Failed to restore previous environment for package %r (installed version %r, "
-                "previous version %r), the error is not fatal but can affect future actions",
-                package,
-                version,
-                previous_version["package"]["installed_version"],
+            _LOGGER.debug(
+                "Restoring previous environment setup after installation of %r (%s)", package, previous_version
             )
-            return
-    else:
-        _LOGGER.debug("Removing installed package %r", package)
-        cmd = "{} -m pip uninstall --yes {}".format(python_bin, quote(package))
-        result = run_command(cmd, raise_on_error=False)
+            if previous_version:
+                cmd = "{} -m pip install --force-reinstall --no-cache-dir --no-deps {}=={}".format(
+                    python_bin, quote(package), quote(previous_version["package"]["installed_version"])
+                )
+                result = run_command(cmd, raise_on_error=False)
 
-        if result.return_code != 0:
-            _LOGGER.warning(
-                "Failed to restore previous environment by removing package %r (installed version %r), "
-                "the error is not fatal but can affect future actions",
-                package,
-                version,
-            )
-            return
+                if result.return_code != 0:
+                    _LOGGER.warning(
+                        "Failed to restore previous environment for package %r (installed version %r), "
+                        ", the error is not fatal but can affect future actions (previous version: %r): %s",
+                        package,
+                        version,
+                        previous_version,
+                        result.stderr
+                    )
 
 
 def _pipdeptree(python_bin, package_name: str = None, warn: bool = False) -> typing.Optional[dict]:
