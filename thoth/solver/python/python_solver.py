@@ -19,7 +19,12 @@
 """Classes for resolving dependencies as specified in each ecosystem."""
 
 import logging
-from pip.req.req_file import parse_requirements
+try:
+    # pip<10
+    from pip.req.req_file import parse_requirements
+except ImportError:
+    # pip>=10
+    from pip._internal.req.req_file import parse_requirements
 from subprocess import check_output
 from tempfile import NamedTemporaryFile
 
