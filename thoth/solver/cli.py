@@ -28,7 +28,7 @@ from thoth.common import init_logging
 
 from thoth.solver import __title__ as analyzer_name
 from thoth.solver import __version__ as analyzer_version
-from thoth.solver.python import resolve as resolve_pypi
+from thoth.solver.python import resolve as resolve_python
 
 init_logging()
 
@@ -45,14 +45,19 @@ def _print_version(ctx, _, value):
 
 @click.group()
 @click.pass_context
-@click.option('-v', '--verbose', is_flag=True, envvar='THOTH_SOLVER_DEBUG',
-              help="Be verbose about what's going on.")
-@click.option('--version', is_flag=True, is_eager=True, callback=_print_version, expose_value=False,
-              help="Print solver version and exit.")
+@click.option("-v", "--verbose", is_flag=True, envvar="THOTH_SOLVER_DEBUG", help="Be verbose about what's going on.")
+@click.option(
+    "--version",
+    is_flag=True,
+    is_eager=True,
+    callback=_print_version,
+    expose_value=False,
+    help="Print solver version and exit.",
+)
 def cli(ctx=None, verbose=0):
     """Thoth solver command line interface."""
     if ctx:
-        ctx.auto_envvar_prefix = 'THOTH_SOLVER'
+        ctx.auto_envvar_prefix = "THOTH_SOLVER"
 
     if verbose:
         _LOG.setLevel(logging.DEBUG)
@@ -62,38 +67,75 @@ def cli(ctx=None, verbose=0):
 
 @cli.command()
 @click.pass_context
-@click.option('--requirements', '-r', type=str, envvar='THOTH_SOLVER_PACKAGES', required=True,
-              help="Requirements to be solved.")
-@click.option('--index', '-i', type=str,
-              help="Python index to be used when resolving version ranges.")
-@click.option('--output', '-o', type=str, envvar='THOTH_SOLVER_OUTPUT', default='-',
-              help="Output file or remote API to print results to, in case of URL a POST request is issued.")
-@click.option('--no-pretty', '-P', is_flag=True,
-              help="Do not print results nicely.")
-@click.option('--exclude-packages', '-e', type=str, metavar='PKG1,PKG2',
-              help="A comma separated list of packages that should be excluded from the final listing.")
-@click.option('--no-transitive', '-T', is_flag=True, envvar='THOTH_SOLVER_NO_TRANSITIVE',
-              help="Do not check transitive dependencies, run only on provided requirements.")
-def pypi(click_ctx, requirements, index=None, python_version=3, exclude_packages=None, output=None,
-         no_transitive=True, no_pretty=False):
+@click.option(
+    "--requirements", "-r", type=str, envvar="THOTH_SOLVER_PACKAGES", required=True, help="Requirements to be solved."
+)
+@click.option(
+    "--index",
+    "-i",
+    type=str,
+    envvar="THOTH_SOLVER_INDEXES",
+    show_default=True,
+    default="https://pypi.org/simple",
+    help="A comma separated list of Python indexes to be used when resolving version ranges.",
+)
+@click.option(
+    "--output",
+    "-o",
+    type=str,
+    envvar="THOTH_SOLVER_OUTPUT",
+    default="-",
+    help="Output file or remote API to print results to, in case of URL a POST request is issued.",
+)
+@click.option("--no-pretty", "-P", is_flag=True, help="Do not print results nicely.")
+@click.option(
+    "--exclude-packages",
+    "-e",
+    type=str,
+    metavar="PKG1,PKG2",
+    help="A comma separated list of packages that should be excluded from the final listing.",
+)
+@click.option(
+    "--no-transitive",
+    "-T",
+    is_flag=True,
+    envvar="THOTH_SOLVER_NO_TRANSITIVE",
+    help="Do not check transitive dependencies, run only on provided requirements.",
+)
+def pypi(
+    click_ctx,
+    requirements,
+    index=None,
+    python_version=3,
+    exclude_packages=None,
+    output=None,
+    no_transitive=True,
+    no_pretty=False,
+):
     """Manipulate with dependency requirements using PyPI."""
-    requirements = [requirement.strip() for requirement in requirements.split('\n') if requirement]
+    requirements = [requirement.strip() for requirement in requirements.split("\\n") if requirement]
 
     if not requirements:
         _LOG.error("No requirements specified, exiting")
         sys.exit(1)
 
-    result = resolve_pypi(
+    result = resolve_python(
         requirements,
-        index_url=index,
+        index_urls=index.split(",") if index else ("https://pypi.org/simple",),
         python_version=int(python_version),
         transitive=not no_transitive,
-        exclude_packages=set(map(str.strip, (exclude_packages or '').split(',')))
+        exclude_packages=set(map(str.strip, (exclude_packages or "").split(","))),
     )
 
-    print_command_result(click_ctx, result, analyzer=analyzer_name, analyzer_version=analyzer_version,
-                         output=output or '-', pretty=not no_pretty)
+    print_command_result(
+        click_ctx,
+        result,
+        analyzer=analyzer_name,
+        analyzer_version=analyzer_version,
+        output=output or "-",
+        pretty=not no_pretty,
+    )
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     cli()

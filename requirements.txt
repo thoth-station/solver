@@ -1,9 +1,9 @@
+autopep8
 click
-rainbow-logging-handler
-pip
-pipdeptree
 pip-tools
+pipdeptree
+rainbow-logging-handler
+thoth-analyzer
+thoth-common
+thoth-python
 virtualenv
-hashin
-thoth-analyzer>=0.0.2
-thoth-common>=0.0.6

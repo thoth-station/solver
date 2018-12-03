@@ -21,6 +21,9 @@
 from functools import cmp_to_key
 import logging
 
+from thoth.python import Source
+
+
 _LOGGER = logging.getLogger(__name__)
 
 
@@ -31,17 +34,18 @@ class SolverException(Exception):
 class Tokens(object):
     """Comparison token representation."""
 
-    operators = ['>=', '<=', '==', '>', '<', '=', '!=']
+    operators = [">=", "<=", "==", ">", "<", "=", "!="]
     (GTE, LTE, EQ1, GT, LT, EQ2, NEQ) = range(len(operators))
 
 
-def compare_version(a, b):
+def compare_version(a, b):  # Ignore PyDocStyleBear
     """Compare two version strings.
 
     :param a: str
     :param b: str
     :return: -1 / 0 / 1
     """
+
     def _range(q):
         """Convert a version string to array of integers.
 
@@ -51,7 +55,7 @@ def compare_version(a, b):
         :return: List[int]
         """
         r = []
-        for n in q.replace('-', '.').split('.'):
+        for n in q.replace("-", ".").split("."):
             try:
                 r.append(int(n))
             except ValueError:
@@ -98,6 +102,11 @@ class ReleasesFetcher(object):
         """Abstract method for getting list of releases versions."""
         raise NotImplementedError
 
+    @property
+    def index_url(self):
+        """Get URL to index from where releases are fetched."""
+        raise NotImplementedError
+
 
 class Dependency(object):
     """A Dependency consists of (package) name and version spec."""
@@ -122,7 +131,7 @@ class Dependency(object):
 
     def __contains__(self, item):
         """Implement 'in' operator."""
-        return self.check(item)
+        return self.check(item[0])
 
     def __repr__(self):
         """Return string representation of this instance."""
@@ -132,15 +141,16 @@ class Dependency(object):
         """Implement '==' operator."""
         return self.name == other.name and self.spec == other.spec
 
-    def check(self, version):
+    def check(self, version):  # Ignore PyDocStyleBear
         """Check if `version` fits into our dependency specification.
 
         :param version: str
         :return: bool
         """
+
         def _compare_spec(spec):
             if len(spec) == 1:
-                spec = ('=', spec[0])
+                spec = ("=", spec[0])
 
             token = Tokens.operators.index(spec[0])
             comparison = compare_version(version, spec[1])
@@ -157,7 +167,7 @@ class Dependency(object):
             elif token == Tokens.NEQ:
                 return comparison != 0
             else:
-                raise ValueError('Invalid comparison token')
+                raise ValueError("Invalid comparison token")
 
         results, intermediaries = False, False
         for spec in self.spec:
@@ -206,12 +216,12 @@ class NoOpDependencyParser(DependencyParser):
 
     def parse(self, specs):
         """Transform list of dependencies (strings) to list of Dependency."""
-        return [Dependency(*x.split(' ')) for x in specs]
+        return [Dependency(*x.split(" ")) for x in specs]
 
     @staticmethod
     def compose(deps):
         """Opposite of parse()."""
-        return DependencyParser.compose_sep(deps, ' ')
+        return DependencyParser.compose_sep(deps, " ")
 
     @staticmethod
     def restrict_versions(deps):
@@ -238,7 +248,7 @@ class Solver(object):
         """Return ReleasesFetcher instance used by this solver."""
         return self._release_fetcher
 
-    def solve(self, dependencies, graceful=True, all_versions=False):
+    def solve(self, dependencies, graceful=True, all_versions=False):  # Ignore PyDocStyleBear
         """Solve `dependencies` against upstream repository.
 
         :param dependencies: List, List of dependencies in native format
@@ -246,6 +256,11 @@ class Solver(object):
         :param all_versions: bool, Return all matched versions instead of the latest
         :return: Dict[str, str], Matched versions
         """
+
+        def _compare_version_index_url(v1, v2):
+            """Get a wrapper around compare version to omit index url when sorting."""
+            return compare_version(v1[0], v2[0])
+
         solved = {}
         for dep in self.dependency_parser.parse(dependencies):
             _LOGGER.debug("Fetching releases for: {}".format(dep))
@@ -257,15 +272,14 @@ class Solver(object):
 
             if not releases:
                 if graceful:
-                    _LOGGER.info("No releases found for: %s", dep.name)
+                    _LOGGER.info("No releases found for package %s", dep.name)
                 else:
-                    raise SolverException("No releases found for: {}".format(dep.name))
+                    raise SolverException("No releases found for package {}".format(dep.name))
 
-            matching = sorted([release
-                               for release in releases
-                               if release in dep], key=cmp_to_key(compare_version))
+            releases = [release for release in releases if release in dep]
+            matching = sorted(releases, key=cmp_to_key(_compare_version_index_url))
 
-            _LOGGER.debug("  matching:\n   {}".format(matching))
+            _LOGGER.debug("  matching: %s", matching)
 
             if all_versions:
                 solved[name] = matching
@@ -289,9 +303,10 @@ def get_ecosystem_solver(ecosystem_name, parser_kwargs=None, fetcher_kwargs=None
     :param fetcher_kwargs: fetcher key-value arguments for constructor
     :return: Solver
     """
-    from .pypi import PypiSolver
+    from .python import PythonSolver
 
-    if ecosystem_name.lower() == 'pypi':
-        return PypiSolver(parser_kwargs, fetcher_kwargs)
+    if ecosystem_name.lower() == "pypi":
+        source = Source(url="https://pypi.org/simple", warehouse_api_url="https://pypi.org/pypi", warehouse=True)
+        return PythonSolver(parser_kwargs, fetcher_kwargs={"source": source})
 
-    raise NotImplementedError('Unknown ecosystem: {}'.format(ecosystem_name))
+    raise NotImplementedError("Unknown ecosystem: {}".format(ecosystem_name))

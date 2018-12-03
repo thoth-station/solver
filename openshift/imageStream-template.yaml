@@ -4,14 +4,14 @@ metadata:
   name: solver-imagestream
   annotations:
     description: >
-      This is Thoth Solver Fedora 26+ ImageStream, this template is meant to
+      This is Thoth Solver Fedora 27+ ImageStream, this template is meant to
       be used by Bots, but could also be used by humans...
     openshift.io/display-name: 'Thoth Core: Solver Fedora 26+ ImageStream'
-    version: 0.2.0
-    tags: poc,thoth,solver,ai-stacks
+    version: 0.5.0
+    tags: thoth,solver,ai-stacks,aistacks
     template.openshift.io/documentation-url: https://github.com/Thoth-Station/
     template.openshift.io/long-description: >
-      This is Thoth Solver Fedora 26+ ImageStream, this template is meant to
+      This is Thoth Solver Fedora 27+ ImageStream, this template is meant to
       be used by Bots, but could also be used by humans...
     template.openshift.io/provider-display-name: Red Hat, Inc.
   labels:
@@ -24,10 +24,10 @@ objects:
     apiVersion: v1
     metadata:
       labels:
-        build: solver-f26-job
+        build: solver-f27
         app: thoth
         component: solver
-      name: solver-f26-job
+      name: solver-f27
     spec:
       name: latest
       lookupPolicy:
@@ -37,10 +37,10 @@ objects:
     apiVersion: v1
     metadata:
       labels:
-        build: solver-f27-job
+        build: solver-f28
         app: thoth
         component: solver
-      name: solver-f27-job
+      name: solver-f28
     spec:
       name: latest
       lookupPolicy:
