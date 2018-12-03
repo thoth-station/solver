@@ -19,6 +19,7 @@
 """Classes for resolving dependencies as specified in each ecosystem."""
 
 import logging
+
 try:
     # pip<10
     from pip.req.req_file import parse_requirements
