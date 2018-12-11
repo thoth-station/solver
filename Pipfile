@@ -12,6 +12,7 @@ thoth-analyzer = "*"
 pip-tools = "*"
 thoth-common = "*"
 "autopep8" = "*"
+requests = "*"
 
 [dev-packages]
 coala-bears = "*"

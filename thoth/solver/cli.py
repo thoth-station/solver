@@ -102,6 +102,12 @@ def cli(ctx=None, verbose=0):
     envvar="THOTH_SOLVER_NO_TRANSITIVE",
     help="Do not check transitive dependencies, run only on provided requirements.",
 )
+@click.option(
+    "--subgraph-check-api",
+    type=str,
+    envvar="THOTH_SOLVER_SUBGRAPH_CHECK_API",
+    help="An API to be queried to retrieve information whether the given subgraph should be resolved.",
+)
 def pypi(
     click_ctx,
     requirements,
@@ -109,6 +115,7 @@ def pypi(
     python_version=3,
     exclude_packages=None,
     output=None,
+    subgraph_check_api=None,
     no_transitive=True,
     no_pretty=False,
 ):
@@ -119,12 +126,16 @@ def pypi(
         _LOG.error("No requirements specified, exiting")
         sys.exit(1)
 
+    if not subgraph_check_api:
+        _LOG.info("No subgraph check API provided, no queries will be done for dependency subgraphs that should be avoided")
+
     result = resolve_python(
         requirements,
         index_urls=index.split(",") if index else ("https://pypi.org/simple",),
         python_version=int(python_version),
         transitive=not no_transitive,
         exclude_packages=set(map(str.strip, (exclude_packages or "").split(","))),
+        subgraph_check_api=subgraph_check_api,
     )
 
     print_command_result(

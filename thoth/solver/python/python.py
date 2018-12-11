@@ -25,6 +25,7 @@ import typing
 from shlex import quote
 from urllib.parse import urlparse
 
+import requests
 from thoth.analyzer import CommandError
 from thoth.analyzer import run_command
 from thoth.python import Source
@@ -63,6 +64,42 @@ def _get_environment_details(python_bin: str) -> list:
     return [_create_entry(entry) for entry in output]
 
 
+def _should_resolve_subgraph(subgraph_check_api: str, package_name: str, package_version: str, index_url: str) -> bool:
+    """Ask the given subgraph check API if the given package in the given version should be included in the resolution.
+
+    This subgraph resolving avoidence serves two purposes - we don't need to
+    resolve dependency subgraphs that were already analyzed and we also avoid
+    analyzing of "core" packages (like setuptools) where not needed as they
+    can break installation environment.
+    """
+    _LOGGER.info(
+        "Checking if the given dependency subgraph for package %r in version %r from index %r should be resolved",
+        package_name,
+        package_version,
+        index_url,
+    )
+
+    response = requests.get(
+        subgraph_check_api,
+        params={"package_name": package_name, "package_version": package_version, "index_url": index_url},
+    )
+
+    if response.status_code == 200:
+        return True
+    elif response.status_code == 208:
+        # This is probably not the correct HTTP status code to be used here, but which one should be used?
+        return False
+
+    response.raise_for_status()
+    raise ValueError(
+        "Unreachable code - subgraph check API responded with unknown HTTP status "
+        "code %s for package %r in version %r from index %r",
+        package_name,
+        package_version,
+        index_url,
+    )
+
+
 @contextmanager
 def _install_requirement(
     python_bin: str, package: str, version: str = None, index_url: str = None, clean: bool = True
@@ -70,57 +107,53 @@ def _install_requirement(
     """Install requirements specified using suggested pip binary."""
     previous_version = _pipdeptree(python_bin, package)
 
-    cmd = "{} -m pip install --force-reinstall --no-cache-dir --no-deps {}".format(python_bin, quote(package))
-    if version:
-        cmd += "=={}".format(quote(version))
-    if index_url:
-        cmd += ' --index-url "{}" '.format(quote(index_url))
-        # Supply trusted host by default so we do not get errors - it safe to
-        # do it here as package indexes are managed by Thoth.
-        trusted_host = urlparse(index_url).netloc
-        cmd += " --trusted-host {}".format(trusted_host)
+    try:
+        cmd = "{} -m pip install --force-reinstall --no-cache-dir --no-deps {}".format(python_bin, quote(package))
+        if version:
+            cmd += "=={}".format(quote(version))
+        if index_url:
+            cmd += ' --index-url "{}" '.format(quote(index_url))
+            # Supply trusted host by default so we do not get errors - it safe to
+            # do it here as package indexes are managed by Thoth.
+            trusted_host = urlparse(index_url).netloc
+            cmd += " --trusted-host {}".format(trusted_host)
 
-    _LOGGER.debug("Installing requirement %r in version %r", package, version)
-    run_command(cmd)
+        _LOGGER.debug("Installing requirement %r in version %r", package, version)
+        run_command(cmd)
+        yield
+    finally:
+        if clean:
+            _LOGGER.debug("Removing installed package %r", package)
+            cmd = "{} -m pip uninstall --yes {}".format(python_bin, quote(package))
+            result = run_command(cmd, raise_on_error=False)
 
-    yield
+            if result.return_code != 0:
+                _LOGGER.warning(
+                    "Failed to restore previous environment by removing package %r (installed version %r), "
+                    "the error is not fatal but can affect future actions: %s",
+                    package,
+                    version,
+                    result.stderr
+                )
 
-    if not clean:
-        return
-
-    _LOGGER.debug("Restoring previous environment setup after installation of %r", package)
-
-    if previous_version:
-        cmd = "{} -m pip install --force-reinstall " "--no-cache-dir --no-deps {}=={}".format(
-            python_bin, quote(package), quote(previous_version["package"]["installed_version"])
-        )
-        _LOGGER.debug(
-            "Installing previous version %r of package %r", package, previous_version["package"]["installed_version"]
-        )
-        result = run_command(cmd, raise_on_error=False)
-
-        if result.return_code != 0:
-            _LOGGER.warning(
-                "Failed to restore previous environment for package %r (installed version %r, "
-                "previous version %r), the error is not fatal but can affect future actions",
-                package,
-                version,
-                previous_version["package"]["installed_version"],
+            _LOGGER.debug(
+                "Restoring previous environment setup after installation of %r (%s)", package, previous_version
             )
-            return
-    else:
-        _LOGGER.debug("Removing installed package %r", package)
-        cmd = "{} -m pip uninstall --yes {}".format(python_bin, quote(package))
-        result = run_command(cmd, raise_on_error=False)
+            if previous_version:
+                cmd = "{} -m pip install --force-reinstall --no-cache-dir --no-deps {}=={}".format(
+                    python_bin, quote(package), quote(previous_version["package"]["installed_version"])
+                )
+                result = run_command(cmd, raise_on_error=False)
 
-        if result.return_code != 0:
-            _LOGGER.warning(
-                "Failed to restore previous environment by removing package %r (installed version %r), "
-                "the error is not fatal but can affect future actions",
-                package,
-                version,
-            )
-            return
+                if result.return_code != 0:
+                    _LOGGER.warning(
+                        "Failed to restore previous environment for package %r (installed version %r), "
+                        ", the error is not fatal but can affect future actions (previous version: %r): %s",
+                        package,
+                        version,
+                        previous_version,
+                        result.stderr
+                    )
 
 
 def _pipdeptree(python_bin, package_name: str = None, warn: bool = False) -> typing.Optional[dict]:
@@ -177,11 +210,14 @@ def _resolve_versions(solver: PythonSolver, source: Source, package_name: str, v
 def _do_resolve_index(
     python_bin: str,
     solver: PythonSolver,
+    *,
     all_solvers: typing.List[PythonSolver],
     requirements: typing.List[str],
     exclude_packages: set = None,
     transitive: bool = True,
+    subgraph_check_api: str = None,
 ) -> dict:
+    """Perform resolution of requirements against the given solver."""
     index_url = solver.release_fetcher.index_url
     source = solver.release_fetcher.source
 
@@ -300,7 +336,14 @@ def _do_resolve_index(
                 for version in resolved_versions:
                     # Did we check this package already - do not check indexes, we manually insert them.
                     seen_entry = (dependency_name, version)
-                    if seen_entry not in packages_seen:
+                    if (
+                        seen_entry not in packages_seen
+                        and subgraph_check_api
+                        and _should_resolve_subgraph(subgraph_check_api, dependency_name, version, index_url)
+                    ):
+                        _LOGGER.debug(
+                            "Adding package %r in version %r for next resolution round", dependency_name, version
+                        )
                         packages_seen.add(seen_entry)
                         queue.append((dependency_name, version))
 
@@ -313,9 +356,14 @@ def resolve(
     python_version: int = 3,
     exclude_packages: set = None,
     transitive: bool = True,
+    subgraph_check_api: str = None,
 ) -> dict:
     """Resolve given requirements for the given Python version."""
     assert python_version in (2, 3), "Unknown Python version"
+
+    if subgraph_check_api and not transitive:
+        _LOG.error("The check against subgraph API cannot be done if no transitive dependencies are resolved")
+        sys.exit(2)
 
     python_bin = "python3" if python_version == 3 else "python2"
     run_command("virtualenv -p python3 venv")
@@ -332,7 +380,15 @@ def resolve(
         all_solvers.append(PythonSolver(fetcher_kwargs={"source": source}))
 
     for solver in all_solvers:
-        solver_result = _do_resolve_index(python_bin, solver, all_solvers, requirements, exclude_packages, transitive)
+        solver_result = _do_resolve_index(
+            python_bin=python_bin,
+            solver=solver,
+            all_solvers=all_solvers,
+            requirements=requirements,
+            exclude_packages=exclude_packages,
+            transitive=transitive,
+            subgraph_check_api=subgraph_check_api,
+        )
 
         result["tree"].extend(solver_result["tree"])
         result["errors"].extend(solver_result["errors"])

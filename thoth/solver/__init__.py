@@ -22,5 +22,5 @@ from .python import resolve
 from .compile import pip_compile
 
 __version__ = "1.1.0"
-__title__ = 'thoth-solver'
-__author__ = 'Fridolin Pokorny'
+__title__ = "thoth-solver"
+__author__ = "Fridolin Pokorny"
