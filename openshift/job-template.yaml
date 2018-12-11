@@ -56,6 +56,7 @@ objects:
         component: solver
         operator: event
         task: solver
+        mark: cleanup
     spec:
       backoffLimit: 0
       template:
@@ -63,6 +64,7 @@ objects:
           labels:
             app: thoth
             component: solver-28
+            mark: cleanup
         spec:
           restartPolicy: Never
           containers:
