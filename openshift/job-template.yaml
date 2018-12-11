@@ -54,6 +54,8 @@ objects:
       labels:
         app: thoth
         component: solver
+        operator: event
+        task: solver
     spec:
       backoffLimit: 0
       template:
