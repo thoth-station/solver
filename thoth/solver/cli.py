@@ -127,7 +127,9 @@ def pypi(
         sys.exit(1)
 
     if not subgraph_check_api:
-        _LOG.info("No subgraph check API provided, no queries will be done for dependency subgraphs that should be avoided")
+        _LOG.info(
+            "No subgraph check API provided, no queries will be done for dependency subgraphs that should be avoided"
+        )  # Ignore PycodestyleBear (E501)
 
     result = resolve_python(
         requirements,
