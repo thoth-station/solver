@@ -93,11 +93,11 @@
         },
         "pip-tools": {
             "hashes": [
-                "sha256:31b43e5f8d605fc84f7506199025460abcb98a29d12cc99db268f73e39cf55e5",
-                "sha256:b1ceca03b4a48346b2f6870565abb09d8d257d5b1524b4c6b222185bf26c3870"
+                "sha256:9da527db744c79c5eb1d3d7e2794fef3a426fd50ef60ff1d0fc6c49931252f1e",
+                "sha256:c1bac40f4de607c69a64e60d5f4deb0d1cbda00d890dcd7cb80c7e3108d1acc4"
             ],
             "index": "pypi",
-            "version": "==3.1.0"
+            "version": "==3.2.0"
         },
         "pipdeptree": {
             "hashes": [
@@ -614,10 +614,10 @@
         },
         "pygments": {
             "hashes": [
-                "sha256:6301ecb0997a52d2d31385e62d0a4a4cf18d2f2da7054a5ddad5c366cd39cee7",
-                "sha256:82666aac15622bd7bb685a4ee7f6625dd716da3ef7473620c192c0168aae64fc"
+                "sha256:5ffada19f6203563680669ee7f53b64dabbeb100eb51b61996085e99c03b284a",
+                "sha256:e8218dd399a61674745138520d0d4cf2621d7e032439341bc3f647bff125818d"
             ],
-            "version": "==2.3.0"
+            "version": "==2.3.1"
         },
         "pylint": {
             "hashes": [
