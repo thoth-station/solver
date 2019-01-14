@@ -15,7 +15,7 @@ metadata:
   labels:
     template: solver
     app: thoth
-    component: solver
+    component: solver-fedora-28-py36
 
 parameters:
   - name: THOTH_SOLVER_NO_TRANSITIVE
@@ -56,7 +56,7 @@ objects:
       name: "${THOTH_SOLVER_JOB_ID}"
       labels:
         app: thoth
-        component: solver
+        component: solver-fedora-28-py36
         operator: graph-sync
         task: solver
         mark: cleanup
@@ -66,15 +66,16 @@ objects:
         metadata:
           labels:
             app: thoth
-            component: solver-28
+            component: solver-fedora-28-py36
             mark: cleanup
+            task: solver
         spec:
           restartPolicy: Never
           containers:
             - name: solver
               env:
                 - name: THOTH_SOLVER
-                  value: solver-f28
+                  value: solver-fedora-28-py36
                 - name: THOTH_LOG_SOLVER
                   value: "${THOTH_LOG_SOLVER}"
                 - name: THOTH_SOLVER_NO_TRANSITIVE
