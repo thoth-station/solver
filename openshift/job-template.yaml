@@ -22,6 +22,10 @@ parameters:
     description: "Do not resolve transitive dependencies"
     displayName: "No transitive dependencies"
     required: true
+  - name: THOTH_SOLVER_JOB_ID
+    description: "Identifier of a job run."
+    displayName: "Job identifier"
+    required: true
   - name: THOTH_SOLVER_PACKAGES
     description: "Packages to be resolved"
     displayName: "Packages to be analyzed by solver"
@@ -49,7 +53,7 @@ objects:
   - apiVersion: batch/v1
     kind: Job
     metadata:
-      generateName: solver-f28-
+      name: "${THOTH_SOLVER_JOB_ID}"
       labels:
         app: thoth
         component: solver
