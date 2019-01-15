@@ -31,7 +31,6 @@ from thoth.analyzer import run_command
 from thoth.python import Source
 from thoth.python.exceptions import NotFound
 
-from .base import get_ecosystem_solver
 from .python_solver import PythonDependencyParser
 from .python_solver import PythonSolver
 
@@ -319,7 +318,7 @@ def _do_resolve_index(
                     dependency_range,
                     dep_solver.release_fetcher.index_url,
                 )
-                resolved_versions = _resolve_versions(dep_solver, source, dependency_name, dependency_range)
+                resolved_versions = _resolve_versions(dep_solver, dep_solver.release_fetcher.source, dependency_name, dependency_range)
                 _LOGGER.debug(
                     "Resolved versions for package %r with range specifier %r: %s",
                     dependency_name,
