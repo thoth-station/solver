@@ -132,7 +132,7 @@ def _install_requirement(
                     "the error is not fatal but can affect future actions: %s",
                     package,
                     version,
-                    result.stderr
+                    result.stderr,
                 )
 
             _LOGGER.debug(
@@ -151,7 +151,7 @@ def _install_requirement(
                         package,
                         version,
                         previous_version,
-                        result.stderr
+                        result.stderr,
                     )
 
 
@@ -318,7 +318,9 @@ def _do_resolve_index(
                     dependency_range,
                     dep_solver.release_fetcher.index_url,
                 )
-                resolved_versions = _resolve_versions(dep_solver, dep_solver.release_fetcher.source, dependency_name, dependency_range)
+                resolved_versions = _resolve_versions(
+                    dep_solver, dep_solver.release_fetcher.source, dependency_name, dependency_range
+                )
                 _LOGGER.debug(
                     "Resolved versions for package %r with range specifier %r: %s",
                     dependency_name,
