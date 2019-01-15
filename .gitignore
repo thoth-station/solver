@@ -2,3 +2,4 @@ __pycache__
 *.pyc
 .eggs/
 thoth_solver.egg-info/
+venv/
