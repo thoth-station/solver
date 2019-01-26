@@ -93,11 +93,11 @@
         },
         "pip-tools": {
             "hashes": [
-                "sha256:9da527db744c79c5eb1d3d7e2794fef3a426fd50ef60ff1d0fc6c49931252f1e",
-                "sha256:c1bac40f4de607c69a64e60d5f4deb0d1cbda00d890dcd7cb80c7e3108d1acc4"
+                "sha256:484665e3635e58a9dc65a3def713cc6e56416eeb67e7babbd00209f0ddbff653",
+                "sha256:8085bf1dd9bcc8892db90c6e3bed5188d944a434f44734df3c9d7a3e08bf448b"
             ],
             "index": "pypi",
-            "version": "==3.2.0"
+            "version": "==3.3.1"
         },
         "pipdeptree": {
             "hashes": [
@@ -328,10 +328,10 @@
         },
         "decorator": {
             "hashes": [
-                "sha256:2c51dff8ef3c447388fe5e4453d24a2bf128d3a4c32af3fabef1f01c6851ab82",
-                "sha256:c39efa13fbdeb4506c476c9b3babf6a718da943dab7811c206005a4a956c080c"
+                "sha256:33cd704aea07b4c28b3eb2c97d288a06918275dac0ecebdaf1bc8a48d98adb9e",
+                "sha256:cabb249f4710888a2fc0e13e9a16c343d932033718ff62e1e9bc93a9d3a9122b"
             ],
-            "version": "==4.3.0"
+            "version": "==4.3.2"
         },
         "dennis": {
             "hashes": [
