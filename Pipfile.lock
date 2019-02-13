@@ -93,11 +93,11 @@
         },
         "pip-tools": {
             "hashes": [
-                "sha256:9da527db744c79c5eb1d3d7e2794fef3a426fd50ef60ff1d0fc6c49931252f1e",
-                "sha256:c1bac40f4de607c69a64e60d5f4deb0d1cbda00d890dcd7cb80c7e3108d1acc4"
+                "sha256:100496b15463155f4da3df04c2ca0068677e1ee74d346ebade2d85eef4de8cda",
+                "sha256:8a170214f8f1f362ed4ba7c51dae3c7d334d88e2643c02da39c9654c71ab5b33"
             ],
             "index": "pypi",
-            "version": "==3.2.0"
+            "version": "==3.3.2"
         },
         "pipdeptree": {
             "hashes": [
