@@ -1,8 +1,8 @@
 [all]
 bears = LineCountBear, FilenameBear
-files = **.py, **.rst
+files = **.py, **.yaml, **.rst, **.toml
 file_naming_convention = snake
-ignore = **/__pycache__/**, **/__pycache__, __pycache__, __pycache__/**, **/*.pyc, *.pyc
+ignore = **/__pycache__/**, **/__pycache__, __pycache__, __pycache__/**, **/*.pyc, *.pyc, openshift/**.yaml
 max_lines_per_file = 1000
 max_line_length = 120
 
