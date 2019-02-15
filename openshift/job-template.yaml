@@ -5,8 +5,8 @@ metadata:
   annotations:
     description: "Thoth: Solver Job Template"
     openshift.io/display-name: 'Thoth: Solver'
-    version: 0.5.0
-    tags: thoth,ai-stacks,aistacks,solver
+    version: 0.6.0
+    tags: thoth,ai-stacks,aistacks,solver,machinlearning
     template.openshift.io/documentation-url: https://github.com/Thoth-Station/
     template.openshift.io/long-description: >
       This template defines resources needed to run solvers in Thoth, it is used
