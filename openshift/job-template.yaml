@@ -93,7 +93,7 @@ objects:
                     secretKeyRef:
                       name: thoth
                       key: sentry-dsn
-              image: solver-f28
+              image: solver-fedora-28-py36
               livenessProbe:
                 failureThreshold: 1
                 initialDelaySeconds: 21600
