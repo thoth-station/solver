@@ -100,11 +100,11 @@
         },
         "pip-tools": {
             "hashes": [
-                "sha256:100496b15463155f4da3df04c2ca0068677e1ee74d346ebade2d85eef4de8cda",
-                "sha256:8a170214f8f1f362ed4ba7c51dae3c7d334d88e2643c02da39c9654c71ab5b33"
+                "sha256:0c1cbec2c0d72bfea64e520366d0a649c77f63d356a8062b47f38a7b26905651",
+                "sha256:169d46ef8c3b89727a883277c584e7e8fe01fb599bbbe02e9f6bc8235ea31ec3"
             ],
             "index": "pypi",
-            "version": "==3.3.2"
+            "version": "==3.4.0"
         },
         "pipdeptree": {
             "hashes": [
@@ -169,17 +169,17 @@
         },
         "rfc5424-logging-handler": {
             "hashes": [
-                "sha256:b8998dece36bfecef2b5d40c3aab8f367115bf0d9239943c19a54692208e0b93",
-                "sha256:cf977981490d977e6ebc4a0fa41c10ff0dfcaf7a291f05ded4863d58b038ed63"
+                "sha256:2025075d9a71084a0baf97a840fd419fd07cb15f63d3c06357dd21e84d5595d4",
+                "sha256:9a0665cecacaf9b6dc7841256b835a7fb7dba231684c8e64412b70bcd789b0d6"
             ],
-            "version": "==1.4.0"
+            "version": "==1.4.1"
         },
         "sentry-sdk": {
             "hashes": [
-                "sha256:131e3b9ac11dffd86fe4f1f5d388d3dab372fc9e30d6611d1fc87096a1d67359",
-                "sha256:e925a2363178c211ad787f507cedda12ee5b0aadf5ac390950140393636a80bb"
+                "sha256:6f4e264d0ad6267c40e20431a6a50f815515805ffe8eb9815340adf931279523",
+                "sha256:ded1a85821d555dd68abdc0a8e7e4eee7b096f8a6d7a4821228b52a62a465f07"
             ],
-            "version": "==0.7.2"
+            "version": "==0.7.3"
         },
         "six": {
             "hashes": [
@@ -344,9 +344,10 @@
         },
         "cpplint": {
             "hashes": [
-                "sha256:6876139c3944c6dc84cc9095b6c4be3c5397b534b0c00230ba59c4b893936719"
+                "sha256:99b59eb2d88675f87696d709bb7213b54aa1787cc881096255a6aa3cdaec31dc",
+                "sha256:9ed01c127e0ff3742cb041706c91ae33dedb87bb2f1fb1fb4da714971d26eae5"
             ],
-            "version": "==1.3.0"
+            "version": "==1.4.3"
         },
         "decorator": {
             "hashes": [
