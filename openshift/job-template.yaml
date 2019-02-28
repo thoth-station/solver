@@ -61,7 +61,6 @@ objects:
         task: solver
         mark: cleanup
     spec:
-      backoffLimit: 0
       template:
         metadata:
           labels:
@@ -70,7 +69,7 @@ objects:
             mark: cleanup
             task: solver
         spec:
-          restartPolicy: Never
+          restartPolicy: OnFailure
           containers:
             - name: solver
               env:
