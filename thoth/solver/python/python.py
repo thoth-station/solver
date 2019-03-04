@@ -336,10 +336,12 @@ def _do_resolve_index(
                 for version in resolved_versions:
                     # Did we check this package already - do not check indexes, we manually insert them.
                     seen_entry = (dependency_name, version)
-                    if (
-                        seen_entry not in packages_seen
-                        and subgraph_check_api
-                        and _should_resolve_subgraph(subgraph_check_api, dependency_name, version, index_url)
+                    if seen_entry not in packages_seen and (
+                        not subgraph_check_api
+                        or (
+                            subgraph_check_api
+                            and _should_resolve_subgraph(subgraph_check_api, dependency_name, version, index_url)
+                        )
                     ):
                         _LOGGER.debug(
                             "Adding package %r in version %r for next resolution round", dependency_name, version
