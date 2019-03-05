@@ -106,7 +106,8 @@ def _install_requirement(
     previous_version = _pipdeptree(python_bin, package)
 
     try:
-        cmd = "{} -m pip install --force-reinstall --no-cache-dir --no-deps {}".format(python_bin, quote(package))
+        cmd = "{} -m pip install --disable-pip-version-check --force-reinstall " \
+              "--no-cache-dir --no-deps {}".format(python_bin, quote(package))
         if version:
             cmd += "=={}".format(quote(version))
         if index_url:
@@ -138,7 +139,8 @@ def _install_requirement(
                 "Restoring previous environment setup after installation of %r (%s)", package, previous_version
             )
             if previous_version:
-                cmd = "{} -m pip install --force-reinstall --no-cache-dir --no-deps {}=={}".format(
+                cmd = "{} -m pip install --disable-pip-version-check " \
+                      "--force-reinstall --no-cache-dir --no-deps {}=={}".format(
                     python_bin, quote(package), quote(previous_version["package"]["installed_version"])
                 )
                 result = run_command(cmd, raise_on_error=False)
@@ -371,7 +373,7 @@ def resolve(
     run_command("virtualenv -p python3 venv")
     python_bin = "venv/bin/" + python_bin
 
-    run_command("{} -m pip install pipdeptree".format(python_bin))
+    run_command("{} -m pip install --disable-pip-version-check pipdeptree".format(python_bin))
     environment_details = _get_environment_details(python_bin)
 
     result = {"tree": [], "errors": [], "unparsed": [], "unresolved": [], "environment": environment_details}
