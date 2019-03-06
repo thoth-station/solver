@@ -17,6 +17,7 @@
 
 """Dependency requirements solving for Python ecosystem."""
 
+import sys
 from collections import deque
 from contextlib import contextmanager
 import logging
@@ -364,7 +365,7 @@ def resolve(
     assert python_version in (2, 3), "Unknown Python version"
 
     if subgraph_check_api and not transitive:
-        _LOG.error("The check against subgraph API cannot be done if no transitive dependencies are resolved")
+        _LOGGER.error("The check against subgraph API cannot be done if no transitive dependencies are resolved")
         sys.exit(2)
 
     python_bin = "python3" if python_version == 3 else "python2"
