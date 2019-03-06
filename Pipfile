@@ -13,9 +13,13 @@ pip-tools = "*"
 thoth-common = "*"
 "autopep8" = "*"
 requests = "*"
+thoth-python = "*"
 
 [dev-packages]
 coala-bears = "*"
 
 [pipenv]
 keep_outdated = true
+
+[requires]
+python_version = "3.6"
