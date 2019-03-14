@@ -1,12 +1,13 @@
-thoth-solver
-============
+Thoth Solver
+------------
 
-Dependency solver for the Thoth project.
+Dependency solver used in `Thoth project <https://thoth-station.ninja>`_.
 
 Project Scope
 =============
 
-The aim of this project is to answer a simple question - what packages will be installed (resolved by pip) for the provided stack?
+The aim of this project is to answer a simple question - what packages will be
+installed (resolved by pip) for the provided stack?
 
 Imagine you have an application that has one dependency:
 
@@ -24,19 +25,21 @@ This project will tell you how dependencies could be resolved:
 
 The output can be found at `here <https://pastebin.com/bKLbcXe1>`_.
 
+You can optionally also specify a list of indexes which should be checked for each package.
+
 Installation and Deployment
 ===========================
 
 .. code-block:: console
 
-  git clone git@github.com:thoth-station/solver.git
-  cd thoth-solver && export PYTHONPATH='.'
-  ./thoth-solver --help
+  git clone git@github.com:thoth-station/solver.git thoth-solver
+  cd thoth-solver
+  PYTHONPATH='.' ./thoth-solver-cli --help
 
 
 This project is also released on
 `PyPI <https://pypi.org/project/thoth-solver>`_, so the latest release can be
-installed via pip or Pipenv:
+installed via pip or `Pipenv <https://pipenv.readthedocs.io>`_:
 
 .. code-block:: console
 
@@ -45,6 +48,6 @@ installed via pip or Pipenv:
 
 Solver is run in Thoth to gather information about package dependencies. You
 can find deployment templates in the `openshift/` directory present in the
-root of this Git repository. The actual deployment is done using Ansible
-playbooks available in the
+root of `solver's Git repository <https://github.com/thoth-station/solver>`_. The
+actual deployment is done using Ansible playbooks available in the
 `Thoth's core repository <https://github.com/thoth-station/core>`_.
