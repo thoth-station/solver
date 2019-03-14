@@ -22,9 +22,10 @@ def get_version():
     raise ValueError("No package version found")
 
 
+VERSION = get_version()
 setup(
     name='thoth-solver',
-    version=get_version(),
+    version=VERSION,
     entry_points={
         'console_scripts': ['thoth-solver=thoth.solver.cli:cli']
     },
@@ -54,5 +55,10 @@ setup(
         "Operating System :: OS Independent",
         "Programming Language :: Python :: Implementation :: CPython",
         "Programming Language :: Python :: Implementation :: PyPy"
-    ]
+    ],
+    command_options={
+        'build_sphinx': {
+            'version': ('setup.py', VERSION),
+        }
+    }
 )
