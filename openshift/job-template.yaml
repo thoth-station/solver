@@ -4,20 +4,33 @@ metadata:
   name: solver
   annotations:
     description: "Thoth: Solver Job Template"
-    openshift.io/display-name: 'Thoth: Solver'
-    version: 0.6.0
+    openshift.io/display-name: "Thoth: Solver"
+    version: 0.6.1
     tags: thoth,ai-stacks,aistacks,solver,machinlearning
     template.openshift.io/documentation-url: https://github.com/Thoth-Station/
     template.openshift.io/long-description: >
       This template defines resources needed to run solvers in Thoth, it is used
       to create new OpenShift Jobs running the analyzer.
-    template.openshift.io/provider-display-name: Red Hat, Inc.
+    template.openshift.io/provider-display-name: "Red Hat, Inc."
   labels:
     template: solver
     app: thoth
     component: solver-fedora-28-py36
 
 parameters:
+  - description: Project the ImageStream to be use lives in
+    displayName: ImageStream Project
+    required: true
+    name: IMAGE_STREAM_NAMESPACE
+    # TODO adjust ansible role so that we dont need a default here
+    value: "thoth-infra-stage"
+
+  - description: Tag of the ImageStream to be use
+    displayName: ImageStream Tag
+    required: true
+    name: IMAGE_STREAM_TAG
+    value: "latest"
+
   - name: THOTH_SOLVER_NO_TRANSITIVE
     description: "Do not resolve transitive dependencies"
     displayName: "No transitive dependencies"
@@ -46,8 +59,7 @@ parameters:
   - name: THOTH_SOLVER_INDEXES
     description: "A comma separated list of indexes to scan during solver run"
     displayName: "Python Package Indexes"
-    value: ''
-
+    value: ""
 
 objects:
   - apiVersion: batch/v1
@@ -60,7 +72,7 @@ objects:
         operator: graph-sync
         task: solver
         mark: cleanup
-        ttl: '2h'
+        ttl: "2h"
     spec:
       template:
         metadata:
@@ -93,7 +105,7 @@ objects:
                     secretKeyRef:
                       name: thoth
                       key: sentry-dsn
-              image: solver-fedora-28-py36
+              image: "${IMAGE_STREAM_NAMESPACE}/solver-fedora-28-py36:${IMAGE_STREAM_TAG}"
               livenessProbe:
                 failureThreshold: 1
                 initialDelaySeconds: 21600
