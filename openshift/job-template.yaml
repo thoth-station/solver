@@ -5,7 +5,7 @@ metadata:
   annotations:
     description: "Thoth: Solver Job Template"
     openshift.io/display-name: "Thoth: Solver"
-    version: 0.6.1
+    version: 0.6.2
     tags: thoth,ai-stacks,aistacks,solver,machinlearning
     template.openshift.io/documentation-url: https://github.com/Thoth-Station/
     template.openshift.io/long-description: >
@@ -18,7 +18,14 @@ metadata:
     component: solver-fedora-28-py36
 
 parameters:
-  - description: Project the ImageStream to be use lives in
+  - description: Registry the ImageStream to be use lives in
+    displayName: ImageStream Registry
+    required: true
+    name: IMAGE_STREAM_REGISTRY
+    # TODO adjust ansible role so that we dont need a default here
+    value: "docker-registry.default.svc:5000"
+
+  - description: Namespace the ImageStream to be use lives in
     displayName: ImageStream Project
     required: true
     name: IMAGE_STREAM_NAMESPACE
@@ -105,7 +112,7 @@ objects:
                     secretKeyRef:
                       name: thoth
                       key: sentry-dsn
-              image: "${IMAGE_STREAM_NAMESPACE}/solver-fedora-28-py36:${IMAGE_STREAM_TAG}"
+              image: "${IMAGE_STREAM_REGISTRY}/${IMAGE_STREAM_NAMESPACE}/solver-fedora-28-py36:${IMAGE_STREAM_TAG}"
               livenessProbe:
                 failureThreshold: 1
                 initialDelaySeconds: 21600
