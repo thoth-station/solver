@@ -4,14 +4,14 @@ metadata:
   name: solver-buildconfig
   annotations:
     description: >
-      This is Thoth Solver Fedora 28+ BuildConfig, this template is meant to
+      This is Thoth Solver Fedora 28+ and UBI8 BuildConfig, this template is meant to
       be used by Bots, but could also be used by humans...
     openshift.io/display-name: 'Thoth Core: Solver Fedora 28+ BuildConfig'
-    version: 0.6.0
+    version: 0.7.0
     tags: thoth,ai-stacks,aistacks,solver,machinlearning
     template.openshift.io/documentation-url: https://github.com/Thoth-Station/
     template.openshift.io/long-description: >
-      This is Thoth Solver Fedora 28+ BuildConfig, this template is meant to
+      This is Thoth Solver Fedora 28+ and UBI8 BuildConfig, this template is meant to
       be used by Bots, but could also be used by humans...
     template.openshift.io/provider-display-name: Red Hat, Inc.
   labels:
@@ -219,4 +219,63 @@ objects:
         type: Docker
       triggers:
         - type: ImageChange
+          imageChange: {}
+
+  - kind: BuildConfig
+    apiVersion: v1
+    metadata:
+      name: "solver-ubi-8-py36"
+      labels:
+        app: "thoth"
+        component: "solver"
+    spec:
+      output:
+        to:
+          kind: "ImageStreamTag"
+          name: "solver-ubi-8-py36:${IMAGE_STREAM_TAG}"
+      source:
+        dockerfile: |
+          FROM registry.access.redhat.com/ubi8/python-36:1-24
+
+          ENV LANG=en_US.UTF-8 \
+              THOTH_SOLVER_TMP_DIR='/tmp/thoth-solver-install'
+
+          USER 0
+          RUN useradd -m solver -s /sbin/nologin -c "Thoth Solver User"
+
+          USER ${USERID}
+          RUN mkdir -p ${THOTH_SOLVER_TMP_DIR}
+
+          # Install thoth-solver itself
+          COPY ./ ${THOTH_SOLVER_TMP_DIR}
+          RUN cd ${THOTH_SOLVER_TMP_DIR} &&\
+              pip3 install . &&\
+              cd / &&\
+              rm -rf ${THOTH_SOLVER_TMP_DIR} &&\
+              unset THOTH_SOLVER_TMP_DIR
+
+          WORKDIR /home/solver
+          USER solver
+
+          CMD ["pypi"]
+          ENTRYPOINT ["thoth-solver"]
+        type: Git
+        git:
+          uri: "${GITHUB_URL}"
+          ref: "${GITHUB_REF}"
+      resources:
+        limits:
+          memory: '512Mi'
+          cpu: '500m'
+        requests:
+          memory: '512Mi'
+          cpu: '500m'
+      strategy:
+        type: "Docker"
+        dockerStrategy:
+          from:
+            kind: "ImageStreamTag"
+            name: "python-36:latest"
+      triggers:
+        - type: "ImageChange"
           imageChange: {}
