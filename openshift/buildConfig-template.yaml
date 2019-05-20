@@ -7,7 +7,7 @@ metadata:
       This is Thoth Solver Fedora 28+ and UBI8 BuildConfig, this template is meant to
       be used by Bots, but could also be used by humans...
     openshift.io/display-name: 'Thoth Core: Solver Fedora 28+ BuildConfig'
-    version: 0.7.0
+    version: 0.7.1
     tags: thoth,ai-stacks,aistacks,solver,machinlearning
     template.openshift.io/documentation-url: https://github.com/Thoth-Station/
     template.openshift.io/long-description: >
@@ -288,6 +288,8 @@ objects:
           from:
             kind: "ImageStreamTag"
             name: "python-36:latest"
+          pullSecret:
+            name: 6340056-thoth-zuul-pull-secret
       triggers:
         - type: "ImageChange"
           imageChange: {}
