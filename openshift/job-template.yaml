@@ -5,7 +5,7 @@ metadata:
   annotations:
     description: "Thoth: Solver Job Template"
     openshift.io/display-name: "Thoth: Solver"
-    version: 0.6.2
+    version: 0.7.0
     tags: thoth,ai-stacks,aistacks,solver,machinlearning
     template.openshift.io/documentation-url: https://github.com/Thoth-Station/
     template.openshift.io/long-description: >
@@ -15,7 +15,7 @@ metadata:
   labels:
     template: solver
     app: thoth
-    component: solver-fedora-28-py36
+    component: solver
 
 parameters:
   - description: Registry the ImageStream to be use lives in
@@ -75,7 +75,7 @@ objects:
       name: "${THOTH_SOLVER_JOB_ID}"
       labels:
         app: thoth
-        component: solver-fedora-28-py36
+        component: solver
         operator: graph-sync
         task: solver
         mark: cleanup
@@ -113,6 +113,41 @@ objects:
                       name: thoth
                       key: sentry-dsn
               image: "${IMAGE_STREAM_REGISTRY}/${IMAGE_STREAM_NAMESPACE}/solver-fedora-28-py36:${IMAGE_STREAM_TAG}"
+              livenessProbe:
+                failureThreshold: 1
+                initialDelaySeconds: 21600
+                periodSeconds: 10
+                tcpSocket:
+                  port: 80
+              resources:
+                limits:
+                  cpu: 1
+                  memory: 1Gi
+                requests:
+                  cpu: 1
+                  memory: 1Gi
+            - name: solver-ubi-8-py36
+              env:
+                - name: THOTH_SOLVER
+                  value: solver-ubi-8-py36
+                - name: THOTH_LOG_SOLVER
+                  value: "${THOTH_LOG_SOLVER}"
+                - name: THOTH_SOLVER_NO_TRANSITIVE
+                  value: "${THOTH_SOLVER_NO_TRANSITIVE}"
+                - name: THOTH_SOLVER_PACKAGES
+                  value: "${THOTH_SOLVER_PACKAGES}"
+                - name: THOTH_SOLVER_OUTPUT
+                  value: "${THOTH_SOLVER_OUTPUT}"
+                - name: THOTH_SOLVER_INDEXES
+                  value: "${THOTH_SOLVER_INDEXES}"
+                - name: THOTH_SOLVER_SUBGRAPH_CHECK_API
+                  value: "${THOTH_SOLVER_SUBGRAPH_CHECK_API}"
+                - name: SENTRY_DSN
+                  valueFrom:
+                    secretKeyRef:
+                      name: thoth
+                      key: sentry-dsn
+              image: "${IMAGE_STREAM_REGISTRY}/${IMAGE_STREAM_NAMESPACE}/solver-ubi-8-py36:${IMAGE_STREAM_TAG}"
               livenessProbe:
                 failureThreshold: 1
                 initialDelaySeconds: 21600
