@@ -27,6 +27,9 @@ objects:
         build: solver-fedora-29-py37
         app: thoth
         component: solver
+        app.kubernetes.io/name: "thoth"
+        app.kubernetes.io/component: "solver"
+        app.thoth-station.ninja/solver: "fedora-29-py37"
       name: solver-fedora-29-py37
     spec:
       name: latest
@@ -40,6 +43,9 @@ objects:
         build: solver-fedora-29-py36
         app: thoth
         component: solver
+        app.kubernetes.io/name: "thoth"
+        app.kubernetes.io/component: "solver"
+        app.thoth-station.ninja/solver: "fedora-29-py36"
       name: solver-fedora-29-py36
     spec:
       name: latest
@@ -53,19 +59,9 @@ objects:
         build: solver-fedora-28-py36
         app: thoth
         component: solver
-      name: solver-fedora-28-py36
-    spec:
-      name: latest
-      lookupPolicy:
-        local: true
-
-  - kind: ImageStream
-    apiVersion: v1
-    metadata:
-      labels:
-        build: solver-fedora-28-py36
-        app: thoth
-        component: solver
+        app.kubernetes.io/name: "thoth"
+        app.kubernetes.io/component: "solver"
+        app.thoth-station.ninja/solver: "fedora-28-py36"
       name: solver-fedora-28-py36
     spec:
       name: latest
@@ -79,6 +75,9 @@ objects:
         build: "solver-ubi-8-py36"
         app: "thoth"
         component: "solver"
+        app.kubernetes.io/name: "thoth"
+        app.kubernetes.io/component: "solver"
+        app.thoth-station.ninja/solver: "ubi-8-py36"
       name: "solver-ubi-8-py36"
     spec:
       name: "latest"
