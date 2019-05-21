@@ -25,6 +25,7 @@ import typing
 from shlex import quote
 from urllib.parse import urlparse
 
+import http
 import requests
 from thoth.analyzer import CommandError
 from thoth.analyzer import run_command
@@ -83,10 +84,10 @@ def _should_resolve_subgraph(subgraph_check_api: str, package_name: str, package
         params={"package_name": package_name, "package_version": package_version, "index_url": index_url},
     )
 
-    if response.status_code == 200:
+    if response.status_code == http.HTTPStatus.OK:
         return True
-    elif response.status_code == 208:
-        # This is probably not the correct HTTP status code to be used here, but which one should be used?
+    elif response.status_code == http.HTTPStatus.ALREADY_REPORTED:
+        # FIXME This is probably not the correct HTTP status code to be used here, but which one should be used?
         return False
 
     response.raise_for_status()
