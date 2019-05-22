@@ -79,10 +79,24 @@ def _should_resolve_subgraph(subgraph_check_api: str, package_name: str, package
         index_url,
     )
 
-    response = requests.get(
-        subgraph_check_api,
-        params={"package_name": package_name, "package_version": package_version, "index_url": index_url},
-    )
+    response = None
+    for i in range(3):
+        response = requests.get(
+            subgraph_check_api,
+            params={"package_name": package_name, "package_version": package_version, "index_url": index_url},
+        )
+
+        if response.status_code in (200, 208):
+            break
+
+        _LOGGER.debug(
+            "Invalid response from subgraph check API %r, retrying (status code: %d): %r",
+            subgraph_check_api,
+            response.status_code,
+            response.text
+        )
+    else:
+        response.raise_for_status()
 
     if response.status_code == http.HTTPStatus.OK:
         return True
@@ -90,7 +104,6 @@ def _should_resolve_subgraph(subgraph_check_api: str, package_name: str, package
         # FIXME This is probably not the correct HTTP status code to be used here, but which one should be used?
         return False
 
-    response.raise_for_status()
     raise ValueError(
         "Unreachable code - subgraph check API responded with unknown HTTP status "
         "code %s for package %r in version %r from index %r",
