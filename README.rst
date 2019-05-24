@@ -23,7 +23,7 @@ This project will tell you how dependencies could be resolved:
 
   thoth-solver -vvv pypi -r requirements.txt 
 
-The output can be found at `here <https://pastebin.com/bKLbcXe1>`_.
+The output can be found at `here <https://github.com/thoth-station/misc/blob/master/examples/runtime-environment/resolved.json>`_.
 
 You can optionally also specify a list of indexes which should be checked for each package.
 
