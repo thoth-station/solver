@@ -4,14 +4,14 @@ metadata:
   name: solver-imagestream
   annotations:
     description: >
-      This is Thoth Solver Fedora 28+ ImageStream, this template is meant to
+      This is Thoth Solver Fedora 28+ and UBI8 ImageStream, this template is meant to
       be used by Bots, but could also be used by humans...
     openshift.io/display-name: 'Thoth Core: Solver Fedora 28+ ImageStream'
-    version: 0.6.0
+    version: 0.7.0
     tags: thoth,ai-stacks,aistacks,solver,machinlearning
     template.openshift.io/documentation-url: https://github.com/Thoth-Station/
     template.openshift.io/long-description: >
-      This is Thoth Solver Fedora 28+ ImageStream, this template is meant to
+      This is Thoth Solver Fedora 28+ and UBI8 ImageStream, this template is meant to
       be used by Bots, but could also be used by humans...
     template.openshift.io/provider-display-name: Red Hat, Inc.
   labels:
@@ -27,6 +27,9 @@ objects:
         build: solver-fedora-29-py37
         app: thoth
         component: solver
+        app.kubernetes.io/name: "thoth"
+        app.kubernetes.io/component: "solver"
+        app.thoth-station.ninja/solver: "fedora-29-py37"
       name: solver-fedora-29-py37
     spec:
       name: latest
@@ -40,6 +43,9 @@ objects:
         build: solver-fedora-29-py36
         app: thoth
         component: solver
+        app.kubernetes.io/name: "thoth"
+        app.kubernetes.io/component: "solver"
+        app.thoth-station.ninja/solver: "fedora-29-py36"
       name: solver-fedora-29-py36
     spec:
       name: latest
@@ -53,6 +59,9 @@ objects:
         build: solver-fedora-28-py36
         app: thoth
         component: solver
+        app.kubernetes.io/name: "thoth"
+        app.kubernetes.io/component: "solver"
+        app.thoth-station.ninja/solver: "fedora-28-py36"
       name: solver-fedora-28-py36
     spec:
       name: latest
@@ -63,11 +72,14 @@ objects:
     apiVersion: v1
     metadata:
       labels:
-        build: solver-fedora-28-py36
-        app: thoth
-        component: solver
-      name: solver-fedora-28-py36
+        build: "solver-ubi-8-py36"
+        app: "thoth"
+        component: "solver"
+        app.kubernetes.io/name: "thoth"
+        app.kubernetes.io/component: "solver"
+        app.thoth-station.ninja/solver: "ubi-8-py36"
+      name: "solver-ubi-8-py36"
     spec:
-      name: latest
+      name: "latest"
       lookupPolicy:
         local: true
