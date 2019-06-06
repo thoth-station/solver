@@ -156,11 +156,11 @@
         },
         "pip-tools": {
             "hashes": [
-                "sha256:4ff38ab655bec47db2d5a82fa6c6807e231ecddf3b7cbb2f2b957a9b11f016c3",
-                "sha256:542cc32393ec8e97932b4710462567e3ecbd0a1d483d8b1d5ef05bc6ef83f7f8"
+                "sha256:1240b075af2aaf8231898a6cb0220a103a06182a239ebf4537920e5d02ad89c3",
+                "sha256:e4f33c3c77954182ec6998d661b0c2749428d3b461c0247d28ee67493a1c90ef"
             ],
             "index": "pypi",
-            "version": "==3.7.0"
+            "version": "==3.8.0"
         },
         "pipdeptree": {
             "hashes": [
@@ -659,9 +659,9 @@
         },
         "nltk": {
             "hashes": [
-                "sha256:6ba7350f7588a239764f2d04e9b20bb2d34e0a45824035ada924ed33a6fe0d58"
+                "sha256:12d7129aea0972840419499411d3aa815c6ad66336a51131e120d35a25d953b2"
             ],
-            "version": "==3.4.2"
+            "version": "==3.4.3"
         },
         "packaging": {
             "hashes": [
