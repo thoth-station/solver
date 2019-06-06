@@ -75,7 +75,7 @@ objects:
       name: "${THOTH_SOLVER_JOB_ID}"
       labels:
         app: thoth
-        component: solver
+        component: solver-fedora-28-py36
         operator: graph-sync
         task: solver
         mark: cleanup
@@ -132,7 +132,7 @@ objects:
       name: "${THOTH_SOLVER_JOB_ID}"
       labels:
         app: thoth
-        component: solver
+        component: solver-ubi-8-py36
         operator: graph-sync
         task: solver
         mark: cleanup
