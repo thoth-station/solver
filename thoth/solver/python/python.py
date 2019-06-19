@@ -17,6 +17,7 @@
 
 """Dependency requirements solving for Python ecosystem."""
 
+import os
 import sys
 from collections import deque
 from contextlib import contextmanager
@@ -72,18 +73,26 @@ def _should_resolve_subgraph(subgraph_check_api: str, package_name: str, package
     analyzing of "core" packages (like setuptools) where not needed as they
     can break installation environment.
     """
+    # This variable is expected to be set in deployment to guarantee solver name correctness for subgraph checks.
+    solver_name = os.environ["THOTH_SOLVER"]
     _LOGGER.info(
-        "Checking if the given dependency subgraph for package %r in version %r from index %r should be resolved",
+        "Checking if the given dependency subgraph for package %r in version %r from index %r should be resolved by %r",
         package_name,
         package_version,
         index_url,
+        solver_name,
     )
 
     response = None
     for i in range(3):
         response = requests.get(
             subgraph_check_api,
-            params={"package_name": package_name, "package_version": package_version, "index_url": index_url},
+            params={
+                "package_name": package_name,
+                "package_version": package_version,
+                "index_url": index_url,
+                "solver_name": solver_name,
+            },
         )
 
         if response.status_code in (200, 208):
@@ -106,10 +115,11 @@ def _should_resolve_subgraph(subgraph_check_api: str, package_name: str, package
 
     raise ValueError(
         "Unreachable code - subgraph check API responded with unknown HTTP status "
-        "code %s for package %r in version %r from index %r",
+        "code %s for package %r in version %r from index %r, solver %r",
         package_name,
         package_version,
         index_url,
+        solver_name
     )
 
 
