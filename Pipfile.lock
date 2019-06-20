@@ -264,10 +264,10 @@
         },
         "thoth-common": {
             "hashes": [
-                "sha256:620c2fcb1199bc5945440fcfdfe7d577fbe20097e653eefd30a82357b35cd6d4"
+                "sha256:97a936ea9c8718cb6815ffb949f450fd86158663e61b93afb6372a246f861712"
             ],
             "index": "pypi",
-            "version": "==0.8.11"
+            "version": "==0.9.0"
         },
         "thoth-python": {
             "hashes": [
@@ -554,10 +554,10 @@
         },
         "jupyter-core": {
             "hashes": [
-                "sha256:927d713ffa616ea11972534411544589976b2493fc7e09ad946e010aa7eb9970",
-                "sha256:ba70754aa680300306c699790128f6fbd8c306ee5927976cbe48adacf240c0b7"
+                "sha256:2c6e7c1e9f2ac45b5c2ceea5730bc9008d92fe59d0725eac57b04c0edfba24f7",
+                "sha256:f4fa22d6cf25f34807c995f22d2923693575c70f02557bcbfbe59bd5ec8d8b84"
             ],
-            "version": "==4.4.0"
+            "version": "==4.5.0"
         },
         "lazy-object-proxy": {
             "hashes": [
@@ -895,9 +895,9 @@
         },
         "wrapt": {
             "hashes": [
-                "sha256:4aea003270831cceb8a90ff27c4031da6ead7ec1886023b80ce0dfe0adf61533"
+                "sha256:565a021fd19419476b9362b05eeaa094178de64f8361e44468f9e9d7843901e1"
             ],
-            "version": "==1.11.1"
+            "version": "==1.11.2"
         },
         "yamllint": {
             "hashes": [
