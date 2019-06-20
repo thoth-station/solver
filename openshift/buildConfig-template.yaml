@@ -101,6 +101,10 @@ objects:
       triggers:
         - type: ImageChange
           imageChange: {}
+        - type: "Generic"
+          generic:
+            secretReference:
+              name: generic-webhook-secret
 
   - kind: BuildConfig
     apiVersion: v1
@@ -166,6 +170,10 @@ objects:
       triggers:
         - type: ImageChange
           imageChange: {}
+        - type: "Generic"
+          generic:
+            secretReference:
+              name: generic-webhook-secret
 
   - kind: BuildConfig
     apiVersion: v1
@@ -229,6 +237,10 @@ objects:
       triggers:
         - type: ImageChange
           imageChange: {}
+        - type: "Generic"
+          generic:
+            secretReference:
+              name: generic-webhook-secret
 
   - kind: BuildConfig
     apiVersion: v1
@@ -294,3 +306,7 @@ objects:
       triggers:
         - type: "ImageChange"
           imageChange: {}
+        - type: "Generic"
+          generic:
+            secretReference:
+              name: generic-webhook-secret
