@@ -271,9 +271,9 @@ class Solver(object):
 
             if not releases:
                 if graceful:
-                    _LOGGER.info("No releases found for package %s", dep.name)
+                    _LOGGER.info("No releases found for package %r", dep.name)
                 else:
-                    raise SolverException("No releases found for package {}".format(dep.name))
+                    raise SolverException("No releases found for package {!r}".format(dep.name))
 
             releases = [release for release in releases if release in dep]
             matching = sorted(releases, key=cmp_to_key(_compare_version_index_url))
