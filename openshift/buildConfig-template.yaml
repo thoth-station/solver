@@ -266,6 +266,7 @@ objects:
               rm -rf ${THOTH_SOLVER_TMP_DIR} &&\
               unset THOTH_SOLVER_TMP_DIR
 
+          RUN chmod -R 777 /home/solver
           WORKDIR /home/solver
           USER solver
 
