@@ -86,8 +86,9 @@ objects:
           labels:
             app: thoth
             component: solver-fedora-28-py36
-            mark: cleanup
             task: solver
+            mark: cleanup
+            ttl: "2h"
         spec:
           restartPolicy: OnFailure
           containers:
@@ -143,8 +144,9 @@ objects:
           labels:
             app: thoth
             component: solver-ubi-8-py36
-            mark: cleanup
             task: solver
+            mark: cleanup
+            ttl: "2h"
         spec:
           restartPolicy: OnFailure
           containers:
