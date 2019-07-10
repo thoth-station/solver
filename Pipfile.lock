@@ -237,10 +237,10 @@
         },
         "sentry-sdk": {
             "hashes": [
-                "sha256:0db9bf507aa227d100768ad0fcb427ff4b91b941e0a06ba27e74d245062ff714",
-                "sha256:6146a59dea4d893df9aabd589003f4aac1311baa218605ad48eb85b52533b183"
+                "sha256:1db9c4653e71d39ff3557c0981d5fb5f43a43e3a830fcf5e21a37c97f7bce6bb",
+                "sha256:7e24f3ec1f4c909306d1b97373fe5caa942f54009acdcfa4d1ee6671f626bbe9"
             ],
-            "version": "==0.9.2"
+            "version": "==0.10.1"
         },
         "six": {
             "hashes": [
@@ -264,11 +264,11 @@
         },
         "thoth-common": {
             "hashes": [
-                "sha256:6cfc81cf3c67451c7332e2428d7ddf4be5b365064899e4ce348f006f5c95150e",
-                "sha256:b005bb71a0359dedd1da0af9dce6eda6b43658ffdbce17e8f89e91e1717ecf82"
+                "sha256:1b65a66652f0c19500a75be7dd7615f4792127f77bfbb6b40fd9f33a93bb19c2",
+                "sha256:f6f1c98cc29c42a766c4a74791539badde8408facff0fe78661bf6adefec963b"
             ],
             "index": "pypi",
-            "version": "==0.9.1"
+            "version": "==0.9.2"
         },
         "thoth-python": {
             "hashes": [
@@ -356,10 +356,10 @@
         },
         "bandit": {
             "hashes": [
-                "sha256:f89adaff792d1f9b72859784c5f7964c6b5a5f32ca0ca458c9643e02d4fdceac",
-                "sha256:fa1fee3cb60a3dca89b7a86c0be82af0e830def961728aba9290854fe18c1f90"
+                "sha256:336620e220cf2d3115877685e264477ff9d9abaeb0afe3dc7264f55fa17a3952",
+                "sha256:41e75315853507aa145d62a78a2a6c5e3240fe14ee7c601459d0df9418196065"
             ],
-            "version": "==1.6.1"
+            "version": "==1.6.2"
         },
         "certifi": {
             "hashes": [
@@ -534,10 +534,10 @@
         },
         "isort": {
             "hashes": [
-                "sha256:c40744b6bc5162bbb39c1257fe298b7a393861d50978b565f3ccd9cb9de0182a",
-                "sha256:f57abacd059dc3bd666258d1efb0377510a89777fda3e3274e3c01f7c03ae22d"
+                "sha256:54da7e92468955c4fceacd0c86bd0ec997b0e1ee80d97f67c35a78b719dccab1",
+                "sha256:6e811fcb295968434526407adb8796944f1988c5b65e8139058f2014cbe100fd"
             ],
-            "version": "==4.3.20"
+            "version": "==4.3.21"
         },
         "jinja2": {
             "hashes": [
@@ -658,9 +658,9 @@
         },
         "nltk": {
             "hashes": [
-                "sha256:12d7129aea0972840419499411d3aa815c6ad66336a51131e120d35a25d953b2"
+                "sha256:764c20a5f8532a681c261af3c7d1a54768a35df6f3603df75e615cbd34e47cb5"
             ],
-            "version": "==3.4.3"
+            "version": "==3.4.4"
         },
         "packaging": {
             "hashes": [
@@ -671,10 +671,10 @@
         },
         "pbr": {
             "hashes": [
-                "sha256:9181e2a34d80f07a359ff1d0504fad3a47e00e1cf2c475b0aa7dcb030af54c40",
-                "sha256:94bdc84da376b3dd5061aa0c3b6faffe943ee2e56fa4ff9bd63e1643932f34fc"
+                "sha256:36ebd78196e8c9588c972f5571230a059ff83783fabbbbedecc07be263ccd7e6",
+                "sha256:5a03f59455ad54f01a94c15829b8b70065462b7bd8d5d7e983306b59127fc841"
             ],
-            "version": "==5.3.1"
+            "version": "==5.4.0"
         },
         "polib": {
             "hashes": [
@@ -747,9 +747,9 @@
         },
         "pyrsistent": {
             "hashes": [
-                "sha256:16692ee739d42cf5e39cef8d27649a8c1fdb7aa99887098f1460057c5eb75c3a"
+                "sha256:50cffebc87ca91b9d4be2dcc2e479272bcb466b5a0487b6c271f7ddea6917e14"
             ],
-            "version": "==0.15.2"
+            "version": "==0.15.3"
         },
         "pytz": {
             "hashes": [
@@ -836,10 +836,9 @@
         },
         "snowballstemmer": {
             "hashes": [
-                "sha256:919f26a68b2c17a7634da993d91339e288964f93c274f1343e3bbbe2096e1128",
-                "sha256:9f3bcd3c401c3e862ec0ebe6d2c069ebc012ce142cce209c098ccb5b09136e89"
+                "sha256:9f3b9ffe0809d174f7047e121431acf99c89a7040f0ca84f94ba53a498e6d0c9"
             ],
-            "version": "==1.2.1"
+            "version": "==1.9.0"
         },
         "sphinx": {
             "hashes": [
