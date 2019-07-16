@@ -69,3 +69,13 @@
 * Introduce subgraph check API parameter in template
 * Add check for subgraph checks
 * Restore correctly environment in case of any exception
+
+## Release 1.2.1 (2019-07-16T19:43:35)
+* Include MANIFEST.in file
+* :pushpin: Automatic update of dependency virtualenv from 16.6.1 to 16.6.2
+* :pushpin: Automatic update of dependency thoth-common from 0.9.2 to 0.9.3
+* :pushpin: Automatic update of dependency thoth-common from 0.9.1 to 0.9.2
+* :pushpin: Automatic update of dependency thoth-common from 0.9.0 to 0.9.1
+* Configure pod ttl to be same as job ttl
+* Quote package name in case of no releases found
+* Fix permission denied when installing to venv
