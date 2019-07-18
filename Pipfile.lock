@@ -264,11 +264,11 @@
         },
         "thoth-common": {
             "hashes": [
-                "sha256:44809240f4c2e71c9168d17e3e39280c9af52e9752977b794917c405a081c3ee",
-                "sha256:72349043a14b56ca2778dcd6c924c169495dabcb09a7ecd8fb500a0739a684b3"
+                "sha256:0b3d166c7cfe5feb0438667a88c06f4d80ad7e5c1f5c7b79b11dc6f0127bc48c",
+                "sha256:b1b0e37ac8a70dcb30238aeea966f26609f463f4e7164cef241addd477b9f735"
             ],
             "index": "pypi",
-            "version": "==0.9.3"
+            "version": "==0.9.4"
         },
         "thoth-python": {
             "hashes": [
@@ -671,10 +671,10 @@
         },
         "pbr": {
             "hashes": [
-                "sha256:36ebd78196e8c9588c972f5571230a059ff83783fabbbbedecc07be263ccd7e6",
-                "sha256:5a03f59455ad54f01a94c15829b8b70065462b7bd8d5d7e983306b59127fc841"
+                "sha256:0ca44dc9fd3b04a22297c2a91082d8df2894862e8f4c86a49dac69eae9e85ca0",
+                "sha256:4aed6c1b1fa5020def0f22aed663d87b81bb3235f112490b07d2643d7a98c5b5"
             ],
-            "version": "==5.4.0"
+            "version": "==5.4.1"
         },
         "polib": {
             "hashes": [
