@@ -30,6 +30,10 @@ class SolverException(Exception):
     """Exception to be raised in Solver."""
 
 
+class NoReleasesFound(SolverException):
+    """Exception raised if no releases were found for the given package."""
+
+
 class Tokens(object):
     """Comparison token representation."""
 
@@ -273,7 +277,7 @@ class Solver(object):
                 if graceful:
                     _LOGGER.info("No releases found for package %r", dep.name)
                 else:
-                    raise SolverException("No releases found for package {!r}".format(dep.name))
+                    raise NoReleasesFound("No releases found for package {!r}".format(dep.name))
 
             releases = [release for release in releases if release in dep]
             matching = sorted(releases, key=cmp_to_key(_compare_version_index_url))
