@@ -79,3 +79,8 @@
 * Configure pod ttl to be same as job ttl
 * Quote package name in case of no releases found
 * Fix permission denied when installing to venv
+
+## Release 1.2.2 (2019-07-22T21:06:26)
+* Be more precise with the exception raised
+* :pushpin: Automatic update of dependency thoth-common from 0.9.3 to 0.9.4
+* :pushpin: Automatic update of dependency pip-tools from 3.8.0 to 3.9.0
