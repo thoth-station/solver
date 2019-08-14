@@ -96,13 +96,13 @@ def _should_resolve_subgraph(subgraph_check_api: str, package_name: str, package
                 },
             )
         except http.client.RemoteDisconnected as exc:
-            _LOGGER.debug("Client got disconnected: %s", str(exc))
+            _LOGGER.warning("Client got disconnected, retrying: %s", str(exc))
             continue
 
         if response.status_code in (200, 208):
             break
 
-        _LOGGER.debug(
+        _LOGGER.warning(
             "Invalid response from subgraph check API %r, retrying (status code: %d): %r",
             subgraph_check_api,
             response.status_code,
