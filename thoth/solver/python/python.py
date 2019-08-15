@@ -95,7 +95,7 @@ def _should_resolve_subgraph(subgraph_check_api: str, package_name: str, package
                     "solver_name": solver_name,
                 },
             )
-        except http.client.RemoteDisconnected as exc:
+        except requests.exceptions.ConnectionError as exc:
             _LOGGER.warning("Client got disconnected, retrying: %s", str(exc))
             continue
 
