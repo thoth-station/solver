@@ -75,7 +75,8 @@ objects:
       name: "${THOTH_SOLVER_JOB_ID}"
       labels:
         app: thoth
-        component: solver-fedora-28-py36
+        component: solver
+        solver-type: solver-fedora-28-py36
         operator: graph-sync
         task: solver
         mark: cleanup
@@ -85,7 +86,8 @@ objects:
         metadata:
           labels:
             app: thoth
-            component: solver-fedora-28-py36
+            component: solver
+            solver-type: solver-fedora-28-py36
             task: solver
             mark: cleanup
             ttl: "2h"
@@ -133,7 +135,8 @@ objects:
       name: "${THOTH_SOLVER_JOB_ID}"
       labels:
         app: thoth
-        component: solver-ubi-8-py36
+        component: solver
+        solver-type: solver-ubi-8-py36
         operator: graph-sync
         task: solver
         mark: cleanup
@@ -143,7 +146,8 @@ objects:
         metadata:
           labels:
             app: thoth
-            component: solver-ubi-8-py36
+            component: solver
+            solver-type: solver-ubi-8-py36
             task: solver
             mark: cleanup
             ttl: "2h"
