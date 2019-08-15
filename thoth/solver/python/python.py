@@ -84,21 +84,25 @@ def _should_resolve_subgraph(subgraph_check_api: str, package_name: str, package
     )
 
     response = None
-    for i in range(3):
-        response = requests.get(
-            subgraph_check_api,
-            params={
-                "package_name": package_name,
-                "package_version": package_version,
-                "index_url": index_url,
-                "solver_name": solver_name,
-            },
-        )
+    for i in range(10):
+        try:
+            response = requests.get(
+                subgraph_check_api,
+                params={
+                    "package_name": package_name,
+                    "package_version": package_version,
+                    "index_url": index_url,
+                    "solver_name": solver_name,
+                },
+            )
+        except http.client.RemoteDisconnected as exc:
+            _LOGGER.warning("Client got disconnected, retrying: %s", str(exc))
+            continue
 
         if response.status_code in (200, 208):
             break
 
-        _LOGGER.debug(
+        _LOGGER.warning(
             "Invalid response from subgraph check API %r, retrying (status code: %d): %r",
             subgraph_check_api,
             response.status_code,
