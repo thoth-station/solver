@@ -274,9 +274,19 @@ def _do_resolve_index(
             unresolved.append({"package_name": dependency.name, "version_spec": version_spec, "index": index_url})
         else:
             for version in resolved_versions:
-                entry = (dependency.name, version)
-                packages_seen.add(entry)
-                queue.append(entry)
+                if not subgraph_check_api or (
+                    subgraph_check_api and
+                    _should_resolve_subgraph(subgraph_check_api, dependency.name, version, index_url)
+                ):
+                    entry = (dependency.name, version)
+                    packages_seen.add(entry)
+                    queue.append(entry)
+                else:
+                    _LOGGER.info(
+                        "Direct dependency %r in version % from %r was already resolved in one "
+                        "of the previous solver runs based on sub-graph check",
+                        dependency.name, version, index_url
+                    )
 
     while queue:
         package_name, package_version = queue.pop()
