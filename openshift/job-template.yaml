@@ -125,10 +125,10 @@ objects:
               resources:
                 limits:
                   cpu: 1
-                  memory: 1Gi
+                  memory: 3Gi
                 requests:
                   cpu: 1
-                  memory: 1Gi
+                  memory: 3Gi
   - apiVersion: batch/v1
     kind: Job
     metadata:
@@ -185,7 +185,7 @@ objects:
               resources:
                 limits:
                   cpu: 1
-                  memory: 1Gi
+                  memory: 3Gi
                 requests:
                   cpu: 1
-                  memory: 1Gi
+                  memory: 3Gi
