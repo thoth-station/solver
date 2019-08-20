@@ -19,6 +19,7 @@
 
 import os
 import sys
+import time
 from collections import deque
 from contextlib import contextmanager
 import logging
@@ -97,6 +98,8 @@ def _should_resolve_subgraph(subgraph_check_api: str, package_name: str, package
             )
         except requests.exceptions.ConnectionError as exc:
             _LOGGER.warning("Client got disconnected, retrying: %s", str(exc))
+            # Retry after some time.
+            time.sleep(1)
             continue
 
         if response.status_code in (200, 208):
@@ -108,8 +111,14 @@ def _should_resolve_subgraph(subgraph_check_api: str, package_name: str, package
             response.status_code,
             response.text
         )
+        # Retry after some time.
+        time.sleep(1)
     else:
-        response.raise_for_status()
+        if response:
+            response.raise_for_status()
+
+        # We received ConnectionError only exceptions.
+        raise requests.exceptions.ConnectionError("Too many connection errors when performing sub-graph checks")
 
     if response.status_code == http.HTTPStatus.OK:
         return True
