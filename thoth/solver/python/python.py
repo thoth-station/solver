@@ -318,6 +318,7 @@ def _do_resolve_index(
                     "version": package_version,
                     "type": "command_error",
                     "details": exc.to_dict(),
+                    "is_provided": source.provides_package_version(package_name, package_version),
                 }
             )
             continue
