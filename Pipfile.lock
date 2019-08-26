@@ -301,11 +301,11 @@
         },
         "pip-tools": {
             "hashes": [
-                "sha256:3b9fb8948340eff5869ac83dc85e3a7c62b837cec33609c45c48c2e5aa740ba5",
-                "sha256:44469037863c3587b4c565caf258e2c752d4235c508cf8410a69164bb65ffc78"
+                "sha256:156a950612e400bf951fc8139ed5420fbeb6a0d639fe8771344658b751a3f21e",
+                "sha256:69a1fd795bb95002b37217d62306026e67ef17012e9f6cfb1c3bfab5c3c4bb2c"
             ],
             "index": "pypi",
-            "version": "==4.0.0"
+            "version": "==4.1.0"
         },
         "pipdeptree": {
             "hashes": [
