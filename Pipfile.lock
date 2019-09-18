@@ -294,10 +294,10 @@
         },
         "packaging": {
             "hashes": [
-                "sha256:a7ac867b97fdc07ee80a8058fe4435ccd274ecc3b0ed61d852d7d53055528cf9",
-                "sha256:c491ca87294da7cc01902edbe30a5bc6c4c28172b5138ab4e4aa1b9d7bfaeafe"
+                "sha256:28b924174df7a2fa32c1953825ff29c61e2f5e082343165438812f00d3a7fc47",
+                "sha256:d9551545c6d761f3def1677baf08ab2a3ca17c56879e70fecba2fc4dde4ed108"
             ],
-            "version": "==19.1"
+            "version": "==19.2"
         },
         "pexpect": {
             "hashes": [
@@ -518,11 +518,11 @@
         },
         "thoth-common": {
             "hashes": [
-                "sha256:0dabe7290a64a08fbd9c9e5e4b87c7b5d3a334ccfe3beba5e9eac5037966dbb9",
-                "sha256:60513e23e0836ee7ada7088b675bc52a4669955f3e18fe453e704b354bc41f28"
+                "sha256:a00f53c4976bca923e5865b8612ae7b4236a01e74a1f8ccb6925caf319a2a309",
+                "sha256:b3a536d4f0c8dc7327549c1a42c26433ada1d46f5d46e639868f8f0163047e6e"
             ],
             "index": "pypi",
-            "version": "==0.9.9"
+            "version": "==0.9.10"
         },
         "thoth-python": {
             "hashes": [
@@ -927,10 +927,10 @@
         },
         "packaging": {
             "hashes": [
-                "sha256:a7ac867b97fdc07ee80a8058fe4435ccd274ecc3b0ed61d852d7d53055528cf9",
-                "sha256:c491ca87294da7cc01902edbe30a5bc6c4c28172b5138ab4e4aa1b9d7bfaeafe"
+                "sha256:28b924174df7a2fa32c1953825ff29c61e2f5e082343165438812f00d3a7fc47",
+                "sha256:d9551545c6d761f3def1677baf08ab2a3ca17c56879e70fecba2fc4dde4ed108"
             ],
-            "version": "==19.1"
+            "version": "==19.2"
         },
         "pbr": {
             "hashes": [
