@@ -413,8 +413,11 @@ def resolve(
     assert python_version in (2, 3), "Unknown Python version"
 
     if subgraph_check_api and not transitive:
-        _LOGGER.error("The check against subgraph API cannot be done if no transitive dependencies are resolved")
-        sys.exit(2)
+        _LOGGER.warning(
+            "The check against subgraph API cannot be done if no transitive dependencies are "
+            "resolved, sub-graph checks are turned off implicitly"
+        )
+        subgraph_check_api = None
 
     python_bin = "python3" if python_version == 3 else "python2"
     run_command("virtualenv -p python3 venv")
