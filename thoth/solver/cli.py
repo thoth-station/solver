@@ -108,7 +108,7 @@ def cli(ctx=None, verbose=0):
     envvar="THOTH_SOLVER_SUBGRAPH_CHECK_API",
     help="An API to be queried to retrieve information whether the given subgraph should be resolved.",
 )
-def pypi(
+def python(
     click_ctx,
     requirements,
     index=None,

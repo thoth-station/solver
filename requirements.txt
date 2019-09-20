@@ -1,8 +1,10 @@
 autopep8
 click
-pip-tools
+importlib-metadata
+packaging
 pipdeptree
-rainbow-logging-handler
+pip-tools
+requests
 thoth-analyzer
 thoth-common
 thoth-python
