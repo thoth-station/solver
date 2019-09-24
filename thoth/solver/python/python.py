@@ -44,11 +44,16 @@ def _create_entry(entry: dict, source: Source = None) -> dict:
     """Filter and normalize the output of pipdeptree entry."""
     entry["package_name"] = entry["package"].pop("package_name")
     entry["package_version"] = entry["package"].pop("installed_version")
+    entry["requested_package_version"] = entry["package"].pop("requested_package_version", entry["package_version"])
 
     if source:
         entry["index_url"] = source.url
         entry["sha256"] = []
-        for item in source.get_package_hashes(entry["package_name"], entry["package_version"]):
+        try:
+            package_hashes = source.get_package_hashes(entry["package_name"], entry["package_version"])
+        except NotFound:
+            package_hashes = source.get_package_hashes(entry["package_name"], entry["requested_package_version"])
+        for item in package_hashes:
             entry["sha256"].append(item["sha256"])
 
     entry.pop("package")
@@ -337,6 +342,7 @@ def _do_resolve_index(
             )
             continue
 
+        package_info["package"]["requested_package_version"] = package_version
         if package_info["package"]["installed_version"] != package_version:
             _LOGGER.warning(
                 "Requested to install version %r of package %r, but installed version is %r, error is not fatal",
