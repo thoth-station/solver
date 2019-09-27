@@ -140,14 +140,13 @@ def pypi(
         exclude_packages=set(map(str.strip, (exclude_packages or "").split(","))),
         subgraph_check_api=subgraph_check_api,
     )
-    duration = start_time - time.monotonic()
     print_command_result(
         click_ctx,
         result,
         analyzer=analyzer_name,
         analyzer_version=analyzer_version,
         output=output or "-",
-        duration=duration,
+        duration=time.monotonic() - start_time,
         pretty=not no_pretty,
     )
 
