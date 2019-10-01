@@ -209,7 +209,7 @@ def pipdeptree(python_bin, package_name: str = None, warn: bool = False) -> typi
     return None
 
 
-def marker2json(marker, extras):
+def _marker2json(marker, extras):
     """Convert internal packaging marker representation into a JSON."""
     if isinstance(marker, str):
         return marker, marker
@@ -218,7 +218,7 @@ def marker2json(marker, extras):
         result_json = []
         result_markers = []
         for nested_marker in marker:
-            marker_json, marker_packaging = marker2json(nested_marker, extras)
+            marker_json, marker_packaging = _marker2json(nested_marker, extras)
             result_json.append(marker_json)
             result_markers.append(marker_packaging)
 
@@ -255,7 +255,7 @@ def parse_requirement_str(requirement_str: str):
         # here.
         markers_copy = []
         for marker in requirement.marker._markers:
-            marker_entry, marker_copy = marker2json(marker, extras)
+            marker_entry, marker_copy = _marker2json(marker, extras)
             parsed_markers.append(marker_entry)
             markers_copy.append(marker_copy)
 
