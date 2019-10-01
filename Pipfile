@@ -5,6 +5,7 @@ name = "pypi"
 
 [packages]
 click = "*"
+rainbow-logging-handler = "*"
 virtualenv = "*"
 pipdeptree = "*"
 thoth-analyzer = "*"
@@ -13,10 +14,12 @@ thoth-common = "*"
 "autopep8" = "*"
 requests = "*"
 thoth-python = "*"
-importlib-metadata = "*"
-packaging = "*"
 
 [dev-packages]
+coala-bears = "*"
+
+[pipenv]
+keep_outdated = true
 
 [requires]
 python_version = "3.6"
