@@ -1,0 +1,266 @@
+{
+    "dependencies": [
+        {
+            "package_name": "absl-py",
+            "normalized_package_name": "absl-py",
+            "specifier": ">=0.7.0",
+            "resolved_versions": [],
+            "extras": [],
+            "marker": null,
+            "marker_evaluation_result": true,
+            "marker_evaluation_error": null,
+            "parsed_markers": []
+        },
+        {
+            "package_name": "astor",
+            "normalized_package_name": "astor",
+            "specifier": ">=0.6.0",
+            "resolved_versions": [],
+            "extras": [],
+            "marker": null,
+            "marker_evaluation_result": true,
+            "marker_evaluation_error": null,
+            "parsed_markers": []
+        },
+        {
+            "package_name": "gast",
+            "normalized_package_name": "gast",
+            "specifier": "==0.2.2",
+            "resolved_versions": [],
+            "extras": [],
+            "marker": null,
+            "marker_evaluation_result": true,
+            "marker_evaluation_error": null,
+            "parsed_markers": []
+        },
+        {
+            "package_name": "google-pasta",
+            "normalized_package_name": "google-pasta",
+            "specifier": ">=0.1.6",
+            "resolved_versions": [],
+            "extras": [],
+            "marker": null,
+            "marker_evaluation_result": true,
+            "marker_evaluation_error": null,
+            "parsed_markers": []
+        },
+        {
+            "package_name": "keras-applications",
+            "normalized_package_name": "keras-applications",
+            "specifier": ">=1.0.8",
+            "resolved_versions": [],
+            "extras": [],
+            "marker": null,
+            "marker_evaluation_result": true,
+            "marker_evaluation_error": null,
+            "parsed_markers": []
+        },
+        {
+            "package_name": "keras-preprocessing",
+            "normalized_package_name": "keras-preprocessing",
+            "specifier": ">=1.0.5",
+            "resolved_versions": [],
+            "extras": [],
+            "marker": null,
+            "marker_evaluation_result": true,
+            "marker_evaluation_error": null,
+            "parsed_markers": []
+        },
+        {
+            "package_name": "numpy",
+            "normalized_package_name": "numpy",
+            "specifier": "<2.0,>=1.16.0",
+            "resolved_versions": [],
+            "extras": [],
+            "marker": null,
+            "marker_evaluation_result": true,
+            "marker_evaluation_error": null,
+            "parsed_markers": []
+        },
+        {
+            "package_name": "opt-einsum",
+            "normalized_package_name": "opt-einsum",
+            "specifier": ">=2.3.2",
+            "resolved_versions": [],
+            "extras": [],
+            "marker": null,
+            "marker_evaluation_result": true,
+            "marker_evaluation_error": null,
+            "parsed_markers": []
+        },
+        {
+            "package_name": "six",
+            "normalized_package_name": "six",
+            "specifier": ">=1.10.0",
+            "resolved_versions": [],
+            "extras": [],
+            "marker": null,
+            "marker_evaluation_result": true,
+            "marker_evaluation_error": null,
+            "parsed_markers": []
+        },
+        {
+            "package_name": "protobuf",
+            "normalized_package_name": "protobuf",
+            "specifier": ">=3.6.1",
+            "resolved_versions": [],
+            "extras": [],
+            "marker": null,
+            "marker_evaluation_result": true,
+            "marker_evaluation_error": null,
+            "parsed_markers": []
+        },
+        {
+            "package_name": "tensorboard",
+            "normalized_package_name": "tensorboard",
+            "specifier": "<2.1.0,>=2.0.0",
+            "resolved_versions": [],
+            "extras": [],
+            "marker": null,
+            "marker_evaluation_result": true,
+            "marker_evaluation_error": null,
+            "parsed_markers": []
+        },
+        {
+            "package_name": "tensorflow-estimator",
+            "normalized_package_name": "tensorflow-estimator",
+            "specifier": "<2.1.0,>=2.0.0",
+            "resolved_versions": [],
+            "extras": [],
+            "marker": null,
+            "marker_evaluation_result": true,
+            "marker_evaluation_error": null,
+            "parsed_markers": []
+        },
+        {
+            "package_name": "termcolor",
+            "normalized_package_name": "termcolor",
+            "specifier": ">=1.1.0",
+            "resolved_versions": [],
+            "extras": [],
+            "marker": null,
+            "marker_evaluation_result": true,
+            "marker_evaluation_error": null,
+            "parsed_markers": []
+        },
+        {
+            "package_name": "wrapt",
+            "normalized_package_name": "wrapt",
+            "specifier": ">=1.11.1",
+            "resolved_versions": [],
+            "extras": [],
+            "marker": null,
+            "marker_evaluation_result": true,
+            "marker_evaluation_error": null,
+            "parsed_markers": []
+        },
+        {
+            "package_name": "grpcio",
+            "normalized_package_name": "grpcio",
+            "specifier": ">=1.8.6",
+            "resolved_versions": [],
+            "extras": [],
+            "marker": null,
+            "marker_evaluation_result": true,
+            "marker_evaluation_error": null,
+            "parsed_markers": []
+        },
+        {
+            "package_name": "wheel",
+            "normalized_package_name": "wheel",
+            "specifier": ">=0.26",
+            "resolved_versions": [],
+            "extras": [],
+            "marker": null,
+            "marker_evaluation_result": true,
+            "marker_evaluation_error": null,
+            "parsed_markers": []
+        },
+        {
+            "package_name": "backports.weakref",
+            "normalized_package_name": "backports-weakref",
+            "specifier": ">=1.0rc1",
+            "resolved_versions": [],
+            "extras": [],
+            "marker": "python_version < \"3.4\"",
+            "marker_evaluation_result": false,
+            "marker_evaluation_error": null,
+            "parsed_markers": [{"variable": "python_version", "op": "<", "value": "3.4"}]
+        },
+        {
+            "package_name": "enum34",
+            "normalized_package_name": "enum34",
+            "specifier": ">=1.1.6",
+            "resolved_versions": [],
+            "extras": [],
+            "marker": "python_version < \"3.4\"",
+            "marker_evaluation_result": false,
+            "marker_evaluation_error": null,
+            "parsed_markers": [{"variable": "python_version", "op": "<", "value": "3.4"}]
+        }
+    ],
+    "package_name": "tensorflow",
+    "package_version": "2.0.0",
+    "importlib_metadata": {
+        "metadata": {
+            "Metadata-Version": "2.1",
+            "Name": "tensorflow",
+            "Version": "2.0.0",
+            "Summary": "TensorFlow is an open source machine learning framework for everyone.",
+            "Home-page": "https://www.tensorflow.org/",
+            "Author": "Google Inc.",
+            "Author-email": "packages@tensorflow.org",
+            "License": "Apache 2.0",
+            "Download-URL": "https://github.com/tensorflow/tensorflow/tags",
+            "Keywords": "tensorflow tensor machine learning",
+            "Platform": "UNKNOWN",
+            "Classifier": "Topic :: Software Development :: Libraries :: Python Modules",
+            "Requires-Dist": "enum34 (>=1.1.6) ; python_version < \"3.4\""
+        },
+        "requires": [
+            "absl-py (>=0.7.0)",
+            "astor (>=0.6.0)",
+            "gast (==0.2.2)",
+            "google-pasta (>=0.1.6)",
+            "keras-applications (>=1.0.8)",
+            "keras-preprocessing (>=1.0.5)",
+            "numpy (<2.0,>=1.16.0)",
+            "opt-einsum (>=2.3.2)",
+            "six (>=1.10.0)",
+            "protobuf (>=3.6.1)",
+            "tensorboard (<2.1.0,>=2.0.0)",
+            "tensorflow-estimator (<2.1.0,>=2.0.0)",
+            "termcolor (>=1.1.0)",
+            "wrapt (>=1.11.1)",
+            "grpcio (>=1.8.6)",
+            "wheel (>=0.26)",
+            "backports.weakref (>=1.0rc1) ; python_version < \"3.4\"",
+            "enum34 (>=1.1.6) ; python_version < \"3.4\""
+        ],
+        "entry_points": [
+            {
+                "name": "saved_model_cli",
+                "value": "tensorflow.python.tools.saved_model_cli:main",
+                "group": "console_scripts"
+            },
+            {"name": "tensorboard", "value": "tensorboard.main:run_main", "group": "console_scripts"},
+            {
+                "name": "tf_upgrade_v2",
+                "value": "tensorflow.tools.compatibility.tf_upgrade_v2_main:main",
+                "group": "console_scripts"
+            },
+            {
+                "name": "tflite_convert",
+                "value": "tensorflow.lite.python.tflite_convert:main",
+                "group": "console_scripts"
+            },
+            {"name": "toco", "value": "tensorflow.lite.python.tflite_convert:main", "group": "console_scripts"},
+            {
+                "name": "toco_from_protos",
+                "value": "tensorflow.lite.toco.python.toco_from_protos:main",
+                "group": "console_scripts"
+            }
+        ],
+        "version": "2.0.0"
+    }
+}
