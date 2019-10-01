@@ -29,6 +29,9 @@ from urllib.parse import urlparse
 
 import http
 import requests
+from packaging.requirements import Requirement
+from packaging.markers import default_environment
+from packaging.utils import canonicalize_name
 from thoth.analyzer import CommandError
 from thoth.analyzer import run_command
 from thoth.python import Source
@@ -40,35 +43,17 @@ from .python_solver import PythonSolver
 _LOGGER = logging.getLogger(__name__)
 
 
-def _create_entry(entry: dict, source: Source = None) -> dict:
-    """Filter and normalize the output of pipdeptree entry."""
-    entry["package_name"] = entry["package"].pop("package_name")
-    entry["package_version"] = entry["package"].pop("installed_version")
-    entry["requested_package_version"] = entry["package"].pop("requested_package_version", entry["package_version"])
-
-    if source:
-        entry["index_url"] = source.url
-        entry["sha256"] = []
-        try:
-            package_hashes = source.get_package_hashes(entry["package_name"], entry["package_version"])
-        except NotFound:
-            package_hashes = source.get_package_hashes(entry["package_name"], entry["requested_package_version"])
-        for item in package_hashes:
-            entry["sha256"].append(item["sha256"])
-
-    entry.pop("package")
-    for dependency in entry["dependencies"]:
-        dependency.pop("key", None)
-        dependency.pop("installed_version", None)
-
-    return entry
-
-
-def _get_environment_details(python_bin: str) -> list:
+def _get_environment_packages(python_bin: str) -> list:
     """Get information about packages in environment where packages get installed."""
-    cmd = "{} -m pipdeptree --json".format(python_bin)
-    output = run_command(cmd, is_json=True).stdout
-    return [_create_entry(entry) for entry in output]
+    cmd = "{} -m pip freeze".format(python_bin)
+    output = run_command(cmd, is_json=False).stdout.splitlines()
+
+    result = []
+    for line in output:
+        package_name, package_version = line.split("==", maxsplit=1)
+        result.append({"package_name": package_name, "package_version": package_version})
+
+    return result
 
 
 def _should_resolve_subgraph(subgraph_check_api: str, package_name: str, package_version: str, index_url: str) -> bool:
@@ -114,7 +99,7 @@ def _should_resolve_subgraph(subgraph_check_api: str, package_name: str, package
             "Invalid response from subgraph check API %r, retrying (status code: %d): %r",
             subgraph_check_api,
             response.status_code,
-            response.text
+            response.text,
         )
         # Retry after some time.
         time.sleep(1)
@@ -137,7 +122,7 @@ def _should_resolve_subgraph(subgraph_check_api: str, package_name: str, package
         package_name,
         package_version,
         index_url,
-        solver_name
+        solver_name,
     )
 
 
@@ -219,6 +204,153 @@ def _pipdeptree(python_bin, package_name: str = None, warn: bool = False) -> typ
     return None
 
 
+def _package_metadata(python_bin, package_name) -> typing.Dict:
+    """Get metadata information from the installed package."""
+    # A simple trick when running importlib_metadata - importlib_metadata is present as
+    # a dependency of this package, but it is not installed in the created virtual environment.
+    # Inject the current path to the created environment. Note however,
+    # we need to make sure importlib_metadata correctly handles metadata of packages which are dependencies of this
+    # package - it works as expected.
+    result = {}
+
+    cmd = (
+        "{} -c '"
+        "import importlib_metadata;"
+        "import json;"
+        'print(json.dumps(dict(importlib_metadata.metadata("{}").items())))\''.format(python_bin, package_name)
+    )
+    _LOGGER.debug("Obtaining package metadata using %r", cmd)
+
+    output = run_command(cmd, is_json=True, raise_on_error=False, env={"PYTHONPATH": ":".join(sys.path)})
+    if output.return_code != 0:
+        _LOGGER.error("Failed to obtain package metadata: %s", output.stderr)
+        result["metadata"] = {}
+    else:
+        result["metadata"] = output.stdout
+
+    cmd = (
+        "{} -c '"
+        "import importlib_metadata;"
+        'print(importlib_metadata.version("{}"))\''.format(python_bin, package_name)
+    )
+    _LOGGER.debug("Obtaining package version using %r", cmd)
+
+    output = run_command(cmd, raise_on_error=False, env={"PYTHONPATH": ":".join(sys.path)})
+    if output.return_code != 0:
+        _LOGGER.error("Failed to obtain package metadata: %s", output.stderr)
+        result["version"] = None
+    else:
+        result["version"] = output.stdout.strip()
+
+    cmd = (
+        "{} -c '"
+        "import importlib_metadata;"
+        "import json;"
+        'print(json.dumps(importlib_metadata.requires("{}")))\''.format(python_bin, package_name)
+    )
+    _LOGGER.debug("Obtaining package requires using %r", cmd)
+
+    output = run_command(cmd, is_json=True, raise_on_error=False, env={"PYTHONPATH": ":".join(sys.path)})
+    if output.return_code != 0:
+        _LOGGER.error("Failed to obtain package metadata: %s", output.stderr)
+        result["requires"] = None
+    else:
+        result["requires"] = output.stdout
+
+    cmd = (
+        "{} -c '"
+        "from importlib_metadata import distribution;"
+        "import json;"
+        'entry_points = distribution("{}").entry_points;'
+        'print(json.dumps([{{"name": ep.name, "value": ep.value, "group": ep.group}} for ep in entry_points]))\''
+        .format(
+            python_bin, package_name
+        )
+    )
+    _LOGGER.debug("Obtaining package entry points using %r", cmd)
+
+    output = run_command(cmd, is_json=True, raise_on_error=False, env={"PYTHONPATH": ":".join(sys.path)})
+    if output.return_code != 0:
+        _LOGGER.error("Failed to obtain package metadata: %s", output.stderr)
+        result["entry_points"] = None
+    else:
+        result["entry_points"] = output.stdout
+
+    cmd = (
+        "{} -c '"
+        "from importlib_metadata import files;"
+        "import json;"
+        "print(json.dumps([{{"
+        '"hash": f.hash.__dict__ if f.hash else None, "size": f.size, "path": str(f)'
+        '}} for f in files("{}")]))\''.format(python_bin, package_name)
+    )
+    _LOGGER.debug("Obtaining package entry points using %r", cmd)
+
+    output = run_command(cmd, is_json=True, raise_on_error=False, env={"PYTHONPATH": ":".join(sys.path)})
+    if output.return_code != 0:
+        _LOGGER.error("Failed to obtain package metadata: %s", output.stderr)
+        result["entry_points"] = None
+    else:
+        result["entry_points"] = output.stdout
+
+    return result
+
+
+def _extract_metadata(metadata: dict) -> dict:
+    """Extract and enhance information from metadata."""
+    result = {
+        "dependencies": [],
+        "package_name": metadata["metadata"].get("Name"),
+        "package_version": metadata["metadata"].get("Version"),
+        "raw_metadata": metadata,
+    }
+    for requirement_str in metadata.get("requires") or []:
+        # Based on: https://github.com/pypa/packaging/issues/211
+        requirement = Requirement(requirement_str)
+
+        parsed_markers = []
+
+        evaluation_result = None
+        evaluation_error = None
+        extra = None
+        if requirement.marker:
+            for marker in requirement.marker._markers:
+                if marker[0].value != "extra":
+                    marker_entry = {"variable": str(marker[0]), "op": str(marker[1]), "value": str(marker[2])}
+                    parsed_markers.append(marker_entry)
+                else:
+                    if extra is not None:
+                        _LOGGER.error("Multiple extra markers detected for requirement {!r}".format(requirement_str))
+                    extra = marker[2].value
+
+        if requirement.marker and extra and parsed_markers:
+            # This would lead to an exception:
+            #   Failed to evaluate marker extra == "<extra>"
+            _LOGGER.error("Skipping marker evaluation as extra is present for {!r}".format(requirement_str))
+        elif requirement.marker and not extra:
+            try:
+                evaluation_result = requirement.marker.evaluate()
+            except Exception as exc:
+                _LOGGER.exception(f"Failed to evaluate marker {requirement.marker!s}")
+                evaluation_error = str(exc)
+
+        dependency = {
+            "package_name": requirement.name,
+            "normalized_package_name": canonicalize_name(requirement.name),
+            "specifier": str(requirement.specifier) if requirement.specifier else None,
+            "resolved_versions": [],
+            "extra": extra,
+            "marker": str(requirement.marker) if requirement.marker else None,
+            "marker_evaluation_result": evaluation_result,
+            "marker_evaluation_error": evaluation_error,
+            "parsed_markers": parsed_markers,
+        }
+
+        result["dependencies"].append(dependency)
+
+    return result
+
+
 def _get_dependency_specification(dep_spec: typing.List[tuple]) -> str:
     """Get string representation of dependency specification as provided by PythonDependencyParser."""
     return ",".join(dep_range[0] + dep_range[1] for dep_range in dep_spec)
@@ -289,8 +421,8 @@ def _do_resolve_index(
         else:
             for version in resolved_versions:
                 if not subgraph_check_api or (
-                    subgraph_check_api and
-                    _should_resolve_subgraph(subgraph_check_api, dependency.name, version, index_url)
+                    subgraph_check_api
+                    and _should_resolve_subgraph(subgraph_check_api, dependency.name, version, index_url)
                 ):
                     entry = (dependency.name, version)
                     packages_seen.add(entry)
@@ -299,7 +431,9 @@ def _do_resolve_index(
                     _LOGGER.info(
                         "Direct dependency %r in version % from %r was already resolved in one "
                         "of the previous solver runs based on sub-graph check",
-                        dependency.name, version, index_url
+                        dependency.name,
+                        version,
+                        index_url,
                     )
 
     while queue:
@@ -307,7 +441,8 @@ def _do_resolve_index(
         _LOGGER.info("Using index %r to discover package %r in version %r", index_url, package_name, package_version)
         try:
             with _install_requirement(python_bin, package_name, package_version, index_url):
-                package_info = _pipdeptree(python_bin, package_name, warn=True)
+                package_metadata = _package_metadata(python_bin, package_name)
+                extracted_metadata = _extract_metadata(package_metadata)
         except CommandError as exc:
             _LOGGER.debug(
                 "There was an error during package %r in version %r discovery from %r: %s",
@@ -320,7 +455,7 @@ def _do_resolve_index(
                 {
                     "package_name": package_name,
                     "index": index_url,
-                    "version": package_version,
+                    "package_version": package_version,
                     "type": "command_error",
                     "details": exc.to_dict(),
                     "is_provided": source.provides_package_version(package_name, package_version),
@@ -328,57 +463,37 @@ def _do_resolve_index(
             )
             continue
 
-        if package_info is None:
-            errors.append(
-                {
-                    "package_name": package_name,
-                    "index": index_url,
-                    "version": package_version,
-                    "type": "not_site_package",
-                    "details": {
-                        "message": "Failed to get information about installed package, probably not site package"
-                    },
-                }
-            )
-            continue
+        packages.append(extracted_metadata)
 
-        package_info["package"]["requested_package_version"] = package_version
-        if package_info["package"]["installed_version"] != package_version:
-            _LOGGER.warning(
-                "Requested to install version %r of package %r, but installed version is %r, error is not fatal",
-                package_version,
-                package_name,
-                package_info["package"]["installed_version"],
-            )
+        # Fill in package hashes.
+        extracted_metadata["sha256"] = []
+        try:
+            package_hashes = source.get_package_hashes(package_name, package_version)
+        except NotFound:
+            # Some older packages have different version on PyPI (considering simple API) than the ones
+            # stated in metadata.
+            package_hashes = source.get_package_hashes(package_name, extracted_metadata["package_version"])
+        for item in package_hashes:
+            extracted_metadata["sha256"].append(item["sha256"])
 
-        if package_info["package"]["package_name"] != package_name:
-            _LOGGER.warning(
-                "Requested to install package %r, but installed package name is %r, error is not fatal",
-                package_name,
-                package_info["package"]["package_name"],
-            )
-
-        entry = _create_entry(package_info, source)
-        packages.append(entry)
-
-        for dependency in entry["dependencies"]:
-            dependency_name, dependency_range = dependency["package_name"], dependency["required_version"]
-            dependency["resolved_versions"] = []
+        # Fill in resolved versions.
+        for dependency in extracted_metadata["dependencies"]:
+            dependency_name, dependency_specifier = dependency["normalized_package_name"], dependency["specifier"]
 
             for dep_solver in all_solvers:
                 _LOGGER.info(
                     "Resolving dependency versions for %r with range %r from %r",
                     dependency_name,
-                    dependency_range,
+                    dependency_specifier,
                     dep_solver.release_fetcher.index_url,
                 )
                 resolved_versions = _resolve_versions(
-                    dep_solver, dep_solver.release_fetcher.source, dependency_name, dependency_range
+                    dep_solver, dep_solver.release_fetcher.source, dependency_name, dependency_specifier or ""
                 )
                 _LOGGER.debug(
                     "Resolved versions for package %r with range specifier %r: %s",
                     dependency_name,
-                    dependency_range,
+                    dependency_specifier,
                     resolved_versions,
                 )
                 dependency["resolved_versions"].append(
@@ -430,9 +545,16 @@ def resolve(
     python_bin = "venv/bin/" + python_bin
 
     run_command("{} -m pip install pipdeptree".format(python_bin))
-    environment_details = _get_environment_details(python_bin)
+    environment_packages = _get_environment_packages(python_bin)
 
-    result = {"tree": [], "errors": [], "unparsed": [], "unresolved": [], "environment": environment_details}
+    result = {
+        "tree": [],
+        "errors": [],
+        "unparsed": [],
+        "unresolved": [],
+        "environment": default_environment(),
+        "environment_packages": environment_packages,
+    }
 
     all_solvers = []
     for index_url in index_urls:
