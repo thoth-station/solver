@@ -205,7 +205,8 @@ interesting parts of the output using JSONPath:
   `PEP-427 <https://www.python.org/dev/peps/pep-0427/#id16>`_.
 
 * ``.result.tree[*].dependencies`` - a list of dependencies which can be resolved given requirements specification of the analyzed package
-* ``.result.tree[*].dependencies[*].extras`` - name of extras signalizing the given package is part of extras as specified in `PEP-508 <https://www.python.org/dev/peps/pep-0508/#extras>`_
+* ``.result.tree[*].dependencies[*].extras`` - name of extras signalizing the given package should be installed with extras as specified in `PEP-508 <https://www.python.org/dev/peps/pep-0508/#extras>`_
+* ``.result.tree[*].dependencies[*].extra`` - name of extra which should be required to take into account this dependency as specified `PEP-508 <https://www.python.org/dev/peps/pep-0508/#extras>`_
 * ``.result.tree[*].dependencies[*].marker`` - a full specification of the environment marker as described in `PEP-508 <https://www.python.org/dev/peps/pep-0508/#environment-markers>`_
 * ``.result.tree[*].dependencies[*].marker_evaluation_error`` - a string capturing error information when marker evaluation failed in the run software environment, otherwise ``null``
 * ``.result.tree[*].dependencies[*].marker_evaluated`` - marker defined by the package, but additionally adjusted for evaluation for the current environment (see notes bellow).
@@ -219,8 +220,10 @@ An example of a dependency entry (an entry from one of ``.result.tree[*].depende
 .. code-block:: json
 
   {
-    "extras": null,
+    "extras": [],
+    "extra": [],
     "marker": "python_version < \"3.4\"",
+    "marker_evaluated": "python_version < \"3.4\"",
     "marker_evaluation_error": null,
     "marker_evaluation_result": false,
     "normalized_package_name": "backports-weakref",
@@ -243,6 +246,21 @@ An example of a dependency entry (an entry from one of ``.result.tree[*].depende
     ],
     "specifier": ">=1.0rc1"
   }
+
+To evaluate environment markers inside solver environment, there was a need to
+adjust marker so that it can be evaluated in the solver environment - see
+`PEP-508 <https://www.python.org/dev/peps/pep-0508/#environment-markers>`_
+specification, specifically the following section:
+
+.. code-block::
+
+  The "extra" variable is special. It is used by wheels to signal which
+  specifications apply to a given extra in the wheel METADATA file, but since
+  the METADATA file is based on a draft version of PEP-426, there is no current
+  specification for this. Regardless, outside of a context where this special
+  handling is taking place, the "extra" variable should result in an error like
+  all other unknown variables.
+
 
 Installation and Deployment
 ===========================

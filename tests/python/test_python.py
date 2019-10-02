@@ -37,45 +37,42 @@ class TestPython(SolverTestCase):
     """Test solving Python dependencies."""
 
     _WINCERTSTORE_REQUIREMENT = {
-        "extras": ["ssl"],
-        "marker": 'sys_platform == "win32" and sys_platform == "linux" and python_version >= "0.0"',
-        "marker_evaluation_error": None,
-        "marker_evaluation_result": False,
-        "normalized_package_name": "wincertstore",
         "package_name": "wincertstore",
-        "parsed_markers": [
-            [{"op": "==", "value": "win32", "variable": "sys_platform"}],
-            "and",
-            [{"op": "==", "value": "linux", "variable": "sys_platform"}],
-            "and",
-            {"op": ">=", "value": "0.0", "variable": "python_version"},
-        ],
-        "resolved_versions": [],
+        "normalized_package_name": "wincertstore",
         "specifier": "==0.2",
+        "resolved_versions": [],
+        "extras": [],
+        "extra": ["ssl"],
+        "marker": 'sys_platform == "win32" and sys_platform == "linux" and extra == "ssl"',
+        "marker_evaluated": 'sys_platform == "win32" and sys_platform == "linux" and python_version >= "0.0"',
+        "marker_evaluation_result": False,
+        "marker_evaluation_error": None,
     }
 
     _XONSH_REQUIREMENT = {
-        "extras": [],
-        "marker": 'python_version >= "2.0"',
-        "marker_evaluation_error": None,
-        "marker_evaluation_result": True,
-        "normalized_package_name": "xonsh",
         "package_name": "xonsh",
-        "parsed_markers": [[{"op": ">=", "value": "2.0", "variable": "python_version"}]],
-        "resolved_versions": [],
+        "normalized_package_name": "xonsh",
         "specifier": None,
+        "resolved_versions": [],
+        "extras": [],
+        "extra": [],
+        "marker": 'python_version >= "2.0"',
+        "marker_evaluated": 'python_version >= "2.0"',
+        "marker_evaluation_result": True,
+        "marker_evaluation_error": None,
     }
 
     _DELEGATOR_PY_REQUIREMENT = {
-        "extras": [],
-        "marker": None,
-        "marker_evaluation_error": None,
-        "marker_evaluation_result": True,
-        "normalized_package_name": "delegator-py",
         "package_name": "delegator-py",
-        "parsed_markers": [],
-        "resolved_versions": [],
+        "normalized_package_name": "delegator-py",
         "specifier": "<=0.0",
+        "resolved_versions": [],
+        "extras": [],
+        "extra": [],
+        "marker": None,
+        "marker_evaluated": None,
+        "marker_evaluation_result": True,
+        "marker_evaluation_error": None,
     }
 
     @pytest.mark.parametrize(

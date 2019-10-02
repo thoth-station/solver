@@ -139,30 +139,30 @@ def pipdeptree(python_bin, package_name: str = None, warn: bool = False) -> typi
     return None
 
 
-def _marker2json(marker, extras):
-    """Convert internal packaging marker representation into a JSON."""
+def _marker_reduction(marker, extra):
+    """Convert internal packaging marker representation to interpretation which can be evaluated.
+
+    As markers also depend on `extra' which will cause issues when evaluating marker in the solver
+    environment, let's substitute `extra' marker with a condition which evaluates always to true.
+    """
     if isinstance(marker, str):
-        return marker, marker
+        return marker
 
     if isinstance(marker, list):
         result_json = []
         result_markers = []
         for nested_marker in marker:
-            marker_json, marker_packaging = _marker2json(nested_marker, extras)
-            result_json.append(marker_json)
-            result_markers.append(marker_packaging)
+            reduced_marker = _marker_reduction(nested_marker, extra)
+            result_markers.append(reduced_marker)
 
-        return result_json, result_markers
+        return result_markers
 
     if marker[0].value != "extra":
-        return {"variable": str(marker[0]), "op": str(marker[1]), "value": str(marker[2])}, marker
+        return marker
 
-    extras.add(str(marker[2]))
+    extra.add(str(marker[2]))
     # A special case to handle extras in markers - substitute extra with a marker which always evaluates to true:
-    return (
-        {"op": ">=", "value": "0.0", "variable": "python_version"},
-        (Variable("python_version"), Op(">="), Value("0.0")),
-    )
+    return Variable("python_version"), Op(">="), Value("0.0")
 
 
 def parse_requirement_str(requirement_str: str):
@@ -170,12 +170,11 @@ def parse_requirement_str(requirement_str: str):
     # Some notes on this implementation can be found at: https://github.com/pypa/packaging/issues/211
     requirement = Requirement(requirement_str)
 
-    parsed_markers = []
-
     evaluation_result = None
     evaluation_error = None
-    extras = set()
-    marker_str = None
+    extra = set()
+    marker_evaluated_str = None
+    marker_str = str(requirement.marker) if requirement.marker else None
     if requirement.marker:
         # We perform a copy of marker specification during the traversal so that we
         # do not evaluate "extra" marker - according to PEP-508, this behavior
@@ -185,14 +184,13 @@ def parse_requirement_str(requirement_str: str):
         # here.
         markers_copy = []
         for marker in requirement.marker._markers:
-            marker_entry, marker_copy = _marker2json(marker, extras)
-            parsed_markers.append(marker_entry)
+            marker_copy = _marker_reduction(marker, extra)
             markers_copy.append(marker_copy)
 
         try:
             requirement.marker._markers = markers_copy
             evaluation_result = requirement.marker.evaluate()
-            marker_str = str(requirement.marker)
+            marker_evaluated_str = str(requirement.marker)
         except Exception as exc:
             _LOGGER.exception("Failed to evaluate marker {}".format(requirement.marker))
             evaluation_error = str(exc)
@@ -204,11 +202,12 @@ def parse_requirement_str(requirement_str: str):
         "normalized_package_name": canonicalize_name(requirement.name),
         "specifier": str(requirement.specifier) if requirement.specifier else None,
         "resolved_versions": [],
-        "extras": list(extras),
+        "extras": list(requirement.extras),
+        "extra": list(extra),
         "marker": marker_str,
+        "marker_evaluated": marker_evaluated_str,
         "marker_evaluation_result": evaluation_result,
         "marker_evaluation_error": evaluation_error,
-        "parsed_markers": parsed_markers,
     }
 
 
