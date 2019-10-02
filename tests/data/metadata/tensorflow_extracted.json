@@ -6,10 +6,11 @@
             "specifier": ">=0.7.0",
             "resolved_versions": [],
             "extras": [],
+            "extra": [],
             "marker": null,
+            "marker_evaluated": null,
             "marker_evaluation_result": true,
-            "marker_evaluation_error": null,
-            "parsed_markers": []
+            "marker_evaluation_error": null
         },
         {
             "package_name": "astor",
@@ -17,10 +18,11 @@
             "specifier": ">=0.6.0",
             "resolved_versions": [],
             "extras": [],
+            "extra": [],
             "marker": null,
+            "marker_evaluated": null,
             "marker_evaluation_result": true,
-            "marker_evaluation_error": null,
-            "parsed_markers": []
+            "marker_evaluation_error": null
         },
         {
             "package_name": "gast",
@@ -28,10 +30,11 @@
             "specifier": "==0.2.2",
             "resolved_versions": [],
             "extras": [],
+            "extra": [],
             "marker": null,
+            "marker_evaluated": null,
             "marker_evaluation_result": true,
-            "marker_evaluation_error": null,
-            "parsed_markers": []
+            "marker_evaluation_error": null
         },
         {
             "package_name": "google-pasta",
@@ -39,10 +42,11 @@
             "specifier": ">=0.1.6",
             "resolved_versions": [],
             "extras": [],
+            "extra": [],
             "marker": null,
+            "marker_evaluated": null,
             "marker_evaluation_result": true,
-            "marker_evaluation_error": null,
-            "parsed_markers": []
+            "marker_evaluation_error": null
         },
         {
             "package_name": "keras-applications",
@@ -50,10 +54,11 @@
             "specifier": ">=1.0.8",
             "resolved_versions": [],
             "extras": [],
+            "extra": [],
             "marker": null,
+            "marker_evaluated": null,
             "marker_evaluation_result": true,
-            "marker_evaluation_error": null,
-            "parsed_markers": []
+            "marker_evaluation_error": null
         },
         {
             "package_name": "keras-preprocessing",
@@ -61,10 +66,11 @@
             "specifier": ">=1.0.5",
             "resolved_versions": [],
             "extras": [],
+            "extra": [],
             "marker": null,
+            "marker_evaluated": null,
             "marker_evaluation_result": true,
-            "marker_evaluation_error": null,
-            "parsed_markers": []
+            "marker_evaluation_error": null
         },
         {
             "package_name": "numpy",
@@ -72,10 +78,11 @@
             "specifier": "<2.0,>=1.16.0",
             "resolved_versions": [],
             "extras": [],
+            "extra": [],
             "marker": null,
+            "marker_evaluated": null,
             "marker_evaluation_result": true,
-            "marker_evaluation_error": null,
-            "parsed_markers": []
+            "marker_evaluation_error": null
         },
         {
             "package_name": "opt-einsum",
@@ -83,10 +90,11 @@
             "specifier": ">=2.3.2",
             "resolved_versions": [],
             "extras": [],
+            "extra": [],
             "marker": null,
+            "marker_evaluated": null,
             "marker_evaluation_result": true,
-            "marker_evaluation_error": null,
-            "parsed_markers": []
+            "marker_evaluation_error": null
         },
         {
             "package_name": "six",
@@ -94,10 +102,11 @@
             "specifier": ">=1.10.0",
             "resolved_versions": [],
             "extras": [],
+            "extra": [],
             "marker": null,
+            "marker_evaluated": null,
             "marker_evaluation_result": true,
-            "marker_evaluation_error": null,
-            "parsed_markers": []
+            "marker_evaluation_error": null
         },
         {
             "package_name": "protobuf",
@@ -105,10 +114,11 @@
             "specifier": ">=3.6.1",
             "resolved_versions": [],
             "extras": [],
+            "extra": [],
             "marker": null,
+            "marker_evaluated": null,
             "marker_evaluation_result": true,
-            "marker_evaluation_error": null,
-            "parsed_markers": []
+            "marker_evaluation_error": null
         },
         {
             "package_name": "tensorboard",
@@ -116,10 +126,11 @@
             "specifier": "<2.1.0,>=2.0.0",
             "resolved_versions": [],
             "extras": [],
+            "extra": [],
             "marker": null,
+            "marker_evaluated": null,
             "marker_evaluation_result": true,
-            "marker_evaluation_error": null,
-            "parsed_markers": []
+            "marker_evaluation_error": null
         },
         {
             "package_name": "tensorflow-estimator",
@@ -127,10 +138,11 @@
             "specifier": "<2.1.0,>=2.0.0",
             "resolved_versions": [],
             "extras": [],
+            "extra": [],
             "marker": null,
+            "marker_evaluated": null,
             "marker_evaluation_result": true,
-            "marker_evaluation_error": null,
-            "parsed_markers": []
+            "marker_evaluation_error": null
         },
         {
             "package_name": "termcolor",
@@ -138,10 +150,11 @@
             "specifier": ">=1.1.0",
             "resolved_versions": [],
             "extras": [],
+            "extra": [],
             "marker": null,
+            "marker_evaluated": null,
             "marker_evaluation_result": true,
-            "marker_evaluation_error": null,
-            "parsed_markers": []
+            "marker_evaluation_error": null
         },
         {
             "package_name": "wrapt",
@@ -149,10 +162,11 @@
             "specifier": ">=1.11.1",
             "resolved_versions": [],
             "extras": [],
+            "extra": [],
             "marker": null,
+            "marker_evaluated": null,
             "marker_evaluation_result": true,
-            "marker_evaluation_error": null,
-            "parsed_markers": []
+            "marker_evaluation_error": null
         },
         {
             "package_name": "grpcio",
@@ -160,10 +174,11 @@
             "specifier": ">=1.8.6",
             "resolved_versions": [],
             "extras": [],
+            "extra": [],
             "marker": null,
+            "marker_evaluated": null,
             "marker_evaluation_result": true,
-            "marker_evaluation_error": null,
-            "parsed_markers": []
+            "marker_evaluation_error": null
         },
         {
             "package_name": "wheel",
@@ -171,10 +186,11 @@
             "specifier": ">=0.26",
             "resolved_versions": [],
             "extras": [],
+            "extra": [],
             "marker": null,
+            "marker_evaluated": null,
             "marker_evaluation_result": true,
-            "marker_evaluation_error": null,
-            "parsed_markers": []
+            "marker_evaluation_error": null
         },
         {
             "package_name": "backports.weakref",
@@ -182,10 +198,11 @@
             "specifier": ">=1.0rc1",
             "resolved_versions": [],
             "extras": [],
+            "extra": [],
             "marker": "python_version < \"3.4\"",
+            "marker_evaluated": "python_version < \"3.4\"",
             "marker_evaluation_result": false,
-            "marker_evaluation_error": null,
-            "parsed_markers": [{"variable": "python_version", "op": "<", "value": "3.4"}]
+            "marker_evaluation_error": null
         },
         {
             "package_name": "enum34",
@@ -193,10 +210,11 @@
             "specifier": ">=1.1.6",
             "resolved_versions": [],
             "extras": [],
+            "extra": [],
             "marker": "python_version < \"3.4\"",
+            "marker_evaluated": "python_version < \"3.4\"",
             "marker_evaluation_result": false,
-            "marker_evaluation_error": null,
-            "parsed_markers": [{"variable": "python_version", "op": "<", "value": "3.4"}]
+            "marker_evaluation_error": null
         }
     ],
     "package_name": "tensorflow",
@@ -243,7 +261,11 @@
                 "value": "tensorflow.python.tools.saved_model_cli:main",
                 "group": "console_scripts"
             },
-            {"name": "tensorboard", "value": "tensorboard.main:run_main", "group": "console_scripts"},
+            {
+                "name": "tensorboard",
+                "value": "tensorboard.main:run_main",
+                "group": "console_scripts"
+            },
             {
                 "name": "tf_upgrade_v2",
                 "value": "tensorflow.tools.compatibility.tf_upgrade_v2_main:main",
@@ -254,7 +276,11 @@
                 "value": "tensorflow.lite.python.tflite_convert:main",
                 "group": "console_scripts"
             },
-            {"name": "toco", "value": "tensorflow.lite.python.tflite_convert:main", "group": "console_scripts"},
+            {
+                "name": "toco",
+                "value": "tensorflow.lite.python.tflite_convert:main",
+                "group": "console_scripts"
+            },
             {
                 "name": "toco_from_protos",
                 "value": "tensorflow.lite.toco.python.toco_from_protos:main",
