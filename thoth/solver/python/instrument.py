@@ -160,13 +160,13 @@ def get_package_metadata(python_bin, package_name):
             is_json=True,
             package_name=package_name,
         ),
-        # "files": execute_env_function(
-        #     python_bin,
-        #     _get_importlib_metadata_files,
-        #     env={"PYTHONPATH": ":".join(sys.path)},
-        #     is_json=True,
-        #     package_name=package_name,
-        # ),
+        "files": execute_env_function(
+            python_bin,
+            _get_importlib_metadata_files,
+            env={"PYTHONPATH": ":".join(sys.path)},
+            is_json=True,
+            package_name=package_name,
+        ),
         "version": execute_env_function(
             python_bin,
             _get_importlib_metadata_version,
