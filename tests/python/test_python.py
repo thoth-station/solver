@@ -78,6 +78,19 @@ class TestPython(SolverTestCase):
         "specifier": "<=0.0",
     }
 
+    _SELINON_REQUIREMENT = {
+        "extra": ["workflow"],
+        "extras": {"redis", "postgresql"},
+        "marker": 'extra == "workflow"',
+        "marker_evaluated": 'python_version >= "0.0"',
+        "marker_evaluation_error": None,
+        "marker_evaluation_result": True,
+        "normalized_package_name": "selinon",
+        "package_name": "selinon",
+        "resolved_versions": [],
+        "specifier": "==1.1.0",
+    }
+
     @pytest.mark.parametrize(
         "metadata_file_path,metadata_file_extracted_path", [("tensorflow.json", "tensorflow_extracted.json")]
     )
@@ -96,10 +109,14 @@ class TestPython(SolverTestCase):
             ),
             ('xonsh ; (python_version >= "2.0")', _XONSH_REQUIREMENT),
             ("delegator-py (<=0.0)", _DELEGATOR_PY_REQUIREMENT),
+            ("selinon[postgresql,redis] (==1.1.0); extra == 'workflow'", _SELINON_REQUIREMENT),
         ],
     )
     def test_parse_requirement_str(self, requirement_str, expected_requirement):
-        assert parse_requirement_str(requirement_str) == expected_requirement
+        result = parse_requirement_str(requirement_str)
+        if result.get("extras"):
+            result["extras"] = set(result["extras"])
+        assert result == expected_requirement
 
     def test_pipdeptree_one(self, venv):
         venv.install("selinon==1.1.0")
