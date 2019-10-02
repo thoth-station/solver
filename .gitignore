@@ -5,3 +5,4 @@ thoth_solver.egg-info/
 venv/
 docs/source/thoth.*.rst
 build/
+.coverage
