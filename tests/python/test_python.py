@@ -22,14 +22,12 @@ import pytest
 import json
 from pathlib import Path
 from base import SolverTestCase
-import responses
 from urllib.parse import urlparse
 from urllib.parse import parse_qs
 
 from thoth.solver.python.python import extract_metadata
 from thoth.solver.python.python import parse_requirement_str
 from thoth.solver.python.python import pipdeptree
-from thoth.solver.python.python import should_resolve_subgraph
 from thoth.solver.python.python import get_environment_packages
 
 
