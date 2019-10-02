@@ -22,14 +22,12 @@ import pytest
 import json
 from pathlib import Path
 from base import SolverTestCase
-import responses
 from urllib.parse import urlparse
 from urllib.parse import parse_qs
 
 from thoth.solver.python.python import extract_metadata
 from thoth.solver.python.python import parse_requirement_str
 from thoth.solver.python.python import pipdeptree
-from thoth.solver.python.python import should_resolve_subgraph
 from thoth.solver.python.python import get_environment_packages
 
 
@@ -109,50 +107,6 @@ class TestPython(SolverTestCase):
         venv.install("selinon==1.1.0")
         output = pipdeptree(venv.python)
         assert len(output) > 1
-
-    @responses.activate
-    def test_should_resolve_subgraph_no(self):
-        def request_callback(request):
-            parsed_url = urlparse(request.url)
-            query = parse_qs(parsed_url.query)
-            assert query.get("package_name") == ["tensorflow"]
-            assert query.get("package_version") == ["2.0.0"]
-            assert query.get("index_url") == ["https://pypi.org/simple"]
-            assert query.get("solver_name") == ["solver-ubi-8-py36"]
-            return 208, {}, "{}"
-
-        assert "THOTH_SOLVER" not in os.environ
-        url = "http://localhost"
-        responses.add_callback(responses.GET, url, callback=request_callback, content_type="application/json")
-        try:
-            os.environ["THOTH_SOLVER"] = "solver-ubi-8-py36"
-            result = should_resolve_subgraph(url, "tensorflow", "2.0.0", "https://pypi.org/simple")
-            assert result is False
-            assert len(responses.calls) == 1
-        finally:
-            os.environ.pop("THOTH_SOLVER")
-
-    @responses.activate
-    def test_should_resolve_subgraph_yes(self):
-        def request_callback(request):
-            parsed_url = urlparse(request.url)
-            query = parse_qs(parsed_url.query)
-            assert query.get("package_name") == ["selinon"]
-            assert query.get("package_version") == ["1.1.0"]
-            assert query.get("index_url") == ["https://pypi.org/simple"]
-            assert query.get("solver_name") == ["solver-ubi-9-py36"]
-            return 200, {}, "{}"
-
-        assert "THOTH_SOLVER" not in os.environ
-        url = "http://localhost"
-        responses.add_callback(responses.GET, url, callback=request_callback, content_type="application/json")
-        try:
-            os.environ["THOTH_SOLVER"] = "solver-ubi-9-py36"
-            result = should_resolve_subgraph(url, "selinon", "1.1.0", "https://pypi.org/simple")
-            assert result is True
-            assert len(responses.calls) == 1
-        finally:
-            os.environ.pop("THOTH_SOLVER")
 
     def test_get_environment_packages(self, venv):
         venv.install("selinon==1.1.0")

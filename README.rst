@@ -25,22 +25,31 @@ Tool provided by this project will tell you how dependencies could be resolved:
   thoth-solver -vvv pypi -r requirements.txt 
 
 The output of this solver is a dependency analysis for the given software stack
-- in the example above, package `tensorflow` in any release with analysis of
+- in the example above, package ``tensorflow`` in any release with analysis of
 its all dependencies (direct and indirect ones) with additional information
 from Python ecosystem needed for a Python resolver to perform the actual
-`TensorFlow` installation.
+``TensorFlow`` installation.
 
 The tool also allows specifying custom Python package indexes which conform to
-`PEP-503 <https://www.python.org/dev/peps/pep-0503/>`_ - see the `--index`
+`PEP-503 <https://www.python.org/dev/peps/pep-0503/>`_ - see the ``--index``
 option for analyzing your custom Python packages provided by your repositories.
 
 Produced output
 ===============
 
-This tool (unless `--no-transitive` is specified`) analyzes recursively all the
+This tool (unless ``--no-transitive`` is specified) analyzes recursively all the
 dependencies of the desired project. Dependencies to be analyzed can be defined
-in a standard `requirements.txt` file or as a string, both conforming to `PEP-508
-<https://www.python.org/dev/peps/pep-0508>`_.
+in similar to ``requirements.txt`` file or as a string in a form of:
+
+.. code-block:: console
+
+  <package-name><version-cmp><version-identifier>
+
+Where ``<package-name>`` is the analyzed package name (as present on PyPI for
+example), part ``<version-cmp><version-identifier>`` is optional and creates
+version specifier for the given package (if not specified, all versions are
+considered). As the solver analysis the project, other parts (such as extras)
+are not supported.
 
 An example output shown bellow can be reproduced by running the tool with the following
 arguments (with an example of produced log):
@@ -50,7 +59,6 @@ arguments (with an example of produced log):
   $ thoth-solver python --requirements 'tensorflow==2.0.0' --index https://pypi.org/simple --no-transitive
   2019-10-01 14:01:02,756 [31432] INFO     root:128: Logging to a Sentry instance is turned off
   2019-10-01 14:01:02,756 [31432] INFO     root:150: Logging to rsyslog endpoint is turned off
-  2019-10-01 14:01:02,756 [31432] INFO     __main__:132: No subgraph check API provided, no queries will be done for dependency subgraphs that should be avoided
   2019-10-01 14:01:06,838 [31432] INFO     thoth.solver.python.python_solver:113: Parsing dependency 'tensorflow==2.0.0'
   2019-10-01 14:01:07,003 [31432] INFO     thoth.solver.python.python:356: Using index 'https://pypi.org/simple' to discover package 'tensorflow' in version '2.0.0'
   2019-10-01 14:01:40,568 [31432] INFO     thoth.solver.python.python:405: Resolving dependency versions for 'absl-py' with range '>=0.7.0' from 'https://pypi.org/simple'
@@ -101,13 +109,13 @@ interesting parts of the output using JSONPath:
 * ``.result.tree[*].package_name`` - name of the analyzed package
 * ``.result.tree[*].package_version`` - version of the analyzed package
 * ``.result.tree[*].sha256`` - sha256 digests of artifacts present on the given Python package index
-* ``.result.tree[*].importlib_metadata`` - metadata associated with the given package, these metadata are obtained using `importlib-metadata <https://pypi.org/project/importlib-metadata/>`_, fallbacks to standard `importlib.metadata <https://docs.python.org/3.9/library/importlib.metadata.html>`_ on Python3.9+
+* ``.result.tree[*].importlib_metadata`` - metadata associated with the given package, these metadata are obtained using `importlib-metadata <https://pypi.org/project/importlib-metadata/>`_, fallback to standard `importlib.metadata <https://docs.python.org/3.9/library/importlib.metadata.html>`_ on Python3.9+
 
   * ``.result.tree[*].importlib_metadata.metadata`` - package metadata
-  * ``.result.tree[*].importlib_metadata.requires`` - raw strings which declare the given Python package requirements as obtained by `importlib_metadata.requires`
-  * ``.result.tree[*].importlib_metadata.version`` - version as obtained by `importlib_metadata.requires`
-  * ``.result.tree[*].importlib_metadata.files`` - file information about the given package (additionally parsed to provide digest, file size and path) as obtained by `importlib_metadata.files`
-  * ``.result.tree[*].importlib_metadata.entry_points`` - entry points as obtained by `importlib_metadata.entry_points` (additionally parsed to provide entry point name, group and value)
+  * ``.result.tree[*].importlib_metadata.requires`` - raw strings which declare the given Python package requirements as obtained by ``importlib_metadata.requires``
+  * ``.result.tree[*].importlib_metadata.version`` - version as obtained by ``importlib_metadata.requires``
+  * ``.result.tree[*].importlib_metadata.files`` - file information about the given package (additionally parsed to provide digest, file size and path) as obtained by ``importlib_metadata.files``
+  * ``.result.tree[*].importlib_metadata.entry_points`` - entry points as obtained by ``importlib_metadata.entry_points`` (additionally parsed to provide entry point name, group and value)
 
   .. code-block:: json
 
@@ -192,7 +200,7 @@ interesting parts of the output using JSONPath:
       "version": "2.0.0"
     }
 
-  The example above shows data associated with `tensorflow==2.0.0`. The `files`
+  The example above shows data associated with ``tensorflow==2.0.0``. The ``files``
   section is intentionally snipped, the file digest is signed as described in
   `PEP-427 <https://www.python.org/dev/peps/pep-0427/#id16>`_.
 
@@ -200,13 +208,12 @@ interesting parts of the output using JSONPath:
 * ``.result.tree[*].dependencies[*].extras`` - name of extras signalizing the given package should be installed with extras as specified in `PEP-508 <https://www.python.org/dev/peps/pep-0508/#extras>`_
 * ``.result.tree[*].dependencies[*].extra`` - name of extra which should be required to take into account this dependency as specified `PEP-508 <https://www.python.org/dev/peps/pep-0508/#extras>`_
 * ``.result.tree[*].dependencies[*].marker`` - a full specification of the environment marker as described in `PEP-508 <https://www.python.org/dev/peps/pep-0508/#environment-markers>`_
+* ``.result.tree[*].dependencies[*].marker_evaluation_error`` - a string capturing error information when marker evaluation failed in the run software environment, otherwise ``null``
 * ``.result.tree[*].dependencies[*].marker_evaluated`` - marker defined by the package, but additionally adjusted for evaluation for the current environment (see notes bellow).
-* ``.result.tree[*].dependencies[*].marker_evaluation_result`` - a boolean representing if the given marker evaluation was evaluated as `true` (the given environment accepts marker) or `false` (marker not accepted), a special value of `null` signalizes marker evaluation error (see `marker_evaluation_error` for more info)
-* ``.result.tree[*].dependencies[*].marker_evaluation_error`` - a string capturing error information when marker evaluation failed in the run software environment, otherwise `null`
+* ``.result.tree[*].dependencies[*].marker_evaluation_result`` - a boolean representing if the given marker evaluation was evaluated as ``true`` (the given environment accepts marker) or ``false`` (marker not accepted), a special value of `null` signalizes marker evaluation error (see ``marker_evaluation_error`` for more info)
 * ``.result.tree[*].dependencies[*].normalized_package_name`` - a string representing normalized package name as described in `PEP-503 <https://www.python.org/dev/peps/pep-0503/#normalized-names>`_
-* ``.result.tree[*].dependencies[*].parsed_markers`` - a list of parsed markers (as parsed in the `packaging <https://github.com/pypa/packaging/>`_ triplet `variable`, `op`, `value`), respecting `and` or `or` structure to create the resulting marker
 * ``.result.tree[*].dependencies[*].specifier`` - a version range specifier which was declared by package which depends on the given dependency conforming to `PEP-440 <https://www.python.org/dev/peps/pep-0440/>`_
-* ``.result.tree[*].dependencies[*].resolved_versions`` - a list of versions which were resolved given the version range specifier and specified Python package indexes (passed `--index` option can specify multiple indexes which causes package discovery on each of them)
+* ``.result.tree[*].dependencies[*].resolved_versions`` - a list of versions which were resolved given the version range specifier and specified Python package indexes (passed ``--index`` option can specify multiple indexes which causes package discovery on each of them)
 
 An example of a dependency entry (an entry from one of ``.result.tree[*].dependencies``:
 
@@ -275,7 +282,7 @@ installed via pip or `Pipenv <https://pipenv.readthedocs.io>`_:
 
 Solver is run in `project Thoth <https://thoth-station.ninja>`_ to gather
 information about package dependencies. You can find deployment templates in
-the `openshift/` directory present in the root of `solver's Git repository
+the ``openshift/`` directory present in the root of `solver's Git repository
 <https://github.com/thoth-station/solver>`_. The actual deployment is done
 using Ansible playbooks available in the `Thoth's core repository
 <https://github.com/thoth-station/core>`_.

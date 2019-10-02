@@ -50,10 +50,6 @@ parameters:
     description: "Packages to be resolved"
     displayName: "Packages to be analyzed by solver"
     required: true
-  - name: THOTH_SOLVER_SUBGRAPH_CHECK_API
-    description: "An API endpoint to be checked when resolving dependency subgraphs"
-    displayName: "Subgraph check API"
-    required: false
   - name: THOTH_SOLVER_OUTPUT
     description: "Output to send solver results to"
     displayName: "Solver output"
@@ -108,8 +104,6 @@ objects:
                   value: "${THOTH_SOLVER_OUTPUT}"
                 - name: THOTH_SOLVER_INDEXES
                   value: "${THOTH_SOLVER_INDEXES}"
-                - name: THOTH_SOLVER_SUBGRAPH_CHECK_API
-                  value: "${THOTH_SOLVER_SUBGRAPH_CHECK_API}"
                 - name: SENTRY_DSN
                   valueFrom:
                     secretKeyRef:

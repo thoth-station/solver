@@ -21,7 +21,6 @@ pytest = "*"
 pytest-timeout = "*"
 pytest-cov = "*"
 pytest-venv = "*"
-responses = "*"
 
 [requires]
 python_version = "3.6"
