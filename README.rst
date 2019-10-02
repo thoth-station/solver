@@ -59,7 +59,6 @@ arguments (with an example of produced log):
   $ thoth-solver python --requirements 'tensorflow==2.0.0' --index https://pypi.org/simple --no-transitive
   2019-10-01 14:01:02,756 [31432] INFO     root:128: Logging to a Sentry instance is turned off
   2019-10-01 14:01:02,756 [31432] INFO     root:150: Logging to rsyslog endpoint is turned off
-  2019-10-01 14:01:02,756 [31432] INFO     __main__:132: No subgraph check API provided, no queries will be done for dependency subgraphs that should be avoided
   2019-10-01 14:01:06,838 [31432] INFO     thoth.solver.python.python_solver:113: Parsing dependency 'tensorflow==2.0.0'
   2019-10-01 14:01:07,003 [31432] INFO     thoth.solver.python.python:356: Using index 'https://pypi.org/simple' to discover package 'tensorflow' in version '2.0.0'
   2019-10-01 14:01:40,568 [31432] INFO     thoth.solver.python.python:405: Resolving dependency versions for 'absl-py' with range '>=0.7.0' from 'https://pypi.org/simple'

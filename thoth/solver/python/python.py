@@ -60,76 +60,6 @@ def get_environment_packages(python_bin: str) -> list:
     return result
 
 
-def should_resolve_subgraph(subgraph_check_api: str, package_name: str, package_version: str, index_url: str) -> bool:
-    """Ask the given subgraph check API if the given package in the given version should be included in the resolution.
-
-    This subgraph resolving avoidence serves two purposes - we don't need to
-    resolve dependency subgraphs that were already analyzed and we also avoid
-    analyzing of "core" packages (like setuptools) where not needed as they
-    can break installation environment.
-    """
-    # This variable is expected to be set in deployment to guarantee solver name correctness for subgraph checks.
-    solver_name = os.environ["THOTH_SOLVER"]
-    _LOGGER.info(
-        "Checking if the given dependency subgraph for package %r in version %r from index %r should be resolved by %r",
-        package_name,
-        package_version,
-        index_url,
-        solver_name,
-    )
-
-    response = None
-    for i in range(10):
-        try:
-            response = requests.get(
-                subgraph_check_api,
-                params={
-                    "package_name": package_name,
-                    "package_version": package_version,
-                    "index_url": index_url,
-                    "solver_name": solver_name,
-                },
-            )
-        except requests.exceptions.ConnectionError as exc:
-            _LOGGER.warning("Client got disconnected, retrying: %s", str(exc))
-            # Retry after some time.
-            time.sleep(1)
-            continue
-
-        if response.status_code in (200, 208):
-            break
-
-        _LOGGER.warning(
-            "Invalid response from subgraph check API %r, retrying (status code: %d): %r",
-            subgraph_check_api,
-            response.status_code,
-            response.text,
-        )
-        # Retry after some time.
-        time.sleep(1)
-    else:
-        if response:
-            response.raise_for_status()
-
-        # We received ConnectionError only exceptions.
-        raise requests.exceptions.ConnectionError("Too many connection errors when performing sub-graph checks")
-
-    if response.status_code == http.HTTPStatus.OK:
-        return True
-    elif response.status_code == http.HTTPStatus.ALREADY_REPORTED:
-        # FIXME This is probably not the correct HTTP status code to be used here, but which one should be used?
-        return False
-
-    raise ValueError(
-        "Unreachable code - subgraph check API responded with unknown HTTP status "
-        "code %s for package %r in version %r from index %r, solver %r",
-        package_name,
-        package_version,
-        index_url,
-        solver_name,
-    )
-
-
 @contextmanager
 def _install_requirement(
     python_bin: str, package: str, version: str = None, index_url: str = None, clean: bool = True
@@ -346,7 +276,6 @@ def _do_resolve_index(
     requirements: typing.List[str],
     exclude_packages: set = None,
     transitive: bool = True,
-    subgraph_check_api: str = None,
 ) -> dict:
     """Perform resolution of requirements against the given solver."""
     index_url = solver.release_fetcher.index_url
@@ -378,21 +307,9 @@ def _do_resolve_index(
             unresolved.append({"package_name": dependency.name, "version_spec": version_spec, "index": index_url})
         else:
             for version in resolved_versions:
-                if not subgraph_check_api or (
-                    subgraph_check_api
-                    and should_resolve_subgraph(subgraph_check_api, dependency.name, version, index_url)
-                ):
-                    entry = (dependency.name, version)
-                    packages_seen.add(entry)
-                    queue.append(entry)
-                else:
-                    _LOGGER.info(
-                        "Direct dependency %r in version % from %r was already resolved in one "
-                        "of the previous solver runs based on sub-graph check",
-                        dependency.name,
-                        version,
-                        index_url,
-                    )
+                entry = (dependency.name, version)
+                packages_seen.add(entry)
+                queue.append(entry)
 
     while queue:
         package_name, package_version = queue.pop()
@@ -456,13 +373,7 @@ def _do_resolve_index(
                 for version in resolved_versions:
                     # Did we check this package already - do not check indexes, we manually insert them.
                     seen_entry = (dependency_name, version)
-                    if seen_entry not in packages_seen and (
-                        not subgraph_check_api
-                        or (
-                            subgraph_check_api
-                            and should_resolve_subgraph(subgraph_check_api, dependency_name, version, index_url)
-                        )
-                    ):
+                    if seen_entry not in packages_seen:
                         _LOGGER.debug(
                             "Adding package %r in version %r for next resolution round", dependency_name, version
                         )
@@ -478,17 +389,9 @@ def resolve(
     python_version: int = 3,
     exclude_packages: set = None,
     transitive: bool = True,
-    subgraph_check_api: str = None,
 ) -> dict:
     """Resolve given requirements for the given Python version."""
     assert python_version in (2, 3), "Unknown Python version"
-
-    if subgraph_check_api and not transitive:
-        _LOGGER.warning(
-            "The check against subgraph API cannot be done if no transitive dependencies are "
-            "resolved, sub-graph checks are turned off implicitly"
-        )
-        subgraph_check_api = None
 
     python_bin = "python3" if python_version == 3 else "python2"
     run_command("virtualenv -p python3 venv")
@@ -519,7 +422,6 @@ def resolve(
             requirements=requirements,
             exclude_packages=exclude_packages,
             transitive=transitive,
-            subgraph_check_api=subgraph_check_api,
         )
 
         result["tree"].extend(solver_result["tree"])
