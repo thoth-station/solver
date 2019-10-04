@@ -92,7 +92,7 @@ class TestPython(SolverTestCase):
     def test_extract_metadata(self, metadata_file_path, metadata_file_extracted_path):
         metadata = json.loads((Path(self.data_dir) / "metadata" / metadata_file_path).read_text())
         metadata_extracted = json.loads((Path(self.data_dir) / "metadata" / metadata_file_extracted_path).read_text())
-        assert extract_metadata(metadata) == metadata_extracted
+        assert extract_metadata(metadata, "https://pypi.org/simple") == metadata_extracted
 
     @pytest.mark.parametrize(
         "requirement_str,expected_requirement",
