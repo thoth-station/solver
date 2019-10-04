@@ -211,12 +211,13 @@ def parse_requirement_str(requirement_str: str):
     }
 
 
-def extract_metadata(metadata: dict) -> dict:
+def extract_metadata(metadata: dict, index_url: str) -> dict:
     """Extract and enhance information from metadata."""
     result = {
         "dependencies": [],
         "package_name": metadata["metadata"].get("Name"),
-        "package_version": metadata["metadata"].get("Version"),
+        "version": metadata["metadata"].get("Version"),
+        "index": index_url,
         "importlib_metadata": metadata,
     }
 
@@ -262,7 +263,7 @@ def _fill_hashes(source: Source, package_name: str, package_version: str, extrac
     except NotFound:
         # Some older packages have different version on PyPI (considering simple API) than the ones
         # stated in metadata.
-        package_hashes = source.get_package_hashes(package_name, extracted_metadata["package_version"])
+        package_hashes = source.get_package_hashes(package_name, extracted_metadata["version"])
     for item in package_hashes:
         extracted_metadata["sha256"].append(item["sha256"])
 
@@ -318,7 +319,7 @@ def _do_resolve_index(
                 # Translate to distribution name - e.g. thoth-solver is actually distribution thoth.solver.
                 package_name = find_distribution_name(python_bin, package_name)
                 package_metadata = get_package_metadata(python_bin, package_name)
-                extracted_metadata = extract_metadata(package_metadata)
+                extracted_metadata = extract_metadata(package_metadata, index_url)
         except CommandError as exc:
             _LOGGER.debug(
                 "There was an error during package %r in version %r discovery from %r: %s",
@@ -331,7 +332,7 @@ def _do_resolve_index(
                 {
                     "package_name": package_name,
                     "index": index_url,
-                    "package_version": package_version,
+                    "version": package_version,
                     "type": "command_error",
                     "details": exc.to_dict(),
                     "is_provided": source.provides_package_version(package_name, package_version),
