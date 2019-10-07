@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 # thoth-solver
-# Copyright(C) 2018, 2019 Fridolin Pokorny
+# Copyright(C) 2019 Fridolin Pokorny
 #
 # This program is free software: you can redistribute it and / or modify
 # it under the terms of the GNU General Public License as published by
@@ -15,11 +15,12 @@
 # You should have received a copy of the GNU General Public License
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
 
-"""Thoth's solver package."""
+"""Core logic for solver test suite."""
 
-from .python import resolve
-from .compile import pip_compile
+import os
 
-__version__ = "1.3.0"
-__title__ = "thoth-solver"
-__author__ = "Fridolin Pokorny"
+
+class SolverTestCase:
+    """A base class for solver test cases."""
+
+    data_dir = os.path.join(os.path.dirname(os.path.realpath(__file__)), "data")
