@@ -294,6 +294,7 @@ def _do_resolve_index(
         try:
             dependency = PythonDependencyParser.parse_python(requirement)
         except Exception as exc:
+            _LOGGER.warning("Failed to parse requirement %r: %s", requirement, str(exc))
             unparsed.append({"requirement": requirement, "details": str(exc)})
             continue
 
