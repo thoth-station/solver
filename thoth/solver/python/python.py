@@ -216,8 +216,8 @@ def extract_metadata(metadata: dict, index_url: str) -> dict:
     result = {
         "dependencies": [],
         "package_name": metadata["metadata"].get("Name"),
-        "version": metadata["metadata"].get("Version"),
-        "index": index_url,
+        "package_version": metadata["metadata"].get("Version"),
+        "index_url": index_url,
         "importlib_metadata": metadata,
     }
 

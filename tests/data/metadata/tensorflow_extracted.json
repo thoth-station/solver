@@ -218,8 +218,8 @@
         }
     ],
     "package_name": "tensorflow",
-    "version": "2.0.0",
-    "index": "https://pypi.org/simple",
+    "package_version": "2.0.0",
+    "index_url": "https://pypi.org/simple",
     "importlib_metadata": {
         "metadata": {
             "Metadata-Version": "2.1",
