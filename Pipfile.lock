@@ -114,13 +114,6 @@
             "index": "pypi",
             "version": "==7.0"
         },
-        "contoml": {
-            "hashes": [
-                "sha256:2353275caef3726131c4192379252cc48eb4a15c06df3e1046f783de937eba94",
-                "sha256:f62960b57a9489187653787bd67756d15a79e4579c7d779d8b94f581dd260a7d"
-            ],
-            "version": "==0.32"
-        },
         "cryptography": {
             "hashes": [
                 "sha256:24b61e5fcb506424d3ec4e18bca995833839bf13c59fc43e530e488f28d46b8c",
@@ -191,14 +184,6 @@
             ],
             "index": "pypi",
             "version": "==0.23"
-        },
-        "iso8601": {
-            "hashes": [
-                "sha256:210e0134677cc0d02f6028087fee1df1e1d76d372ee1db0bf30bf66c5c1c89a3",
-                "sha256:49c4b20e1f38aa5cf109ddcd39647ac419f928512c869dc01d5c7098eddede82",
-                "sha256:bbbae5fb4a7abfe71d4688fd64bff70b91bbd74ef6a99d964bab18f7fdf286dd"
-            ],
-            "version": "==0.1.12"
         },
         "jinja2": {
             "hashes": [
@@ -342,10 +327,10 @@
         },
         "pyasn1-modules": {
             "hashes": [
-                "sha256:43c17a83c155229839cc5c6b868e8d0c6041dba149789b6d6e28801c64821722",
-                "sha256:e30199a9d221f1b26c885ff3d87fd08694dbbe18ed0e8e405a2a7126d30ce4c0"
+                "sha256:0c35a52e00b672f832e5846826f1fb7507907f7d52fba6faa9e3c4cbe874fe4b",
+                "sha256:b6ada4f840fe51abf5a6bd545b45bf537bea62221fa0dde2e8a553ed9f06a4e3"
             ],
-            "version": "==0.2.6"
+            "version": "==0.2.7"
         },
         "pycodestyle": {
             "hashes": [
@@ -499,12 +484,6 @@
             ],
             "version": "==1.12.0"
         },
-        "strict-rfc3339": {
-            "hashes": [
-                "sha256:5cad17bedfc3af57b399db0fed32771f18fc54bbd917e85546088607ac5e1277"
-            ],
-            "version": "==0.7"
-        },
         "thoth-analyzer": {
             "hashes": [
                 "sha256:2748dac8497c479ba7c17a82ea449082484f9222d4a385ad1e894904d85b51e3",
@@ -523,17 +502,18 @@
         },
         "thoth-python": {
             "hashes": [
-                "sha256:eba8178312ca77f10590ab893fa9a948cc61972f0e4e8686a3ecbf24bcd14a3d",
-                "sha256:ffc569523ba8d4471f9b4065b002632c96a8a566bd755ec11b0950e0e79efbc2"
+                "sha256:075b048c550be4a7cedee9972b20eeeb5aa2ba91e7b25dbca663e8030fb7946e",
+                "sha256:63e75994bbc67f0dc85c09f41468b91390ec04443ce6bc2ef1285e6cc742caf7"
             ],
             "index": "pypi",
-            "version": "==0.6.3"
+            "version": "==0.6.4"
         },
-        "timestamp": {
+        "toml": {
             "hashes": [
-                "sha256:b5c7a4539f0d8742b7d6c78febd241ab24903c73c38045690725220ca7eae4ac"
+                "sha256:229f81c57791a41d65e399fc06bf0848bab550a9dfd5ed66df18ce5f05e73d5c",
+                "sha256:235682dd292d5899d361a811df37e04a8828a5b1da3115886b73cf81ebc9100e"
             ],
-            "version": "==0.0.1"
+            "version": "==0.10.0"
         },
         "tzlocal": {
             "hashes": [
