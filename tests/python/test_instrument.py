@@ -111,6 +111,14 @@ class TestInstrument(SolverTestCase):
         discovered_metadata.pop("files")
         assert discovered_metadata == metadata
 
+    def test_package_clash(self, venv):
+        """Test packages which are dependencies of this solver do not affect results of data gathering."""
+        import click
+        assert click.__version__ != "3.0"
+        venv.install("click==3.0")
+        discovered_metadata = get_package_metadata(venv.python, "click")
+        assert discovered_metadata.get("version") == "3.0"
+
     def test_execute_env_function_raise_on_error(self, venv):
         """Assert raising an error (error propagation turned on by default)."""
         with pytest.raises(ValueError) as exc:
