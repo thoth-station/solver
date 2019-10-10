@@ -79,7 +79,8 @@ def _install_requirement(
             cmd += " --trusted-host {}".format(trusted_host)
 
         _LOGGER.debug("Installing requirement %r in version %r", package, version)
-        run_command(cmd)
+        result = run_command(cmd)
+        _LOGGER.debug("Log during installation:\nstdout: %s\nstderr:%s", result.stdout, result.stderr)
         yield
     finally:
         if clean:
@@ -342,6 +343,14 @@ def _do_resolve_index(
             continue
 
         packages.append(extracted_metadata)
+        if package_version != extracted_metadata["package_version"]:
+            _LOGGER.warning(
+                "Requested to install package %r in version %r but installed version is %r",
+                package_name,
+                package_version,
+                extracted_metadata["package_version"]
+            )
+
         extracted_metadata["package_version_requested"] = package_version
         _fill_hashes(source, package_name, package_version, extracted_metadata)
 
