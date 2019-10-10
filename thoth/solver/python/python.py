@@ -79,7 +79,8 @@ def _install_requirement(
             cmd += " --trusted-host {}".format(trusted_host)
 
         _LOGGER.debug("Installing requirement %r in version %r", package, version)
-        run_command(cmd)
+        result = run_command(cmd)
+        _LOGGER.debug("Log during installation:\nstdout: %s\nstderr:%s", result.stdout, result.stderr)
         yield
     finally:
         if clean:
