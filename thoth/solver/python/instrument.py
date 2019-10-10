@@ -55,9 +55,11 @@ def _find_distribution_name(package_name):
 
 def _get_importlib_metadata_metadata(package_name):
     """"Retrieve all the metadata for the given package."""
+    import sys
+    sys.path = sys.path[::-1]
+
     import importlib_metadata
     import json
-    import sys
 
     print(json.dumps(dict(importlib_metadata.metadata(package_name).items())))
     sys.exit(0)
@@ -66,6 +68,8 @@ def _get_importlib_metadata_metadata(package_name):
 def _get_importlib_metadata_version(package_name):
     """"Retrieve version based for the given package."""
     import sys
+    sys.path = sys.path[::-1]
+
     import importlib_metadata
 
     print(importlib_metadata.version(package_name), end="")
@@ -75,6 +79,8 @@ def _get_importlib_metadata_version(package_name):
 def _get_importlib_metadata_requires(package_name):
     """"Retrieve requires based for the given package."""
     import sys
+    sys.path = sys.path[::-1]
+
     import importlib_metadata
     import json
 
@@ -84,9 +90,11 @@ def _get_importlib_metadata_requires(package_name):
 
 def _get_importlib_metadata_entry_points(package_name):
     """Retrieve information about entry-points for the given package."""
+    import sys
+    sys.path = sys.path[::-1]
+
     import importlib_metadata
     import json
-    import sys
 
     entry_points = importlib_metadata.distribution(package_name).entry_points
     print(json.dumps([{"name": ep.name, "value": ep.value, "group": ep.group} for ep in entry_points]))
@@ -95,9 +103,11 @@ def _get_importlib_metadata_entry_points(package_name):
 
 def _get_importlib_metadata_files(package_name):
     """Retrieve information about files present for the given package."""
+    import sys
+    sys.path = sys.path[::-1]
+
     from importlib_metadata import files
     import json
-    import sys
 
     print(
         json.dumps(
@@ -121,6 +131,9 @@ def execute_env_function(python_bin, function, *, env=None, raise_on_error=True,
     _LOGGER.debug("Executing the following command in Python interpreter (env: %r): %r", env, cmd)
     res = run_command(cmd, env=env, is_json=is_json, raise_on_error=False)
 
+    _LOGGER.debug("stdout during command execution: %s", res.stdout)
+    _LOGGER.debug("stderr during command execution: %s", res.stderr)
+
     if raise_on_error and res.return_code != 0:
         raise ValueError("Failed to successfully execute function in Python interpreter: {}".format(res.stderr))
 
@@ -137,7 +150,8 @@ def get_package_metadata(python_bin, package_name):
     # a dependency of this package, but it is not installed in the created virtual environment.
     # Inject the current path to the created environment. Note however,
     # we need to make sure importlib_metadata correctly handles metadata of packages which are dependencies of this
-    # package - it works as expected.
+    # package - each function executed in the virtual environment should reverse sys.path to give precedence
+    # in importing packages from virtual environment, and then, import from the environment where solver runs in.
     return {
         "metadata": execute_env_function(
             python_bin,

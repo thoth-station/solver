@@ -79,7 +79,8 @@ def _install_requirement(
             cmd += " --trusted-host {}".format(trusted_host)
 
         _LOGGER.debug("Installing requirement %r in version %r", package, version)
-        run_command(cmd)
+        result = run_command(cmd)
+        _LOGGER.debug("Log during installation:\nstdout: %s\nstderr:%s", result.stdout, result.stderr)
         yield
     finally:
         if clean:
@@ -305,7 +306,7 @@ def _do_resolve_index(
         resolved_versions = _resolve_versions(solver, source, dependency.name, version_spec)
         if not resolved_versions:
             _LOGGER.warning("No versions were resolved for dependency %r in version %r", dependency.name, version_spec)
-            unresolved.append({"package_name": dependency.name, "version_spec": version_spec, "index": index_url})
+            unresolved.append({"package_name": dependency.name, "version_spec": version_spec, "index_url": index_url})
         else:
             for version in resolved_versions:
                 entry = (dependency.name, version)
@@ -332,8 +333,8 @@ def _do_resolve_index(
             errors.append(
                 {
                     "package_name": package_name,
-                    "index": index_url,
-                    "version": package_version,
+                    "index_url": index_url,
+                    "package_version": package_version,
                     "type": "command_error",
                     "details": exc.to_dict(),
                     "is_provided": source.provides_package_version(package_name, package_version),
