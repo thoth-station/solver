@@ -124,7 +124,7 @@ objects:
       source:
         dockerfile: |
           FROM fedora:29
-          CMD ["pypi"]
+          CMD ["python"]
           ENTRYPOINT ["thoth-solver"]
           ENV \
           LANG=en_US.UTF-8 \
@@ -193,7 +193,7 @@ objects:
       source:
         dockerfile: |
           FROM fedora:28
-          CMD ["pypi"]
+          CMD ["python"]
           ENTRYPOINT ["thoth-solver"]
           ENV \
           LANG=en_US.UTF-8 \
@@ -282,7 +282,7 @@ objects:
           WORKDIR /home/solver
           USER solver
 
-          CMD ["pypi"]
+          CMD ["python"]
           ENTRYPOINT ["thoth-solver"]
         type: Git
         git:
