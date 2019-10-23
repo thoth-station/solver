@@ -57,7 +57,7 @@ objects:
       source:
         dockerfile: |
           FROM fedora:29
-          CMD ["pypi"]
+          CMD ["python"]
           ENTRYPOINT ["thoth-solver"]
           ENV \
           LANG=en_US.UTF-8 \
