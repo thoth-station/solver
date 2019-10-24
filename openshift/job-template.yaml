@@ -5,7 +5,7 @@ metadata:
   annotations:
     description: "Thoth: Solver Job Template"
     openshift.io/display-name: "Thoth: Solver"
-    version: 0.8.0
+    version: 0.9.0
     tags: thoth,ai-stacks,aistacks,solver,machinlearning
     template.openshift.io/documentation-url: https://github.com/Thoth-Station/
     template.openshift.io/long-description: >
@@ -83,17 +83,17 @@ objects:
           labels:
             app: thoth
             component: solver
-            solver-type: solver-ubi-8-py36
+            solver-type: solver-rhel-8.0-py36
             task: solver
             mark: cleanup
             ttl: "2h"
         spec:
           restartPolicy: OnFailure
           containers:
-            - name: solver-ubi-8-py36
+            - name: solver-rhel-8.0-py36
               env:
                 - name: THOTH_SOLVER
-                  value: solver-ubi-8-py36
+                  value: solver-rhel-8.0-py36
                 - name: THOTH_LOG_SOLVER
                   value: "${THOTH_LOG_SOLVER}"
                 - name: THOTH_SOLVER_NO_TRANSITIVE
@@ -109,7 +109,7 @@ objects:
                     secretKeyRef:
                       name: thoth
                       key: sentry-dsn
-              image: "${IMAGE_STREAM_REGISTRY}/${IMAGE_STREAM_NAMESPACE}/solver-ubi-8-py36:${IMAGE_STREAM_TAG}"
+              image: "${IMAGE_STREAM_REGISTRY}/${IMAGE_STREAM_NAMESPACE}/solver-rhel-8.0-py36:${IMAGE_STREAM_TAG}"
               livenessProbe:
                 failureThreshold: 1
                 initialDelaySeconds: 21600
