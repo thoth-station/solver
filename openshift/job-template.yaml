@@ -72,7 +72,7 @@ objects:
       labels:
         app: thoth
         component: solver
-        solver-type: solver-ubi-8-py36
+        solver-type: solver-rhel-8.0-py36
         operator: graph-sync
         task: solver
         mark: cleanup
