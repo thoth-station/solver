@@ -322,7 +322,7 @@ def _do_resolve_index(
                 package_name = find_distribution_name(python_bin, package_name)
                 package_metadata = get_package_metadata(python_bin, package_name)
                 extracted_metadata = extract_metadata(package_metadata, index_url)
-        except CommandError as exc:
+        except (CommandError, Exception) as exc:
             _LOGGER.debug(
                 "There was an error during package %r in version %r discovery from %r: %s",
                 package_name,
@@ -330,13 +330,22 @@ def _do_resolve_index(
                 index_url,
                 exc,
             )
+            if not isinstance(exc, CommandError):
+                # Report any error happening during metadata aggregation so we know if there is a programming error.
+                # An example reported message:
+                #  https://github.com/thoth-station/solver/issues/342
+                _LOGGER.exception("An exception occurred during package metadata gathering")
+                details = {'message': str(exc)}
+            else:
+                details = exc.to_dict()
+
             errors.append(
                 {
                     "package_name": package_name,
                     "index_url": index_url,
                     "package_version": package_version,
                     "type": "command_error",
-                    "details": exc.to_dict(),
+                    "details": details,
                     "is_provided": source.provides_package_version(package_name, package_version),
                 }
             )
