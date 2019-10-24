@@ -90,7 +90,7 @@ objects:
         spec:
           restartPolicy: OnFailure
           containers:
-            - name: solver-rhel-8.0-py36
+            - name: solver
               env:
                 - name: THOTH_SOLVER
                   value: solver-rhel-8.0-py36
