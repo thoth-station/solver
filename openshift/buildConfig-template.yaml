@@ -124,32 +124,39 @@ objects:
       source:
         dockerfile: |
           FROM fedora:29
-          CMD ["python"]
-          ENTRYPOINT ["thoth-solver"]
           ENV \
-          LANG=en_US.UTF-8 \
-          THOTH_SOLVER_TMP_DIR='/tmp/thoth-solver-install'
+           LANG=en_US.UTF-8 \
+           THOTH_SOLVER_TMP_DIR='/tmp/thoth-solver-install'
 
           RUN \
-          useradd -m solver && \
-          dnf update --setopt=tsflags=nodocs -y && \
-          dnf install --setopt=tsflags=nodocs -y python36 && \
-          ln -sf /usr/bin/python3.6 /usr/bin/python3 && \
-          mkdir -p ${THOTH_SOLVER_TMP_DIR}
+            useradd -m solver && \
+            dnf update --setopt=tsflags=nodocs -y && \
+            dnf install --setopt=tsflags=nodocs -y python36 python3-pip && \
+            mkdir -p ${THOTH_SOLVER_TMP_DIR}
+
+          RUN \
+            PYTHON_LIB_PATH=/usr/lib64/python3.6/site-packages && \
+            rm -fr /usr/bin/python && \
+            ln -s /usr/bin/python3.6 /usr/bin/python && \
+            rm -fr /usr/bin/pip && \
+            ln -s /usr/bin/pip-3 /usr/bin/pip
 
           # Install thoth-solver itself
           COPY ./ ${THOTH_SOLVER_TMP_DIR}
           RUN \
-          cd ${THOTH_SOLVER_TMP_DIR} &&\
-          pip3 install . &&\
-          cd / &&\
-          rm -rf ${THOTH_SOLVER_TMP_DIR} &&\
-          unset THOTH_SOLVER_TMP_DIR &&\
-          dnf clean all &&\
-          chmod 777 /home/solver
+            cd ${THOTH_SOLVER_TMP_DIR} &&\
+            pip install . &&\
+            cd / &&\
+            rm -rf ${THOTH_SOLVER_TMP_DIR} &&\
+            unset THOTH_SOLVER_TMP_DIR &&\
+            dnf clean all &&\
+            chmod 777 /home/solver
 
           WORKDIR /home/solver
           USER solver
+
+          ENTRYPOINT ["thoth-solver"]
+          CMD ["python"]
         type: Git
         git:
           uri: ${GITHUB_URL}
