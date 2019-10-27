@@ -14,6 +14,7 @@ metadata:
       This is Thoth Solver Fedora 28+ and UBI8 ImageStream, this template is meant to
       be used by Bots, but could also be used by humans...
     template.openshift.io/provider-display-name: Red Hat, Inc.
+    thoth-station.ninja/template-version: 0.9.0
   labels:
     template: solver-imagestream
     app: thoth
@@ -30,6 +31,8 @@ objects:
         app.kubernetes.io/name: "thoth"
         app.kubernetes.io/component: "solver"
         app.thoth-station.ninja/solver: "fedora-29-py37"
+      annotations:
+        thoth-station.ninja/template-version: 0.9.0
       name: solver-fedora-29-py37
     spec:
       name: latest
@@ -46,6 +49,8 @@ objects:
         app.kubernetes.io/name: "thoth"
         app.kubernetes.io/component: "solver"
         app.thoth-station.ninja/solver: "fedora-29-py36"
+      annotations:
+        thoth-station.ninja/template-version: 0.9.0
       name: solver-fedora-29-py36
     spec:
       name: latest
@@ -62,6 +67,8 @@ objects:
         app.kubernetes.io/name: "thoth"
         app.kubernetes.io/component: "solver"
         app.thoth-station.ninja/solver: "fedora-28-py36"
+      annotations:
+        thoth-station.ninja/template-version: 0.9.0
       name: solver-fedora-28-py36
     spec:
       name: latest
@@ -78,6 +85,8 @@ objects:
         app.kubernetes.io/name: "thoth"
         app.kubernetes.io/component: "solver"
         app.thoth-station.ninja/solver: "rhel-8.0-py36"
+      annotations:
+        thoth-station.ninja/template-version: 0.9.0
       name: "solver-rhel-8.0-py36"
     spec:
       name: "latest"

@@ -14,6 +14,7 @@ metadata:
       This is Thoth Solver Fedora 28+ and UBI8 BuildConfig, this template is meant to
       be used by Bots, but could also be used by humans...
     template.openshift.io/provider-display-name: Red Hat, Inc.
+    thoth-station.ninja/template-version: 0.9.0
   labels:
     template: solver-buildconfig
     app: thoth
@@ -43,6 +44,8 @@ objects:
     apiVersion: v1
     metadata:
       name: solver-fedora-29-py37
+      annotations:
+        thoth-station.ninja/template-version: 0.9.0
       labels:
         app: thoth
         component: solver
@@ -110,6 +113,8 @@ objects:
     apiVersion: v1
     metadata:
       name: solver-fedora-29-py36
+      annotations:
+        thoth-station.ninja/template-version: 0.9.0
       labels:
         app: thoth
         component: solver
@@ -186,6 +191,8 @@ objects:
     apiVersion: v1
     metadata:
       name: solver-fedora-28-py36
+      annotations:
+        thoth-station.ninja/template-version: 0.9.0
       labels:
         app: thoth
         component: solver
@@ -253,6 +260,8 @@ objects:
     apiVersion: v1
     metadata:
       name: "solver-rhel-8.0-py36"
+      annotations:
+        thoth-station.ninja/template-version: 0.9.0
       labels:
         app: "thoth"
         component: "solver"
