@@ -12,6 +12,7 @@ metadata:
       This template defines resources needed to run solvers in Thoth, it is used
       to create new OpenShift Jobs running the analyzer.
     template.openshift.io/provider-display-name: "Red Hat, Inc."
+    thoth-station.ninja/template-version: 0.9.0
   labels:
     template: solver
     app: thoth
@@ -69,6 +70,8 @@ objects:
     kind: Job
     metadata:
       name: "${THOTH_SOLVER_JOB_ID}"
+      annotations:
+        thoth-station.ninja/template-version: 0.9.0
       labels:
         app: thoth
         component: solver
