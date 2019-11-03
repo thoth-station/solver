@@ -1,0 +1,137 @@
+---
+apiVersion: argoproj.io/v1alpha1
+kind: WorkflowTemplate
+metadata:
+  name: graph-sync
+  annotations:
+    thoth-station.ninja/template-version: 0.10.0-dev
+  labels:
+    app: thoth
+    component: graph-sync
+spec:
+  templates:
+    - name: solver
+      inputs:
+        parameters:
+          - name: THOTH_SYNC_DOCUMENT_ID
+            value: "2"
+          - name: THOTH_FORCE_SYNC
+            value: "3"
+      resource:
+        action: create
+        successCondition: status.succeeded == 1
+        manifest: |
+          apiVersion: batch/v1
+          kind: Job
+          metadata:
+            generateName: "{{workflow.name}}-"
+            labels:
+              app: thoth
+              component: graph-sync
+              graph-sync-type: solver
+            ownerReferences:
+            - apiVersion: argoproj.io/v1alpha1
+              blockOwnerDeletion: true
+              kind: Workflow
+              name: "{{workflow.name}}"
+              uid: "{{workflow.uid}}"
+          spec:
+            completions: 1
+            template:
+              metadata:
+                generateName: "{{workflow.name}}-graph-sync-"
+                labels:
+                  app: graph-sync
+              spec:
+                containers:
+                  - name: graph-sync
+                    image: graph-sync-job
+                    command: [ "sh", "-c", "env; exit 0" ]
+                    env:
+                      - name: THOTH_ONLY_SOLVER_DOCUMENTS
+                        value: "1"
+                      - name: THOTH_SYNC_DOCUMENT_ID
+                        value: "{{workflow.parameters.THOTH_SYNC_DOCUMENT_ID}}"
+                      - name: THOTH_FORCE_SYNC
+                        value: "{{workflow.parameters.THOTH_FORCE_SYNC}}"
+                      - name: THOTH_DEPLOYMENT_NAME
+                        valueFrom:
+                          configMapKeyRef:
+                            key: storage-bucket-name
+                            name: thoth
+                      - name: AMUN_API_URL
+                        valueFrom:
+                          configMapKeyRef:
+                            key: amun-api-url
+                            name: thoth
+                      - name: THOTH_S3_ENDPOINT_URL
+                        valueFrom:
+                          configMapKeyRef:
+                            key: ceph-host
+                            name: thoth
+                      - name: THOTH_CEPH_BUCKET
+                        valueFrom:
+                          configMapKeyRef:
+                            key: ceph-bucket-name
+                            name: thoth
+                      - name: THOTH_CEPH_BUCKET_PREFIX
+                        valueFrom:
+                          configMapKeyRef:
+                            key: ceph-bucket-prefix
+                            name: thoth
+                      - name: THOTH_CEPH_KEY_ID
+                        valueFrom:
+                          secretKeyRef:
+                            name: thoth
+                            key: ceph-key-id
+                      - name: THOTH_CEPH_SECRET_KEY
+                        valueFrom:
+                          secretKeyRef:
+                            name: thoth
+                            key: ceph-secret-key
+                      - name: THOTH_METRICS_PUSHGATEWAY_URL
+                        valueFrom:
+                          configMapKeyRef:
+                            name: thoth
+                            key: metrics-pushgateway-url
+                      - name: "THOTH_NAMESPACE"
+                        valueFrom:
+                          fieldRef:
+                            fieldPath: metadata.namespace
+                      - name: SENTRY_DSN
+                        valueFrom:
+                          secretKeyRef:
+                            name: thoth
+                            key: sentry-dsn
+                      - name: KNOWLEDGE_GRAPH_HOST
+                        valueFrom:
+                          configMapKeyRef:
+                            key: postgresql-host
+                            name: thoth
+                      - name: KNOWLEDGE_GRAPH_PORT
+                        value: "5432"
+                      - name: KNOWLEDGE_GRAPH_SSL_DISABLED
+                        value: "1"
+                      - name: KNOWLEDGE_GRAPH_USER
+                        valueFrom:
+                          secretKeyRef:
+                            name: postgresql
+                            key: database-user
+                      - name: KNOWLEDGE_GRAPH_PASSWORD
+                        valueFrom:
+                          secretKeyRef:
+                            name: postgresql
+                            key: database-password
+                      - name: KNOWLEDGE_GRAPH_DATABASE
+                        valueFrom:
+                          secretKeyRef:
+                            name: postgresql
+                            key: database-name
+                    resources:
+                      limits:
+                        cpu: 500m
+                        memory: 512Mi
+                      requests:
+                        cpu: 500m
+                        memory: 256Mi
+                restartPolicy: Never
