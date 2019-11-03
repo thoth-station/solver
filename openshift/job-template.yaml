@@ -79,7 +79,6 @@ objects:
         operator: graph-sync
         task: solver
         mark: cleanup
-        ttl: "2h"
     spec:
       template:
         metadata:
