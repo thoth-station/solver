@@ -1,0 +1,81 @@
+---
+apiVersion: argoproj.io/v1alpha1
+kind: WorkflowTemplate
+metadata:
+  name: solver
+  annotations:
+    thoth-station.ninja/template-version: 0.10.0-dev
+  labels:
+    app: thoth
+    component: solver
+spec:
+  templates:
+    - name: solve
+      inputs:
+        parameters:
+          - name: THOTH_LOG_SOLVER
+            value: "1"
+          - name: THOTH_SOLVER_NO_TRANSITIVE
+            value: "2"
+          - name: THOTH_SOLVER_PACKAGES
+            value: "3"
+          - name: THOTH_SOLVER_OUTPUT
+            value: "4"
+          - name: THOTH_SOLVER_INDEXES
+            value: "5"
+      resource:
+        action: create
+        successCondition: status.succeeded == 1
+        manifest: |
+          apiVersion: batch/v1
+          kind: Job
+          metadata:
+            generateName: "{{workflow.name}}-"
+            labels:
+              app: thoth
+              component: solver
+              solver-type: solver-rhel-8.0-py36
+            ownerReferences:
+            - apiVersion: argoproj.io/v1alpha1
+              blockOwnerDeletion: true
+              kind: Workflow
+              name: "{{workflow.name}}"
+              uid: "{{workflow.uid}}"
+          spec:
+            completions: 1
+            template:
+              metadata:
+                generateName: "{{workflow.name}}-solver-"
+                labels:
+                  app: solver
+              spec:
+                containers:
+                  - name: solver
+                    image: solver-rhel-8.0-py36
+                    command: [ "sh", "-c", "env; exit 0" ]
+                    env:
+                      - name: THOTH_SOLVER
+                        value: solver-rhel-8.0-py36
+                      - name: THOTH_LOG_SOLVER
+                        value: "{{inputs.parameters.THOTH_LOG_SOLVER}}"
+                      - name: THOTH_SOLVER_NO_TRANSITIVE
+                        value: "{{inputs.parameters.THOTH_SOLVER_NO_TRANSITIVE}}"
+                      - name: THOTH_SOLVER_PACKAGES
+                        value: "{{inputs.parameters.THOTH_SOLVER_PACKAGES}}"
+                      - name: THOTH_SOLVER_OUTPUT
+                        value: "{{inputs.parameters.THOTH_SOLVER_OUTPUT}}"
+                      - name: THOTH_SOLVER_INDEXES
+                        value: "{{inputs.parameters.THOTH_SOLVER_INDEXES}}"
+                      - name: SENTRY_DSN
+                        valueFrom:
+                          secretKeyRef:
+                            name: thoth
+                            key: sentry-dsn
+                    resources:
+                      limits:
+                        cpu: 1
+                        memory: 3Gi
+                      requests:
+                        cpu: 1
+                        memory: 3Gi
+                restartPolicy: Never
