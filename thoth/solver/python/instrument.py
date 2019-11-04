@@ -61,7 +61,29 @@ def _get_importlib_metadata_metadata(package_name):
     import importlib_metadata
     import json
 
-    print(json.dumps(dict(importlib_metadata.metadata(package_name).items())))
+    result = dict(importlib_metadata.metadata(package_name).items())
+
+    # As metadata are encoded as email.message, it's not possible to implicitly expose information about which keys
+    # keep multiple values and which are single-value. Let's explicitly maintain a list for metadata keys that
+    # are arrays:
+    #    https://packaging.python.org/specifications/core-metadata
+    keys = frozenset((
+        "Platform",
+        "Supported-Platform",
+        "Classifier",
+        "Provides-Dist",
+        "Requires-Dist",
+        "Requires-External",
+        "Project-URL",
+        "Provides-Extra",
+    ))
+    for key in keys:
+        value = importlib_metadata.metadata(package_name).get_all(key)
+        if value:
+            # Override the previous one (single value) with array.
+            result[key] = value
+
+    print(json.dumps(result))
     sys.exit(0)
 
 
