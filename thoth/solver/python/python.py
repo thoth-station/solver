@@ -306,7 +306,12 @@ def _do_resolve_index(
         resolved_versions = _resolve_versions(solver, source, dependency.name, version_spec)
         if not resolved_versions:
             _LOGGER.warning("No versions were resolved for dependency %r in version %r", dependency.name, version_spec)
-            unresolved.append({"package_name": dependency.name, "version_spec": version_spec, "index_url": index_url})
+            unresolved.append({
+                "package_name": dependency.name,
+                "version_spec": version_spec,
+                "index_url": index_url,
+                "is_provided": dependency.name in source.get_packages(),
+            })
         else:
             for version in resolved_versions:
                 entry = (dependency.name, version)
