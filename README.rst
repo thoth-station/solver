@@ -111,7 +111,7 @@ interesting parts of the output using JSONPath:
 * ``.result.tree[*].sha256`` - sha256 digests of artifacts present on the given Python package index
 * ``.result.tree[*].importlib_metadata`` - metadata associated with the given package, these metadata are obtained using `importlib-metadata <https://pypi.org/project/importlib-metadata/>`_, fallback to standard `importlib.metadata <https://docs.python.org/3.9/library/importlib.metadata.html>`_ on Python3.9+
 
-  * ``.result.tree[*].importlib_metadata.metadata`` - package metadata
+  * ``.result.tree[*].importlib_metadata.metadata`` - package metadata - see `packaging docs for more info <https://packaging.python.org/specifications/core-metadata/>`_
   * ``.result.tree[*].importlib_metadata.requires`` - raw strings which declare the given Python package requirements as obtained by ``importlib_metadata.requires``
   * ``.result.tree[*].importlib_metadata.version`` - version as obtained by ``importlib_metadata.requires``
   * ``.result.tree[*].importlib_metadata.files`` - file information about the given package (additionally parsed to provide digest, file size and path) as obtained by ``importlib_metadata.files``
@@ -165,15 +165,55 @@ interesting parts of the output using JSONPath:
       "metadata": {
         "Author": "Google Inc.",
         "Author-email": "packages@tensorflow.org",
-        "Classifier": "Topic :: Software Development :: Libraries :: Python Modules",
+        "Classifier": [
+          "Development Status :: 5 - Production/Stable",
+          "Intended Audience :: Developers",
+          "Intended Audience :: Education",
+          "Intended Audience :: Science/Research",
+          "License :: OSI Approved :: Apache Software License",
+          "Programming Language :: Python :: 2",
+          "Programming Language :: Python :: 2.7",
+          "Programming Language :: Python :: 3",
+          "Programming Language :: Python :: 3.4",
+          "Programming Language :: Python :: 3.5",
+          "Programming Language :: Python :: 3.6",
+          "Programming Language :: Python :: 3.7",
+          "Topic :: Scientific/Engineering",
+          "Topic :: Scientific/Engineering :: Mathematics",
+          "Topic :: Scientific/Engineering :: Artificial Intelligence",
+          "Topic :: Software Development",
+          "Topic :: Software Development :: Libraries",
+          "Topic :: Software Development :: Libraries :: Python Modules"
+        ],
         "Download-URL": "https://github.com/tensorflow/tensorflow/tags",
         "Home-page": "https://www.tensorflow.org/",
         "Keywords": "tensorflow tensor machine learning",
         "License": "Apache 2.0",
         "Metadata-Version": "2.1",
         "Name": "tensorflow",
-        "Platform": "UNKNOWN",
-        "Requires-Dist": "enum34 (>=1.1.6) ; python_version < \"3.4\"",
+        "Platform": [
+          "UNKNOWN"
+        ],
+        "Requires-Dist": [
+          "absl-py (>=0.7.0)",
+          "astor (>=0.6.0)",
+          "gast (==0.2.2)",
+          "google-pasta (>=0.1.6)",
+          "keras-applications (>=1.0.8)",
+          "keras-preprocessing (>=1.0.5)",
+          "numpy (<2.0,>=1.16.0)",
+          "opt-einsum (>=2.3.2)",
+          "six (>=1.10.0)",
+          "protobuf (>=3.6.1)",
+          "tensorboard (<2.1.0,>=2.0.0)",
+          "tensorflow-estimator (<2.1.0,>=2.0.0)",
+          "termcolor (>=1.1.0)",
+          "wrapt (>=1.11.1)",
+          "grpcio (>=1.8.6)",
+          "wheel (>=0.26)",
+          "backports.weakref (>=1.0rc1) ; python_version < \"3.4\"",
+          "enum34 (>=1.1.6) ; python_version < \"3.4\""
+        ],
         "Summary": "TensorFlow is an open source machine learning framework for everyone.",
         "Version": "2.0.0"
       },
