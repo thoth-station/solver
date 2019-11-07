@@ -418,10 +418,10 @@ def resolve(requirements, index_urls, python_version, exclude_packages, transiti
     if not virtualenv:
         run_command("virtualenv -p " + python_bin + " venv")
         python_bin = os.path.join("venv", "bin", python_bin)
+        run_command("{} -m pip install pipdeptree".format(python_bin))
     else:
         python_bin = os.path.join(virtualenv, "bin", python_bin)
 
-    run_command("{} -m pip install pipdeptree".format(python_bin))
     environment_packages = get_environment_packages(python_bin)
 
     result = {

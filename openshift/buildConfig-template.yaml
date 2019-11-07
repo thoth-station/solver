@@ -86,7 +86,7 @@ objects:
           USER solver
 
           # Prepare virtual environment for the solver.
-          RUN virtualenv -p python3.7 venv
+          RUN virtualenv -p python3.7 venv && venv/bin/python3 -m pip install pipdeptree
         type: Git
         git:
           uri: ${GITHUB_URL}
@@ -164,7 +164,7 @@ objects:
           USER solver
 
           # Prepare virtual environment for the solver.
-          RUN virtualenv -p python3.6 venv
+          RUN virtualenv -p python3.6 venv && venv/bin/python3 -m pip install pipdeptree
 
           ENTRYPOINT ["thoth-solver"]
           CMD ["python"]
@@ -239,7 +239,7 @@ objects:
           USER solver
 
           # Prepare virtual environment for the solver.
-          RUN virtualenv -p python3.6 venv
+          RUN virtualenv -p python3.6 venv && venv/bin/python3 -m pip install pipdeptree
         type: Git
         git:
           uri: ${GITHUB_URL}
@@ -308,7 +308,7 @@ objects:
           USER solver
 
           # Prepare virtual environment for the solver.
-          RUN virtualenv -p python3.6 venv
+          RUN virtualenv -p python3.6 venv && venv/bin/python3 -m pip install pipdeptree
 
           CMD ["python"]
           ENTRYPOINT ["thoth-solver"]
