@@ -18,9 +18,9 @@
 """Exception hierarchy used in thoth-solver."""
 
 
-class ThothSolverExceptionBase(Exception):
-    """Top level solver exception in thoth-solver hierarchy."""
+class SolverException(Exception):
+    """Exception to be raised in Solver."""
 
 
-class ThothPipCompileError(ThothSolverExceptionBase):
-    """Exception raised by pip-compile."""
+class NoReleasesFound(SolverException):
+    """Exception raised if no releases were found for the given package."""

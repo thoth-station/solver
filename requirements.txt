@@ -1,9 +1,9 @@
+attr
 autopep8
 click
 importlib-metadata
 packaging
 pipdeptree
-pip-tools
 requests
 thoth-analyzer
 thoth-common

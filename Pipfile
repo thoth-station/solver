@@ -4,23 +4,26 @@ verify_ssl = true
 name = "pypi"
 
 [packages]
-click = "*"
-virtualenv = "*"
-pipdeptree = "*"
-thoth-analyzer = "*"
-pip-tools = "*"
-thoth-common = "*"
+attr = "*"
 "autopep8" = "*"
-requests = "*"
-thoth-python = "*"
+click = "*"
 importlib-metadata = "*"
 packaging = "*"
+pipdeptree = "*"
+requests = "*"
+thoth-analyzer = "*"
+thoth-common = "*"
+thoth-python = "*"
+virtualenv = "*"
 
 [dev-packages]
 pytest = "*"
 pytest-timeout = "*"
 pytest-cov = "*"
 pytest-venv = "*"
+mypy = "*"
+typeshed = "*"
+pytest-mypy = "*"
 
 [requires]
 python_version = "3.6"
