@@ -106,6 +106,8 @@ objects:
                   value: "${THOTH_SOLVER_OUTPUT}"
                 - name: THOTH_SOLVER_INDEXES
                   value: "${THOTH_SOLVER_INDEXES}"
+                - name: THOTH_SOLVER_VIRTUALENV
+                  value: "/home/solver/venv"
                 - name: SENTRY_DSN
                   valueFrom:
                     secretKeyRef:

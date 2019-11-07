@@ -20,7 +20,7 @@
 from collections import deque
 from contextlib import contextmanager
 import logging
-import typing
+import os
 from shlex import quote
 from urllib.parse import urlparse
 
@@ -409,16 +409,19 @@ def _do_resolve_index(python_bin, solver, all_solvers, requirements, exclude_pac
     return {"tree": packages, "errors": errors, "unparsed": unparsed, "unresolved": unresolved}
 
 
-def resolve(requirements, index_urls, python_version, exclude_packages, transitive):
-    # type: (List[str], List[str], int, Optional[Set[str]], bool) -> Dict[str, Any]
+def resolve(requirements, index_urls, python_version, exclude_packages, transitive, virtualenv):
+    # type: (List[str], List[str], int, Optional[Set[str]], bool, Optional[str]) -> Dict[str, Any]
     """Resolve given requirements for the given Python version."""
     assert python_version in (2, 3), "Unknown Python version"
 
     python_bin = "python3" if python_version == 3 else "python2"
-    run_command("virtualenv -p python3 venv")
-    python_bin = "venv/bin/" + python_bin
+    if not virtualenv:
+        run_command("virtualenv -p " + python_bin + " venv")
+        python_bin = os.path.join("venv", "bin", python_bin)
+        run_command("{} -m pip install pipdeptree".format(python_bin))
+    else:
+        python_bin = os.path.join(virtualenv, "bin", python_bin)
 
-    run_command("{} -m pip install pipdeptree".format(python_bin))
     environment_packages = get_environment_packages(python_bin)
 
     result = {
