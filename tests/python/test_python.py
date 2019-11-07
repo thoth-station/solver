@@ -14,20 +14,18 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
+# type: ignore
 
 """Test solver for Python ecosystem."""
 
-import os
 import pytest
 import json
 from pathlib import Path
 from base import SolverTestCase
-from urllib.parse import urlparse
-from urllib.parse import parse_qs
 
 from thoth.solver.python.python import extract_metadata
 from thoth.solver.python.python import parse_requirement_str
-from thoth.solver.python.python import pipdeptree
+from thoth.solver.python.python import _pipdeptree as pipdeptree
 from thoth.solver.python.python import get_environment_packages
 
 

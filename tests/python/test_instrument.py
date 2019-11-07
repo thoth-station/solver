@@ -14,6 +14,7 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
+# type: ignore
 
 """Test instrumentation inside a virtual environment."""
 
@@ -95,7 +96,7 @@ class TestInstrument(SolverTestCase):
                 "Programming Language :: Python :: 3.4",
                 "Programming Language :: Python :: 3.5",
                 "Programming Language :: Python :: 3.6",
-                "Programming Language :: Python :: 3.7"
+                "Programming Language :: Python :: 3.7",
             ],
             "Home-page": "https://palletsprojects.com/p/click/",
             "License": "BSD",
@@ -107,7 +108,7 @@ class TestInstrument(SolverTestCase):
             "Project-URL": [
                 "Documentation, https://click.palletsprojects.com/",
                 "Code, https://github.com/pallets/click",
-                "Issue tracker, https://github.com/pallets/click/issues"
+                "Issue tracker, https://github.com/pallets/click/issues",
             ],
             "Requires-Python": ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*",
             "Summary": "Composable command line interface toolkit",
@@ -142,6 +143,7 @@ class TestInstrument(SolverTestCase):
     def test_package_clash(self, venv):
         """Test packages which are dependencies of this solver do not affect results of data gathering."""
         import click
+
         assert click.__version__ != "3.0"
         venv.install("click==3.0")
         discovered_metadata = get_package_metadata(venv.python, "click")
