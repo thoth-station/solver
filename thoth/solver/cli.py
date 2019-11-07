@@ -103,6 +103,14 @@ def cli(ctx=None, verbose=0):
     envvar="THOTH_SOLVER_NO_TRANSITIVE",
     help="Do not check transitive dependencies, run only on provided requirements.",
 )
+@click.option(
+    "--virtualenv",
+    type=str,
+    required=False,
+    envvar="THOTH_SOLVER_VIRTUALENV",
+    metavar="VENV",
+    help="Virtual environment to be used - if not provided a new one is created in the current directory.",
+)
 def python(
     click_ctx,
     requirements,
@@ -112,6 +120,7 @@ def python(
     output=None,
     no_transitive=True,
     no_pretty=False,
+    virtualenv=None,
 ):
     """Manipulate with dependency requirements using PyPI."""
     start_time = time.monotonic()
@@ -127,6 +136,7 @@ def python(
         python_version=int(python_version),
         transitive=not no_transitive,
         exclude_packages=set(map(str.strip, (exclude_packages or "").split(","))),
+        virtualenv=virtualenv,
     )
     print_command_result(
         click_ctx,
