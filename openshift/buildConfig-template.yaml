@@ -81,8 +81,8 @@ objects:
           rm -rf ${THOTH_SOLVER_TMP_DIR} &&\
           unset THOTH_SOLVER_TMP_DIR &&\
           dnf clean all &&\
-          virtualenv -p python3.7 venv &&\
-          venv/bin/python3 -m pip install pipdeptree &&\
+          virtualenv -p python3.7 /home/solver/venv &&\
+          /home/solver/venv/bin/python3 -m pip install pipdeptree &&\
           chmod 777 /home/solver
 
           WORKDIR /home/solver
@@ -158,8 +158,8 @@ objects:
             rm -rf ${THOTH_SOLVER_TMP_DIR} &&\
             unset THOTH_SOLVER_TMP_DIR &&\
             dnf clean all &&\
-            virtualenv -p python3.6 venv &&\
-            venv/bin/python3 -m pip install pipdeptree &&\
+            virtualenv -p python3.6 /home/solver/venv &&\
+            /home/solver/venv/bin/python3 -m pip install pipdeptree &&\
             chmod 777 /home/solver
 
           WORKDIR /home/solver
@@ -233,8 +233,8 @@ objects:
           rm -rf ${THOTH_SOLVER_TMP_DIR} &&\
           unset THOTH_SOLVER_TMP_DIR &&\
           dnf clean all &&\
-          virtualenv -p python3.6 venv &&\
-          venv/bin/python3 -m pip install pipdeptree &&\
+          virtualenv -p python3.6 /home/solver/venv &&\
+          /home/solver/venv/bin/python3 -m pip install pipdeptree &&\
           chmod 777 /home/solver
 
           WORKDIR /home/solver
@@ -303,8 +303,8 @@ objects:
               cd / &&\
               rm -rf ${THOTH_SOLVER_TMP_DIR} &&\
               unset THOTH_SOLVER_TMP_DIR &&\
-              virtualenv -p python3.6 venv &&\
-              venv/bin/python3 -m pip install pipdeptree &&\
+              virtualenv -p python3.6 /home/solver/venv &&\
+              /home/solver/venv/bin/python3 -m pip install pipdeptree &&\
               chmod -R 777 /home/solver
 
           WORKDIR /home/solver
