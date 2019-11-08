@@ -23,7 +23,7 @@ from .python import PythonReleasesFetcher
 from .python import PythonSolver
 from .python import resolve
 
-__version__ = "1.3.0"
+__version__ = "1.4.0"
 __title__ = "thoth-solver"
 __author__ = "Fridolin Pokorny"
 

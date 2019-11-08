@@ -84,3 +84,51 @@
 * Be more precise with the exception raised
 * :pushpin: Automatic update of dependency thoth-common from 0.9.3 to 0.9.4
 * :pushpin: Automatic update of dependency pip-tools from 3.8.0 to 3.9.0
+
+## Release 1.4.0 (2019-11-08T11:54:53)
+* Add README metadata based on the current implementation
+* Move also pipdeptree installation into a pre-built virtualenv
+* Provide an option to pass pre-built virtualenvironment
+* Rewrite solver to use packaging instead of pip internals
+* Provide information if the given package was found on the index
+* Aggregate information which is a list of strings
+* Lower requests for running solver jobs
+* Remove ttl configuration for cleanup
+* updated templates with annotations and param thoth-advise-value
+* :pushpin: Automatic update of dependency pytest from 5.2.1 to 5.2.2
+* Fixing metadata part, missed previously
+* Dot not allowed in container name as per DNS-1123
+* Install py3.6 as base python in f29
+* Updated Imagestream from ubi to rhel
+* Correctly report issues when aggregating metadata for old packages
+* Name Conversion of ubi to rhel 8.0
+* Update the cmd as python in all solver images
+* Update the cmd as python
+* :pushpin: Automatic update of dependency virtualenv from 16.7.6 to 16.7.7
+* :pushpin: Automatic update of dependency thoth-python from 0.6.4 to 0.6.5
+* :pushpin: Automatic update of dependency virtualenv from 16.7.5 to 16.7.6
+* :pushpin: Automatic update of dependency pip-tools from 4.1.0 to 4.2.0
+* Be consistent with index_url and package_version
+* Add a test for checks that packages of this solver do not affect the inspected ones
+* Reverse order of imports
+* Log warning if found version does not match the one requested
+* Show more debug messages to debug instrumented virtual environments
+* Show more debug messages to debug instrumented virtual environments
+* Log warning if found version does not match the one requested
+* :pushpin: Automatic update of dependency thoth-common from 0.9.12 to 0.9.14
+* :pushpin: Automatic update of dependency thoth-python from 0.6.3 to 0.6.4
+* :pushpin: Automatic update of dependency pytest-cov from 2.7.1 to 2.8.1
+* :pushpin: Automatic update of dependency pytest from 5.2.0 to 5.2.1
+* :pushpin: Automatic update of dependency thoth-common from 0.9.11 to 0.9.12
+* Adjust testsuite respecting key names
+* Be backwards compatible with older versions of solver
+* Log warning if the given package cannot be parsed
+* Bump solver version
+* Adjust testsuite to be backwards compatible
+* Be backwards compatible with older release
+* Add test for parsing extra and extras
+* Remove responses from requirements
+* Drop subgraph checks
+* Update README file description
+* Adjust testsuite accordingly
+
