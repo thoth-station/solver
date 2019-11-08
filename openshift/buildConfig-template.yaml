@@ -75,6 +75,7 @@ objects:
           COPY ./ ${THOTH_SOLVER_TMP_DIR}
           RUN \
           cd ${THOTH_SOLVER_TMP_DIR} &&\
+          pip3 install --upgrade setuptools pip &&\
           pip3 install . &&\
           cd / &&\
           rm -rf ${THOTH_SOLVER_TMP_DIR} &&\
@@ -228,6 +229,7 @@ objects:
           COPY ./ ${THOTH_SOLVER_TMP_DIR}
           RUN \
           cd ${THOTH_SOLVER_TMP_DIR} &&\
+          pip3 install --upgrade setuptools pip &&\
           pip3 install . &&\
           cd / &&\
           rm -rf ${THOTH_SOLVER_TMP_DIR} &&\
@@ -298,6 +300,7 @@ objects:
           # Install thoth-solver itself
           COPY ./ ${THOTH_SOLVER_TMP_DIR}
           RUN cd ${THOTH_SOLVER_TMP_DIR} &&\
+              pip3 install --upgrade setuptools pip &&\
               pip3 install . &&\
               cd / &&\
               rm -rf ${THOTH_SOLVER_TMP_DIR} &&\
