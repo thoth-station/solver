@@ -14,13 +14,14 @@
 #
 # You should have received a copy of the GNU General Public License
 # along with this program. If not, see <http://www.gnu.org/licenses/>.
+# type: ignore
 
 """Test resolving versions given the version range in Python ecosystem."""
 
 import pytest
 from base import SolverTestCase
-from thoth.python import Source
-from thoth.solver.python.python_solver import PythonSolver
+
+from thoth.solver import get_ecosystem_solver
 
 
 class TestPythonSolver(SolverTestCase):
@@ -28,7 +29,7 @@ class TestPythonSolver(SolverTestCase):
 
     _PYPI_SIMPLE_API_URL = "https://pypi.org/simple"
 
-    _SELINON_VERSIONS = {
+    _SELINON_VERSIONS_ALL = {
         "selinon": {
             ("0.1.0rc2", "https://pypi.org/simple"),
             ("0.1.0rc3", "https://pypi.org/simple"),
@@ -48,15 +49,37 @@ class TestPythonSolver(SolverTestCase):
     }
 
     @pytest.mark.parametrize(
-        "package_specification,resolved_versions,all_versions",
+        "package_specification,resolved_versions",
         [
-            ("selinon<=1.1.0", _SELINON_VERSIONS, True),
-            ("selinon<=1.0.0", {"selinon": {"1.0.0", "https://pypi.org/simple"}}, False),
-            ("tensorflow==2.0.0", {"tensorflow": {("2.0.0", "https://pypi.org/simple")}}, True),
+            (
+                "selinon>=0.1.0rc0,<1.1.0",
+                {
+                    "selinon": {
+                        ("0.1.0rc2", "https://pypi.org/simple"),
+                        ("0.1.0rc3", "https://pypi.org/simple"),
+                        ("0.1.0rc4", "https://pypi.org/simple"),
+                        ("0.1.0rc5", "https://pypi.org/simple"),
+                        ("0.1.0rc6", "https://pypi.org/simple"),
+                        ("0.1.0rc7", "https://pypi.org/simple"),
+                        ("0.1.0rc8", "https://pypi.org/simple"),
+                        ("0.1.0rc9", "https://pypi.org/simple"),
+                        ("1.0.0rc1", "https://pypi.org/simple"),
+                        ("1.0.0rc2", "https://pypi.org/simple"),
+                        ("1.0.0rc3", "https://pypi.org/simple"),
+                        ("1.0.0rc4", "https://pypi.org/simple"),
+                        ("1.0.0", "https://pypi.org/simple"),
+                    }
+                },
+            ),
+            (
+                "selinon<=1.1.0",
+                {"selinon": {("1.0.0", "https://pypi.org/simple"), ("1.1.0", "https://pypi.org/simple")}},
+            ),
+            ("tensorflow==2.0.0", {"tensorflow": {("2.0.0", "https://pypi.org/simple")}}),
         ],
     )
-    def test_solve_dependencies(self, package_specification, resolved_versions, all_versions):
-        solver = PythonSolver(fetcher_kwargs={"source": Source(self._PYPI_SIMPLE_API_URL)})
-        test_resolved_versions = solver.solve([package_specification], all_versions=all_versions)
+    def test_solve_dependencies(self, package_specification, resolved_versions):
+        solver = get_ecosystem_solver("pypi")
+        test_resolved_versions = solver.solve([package_specification])
         test_resolved_versions = {k: set(v) for k, v in test_resolved_versions.items()}
         assert test_resolved_versions == resolved_versions

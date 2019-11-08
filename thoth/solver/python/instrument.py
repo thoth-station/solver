@@ -28,12 +28,19 @@ import inspect
 import sys
 import shlex
 import logging
+
 from thoth.analyzer import run_command
+
+from .._typing import MYPY_CHECK_RUNNING
+
+if MYPY_CHECK_RUNNING:  # pragma: no cover
+    from typing import Dict, Any, Optional, Callable, Union
+
 
 _LOGGER = logging.getLogger(__name__)
 
 
-def _find_distribution_name(package_name):
+def _find_distribution_name(package_name):  # type: (str) -> None
     """Find the given distribution based on package name and print out distribution's project name.
 
     For example, `backports-weakref' has distribution's project nmae `backports.weakref'. This is also
@@ -53,9 +60,10 @@ def _find_distribution_name(package_name):
     sys.exit(1)
 
 
-def _get_importlib_metadata_metadata(package_name):
+def _get_importlib_metadata_metadata(package_name):  # type: (str) -> None
     """"Retrieve all the metadata for the given package."""
     import sys
+
     sys.path = sys.path[::-1]
 
     import importlib_metadata
@@ -67,16 +75,18 @@ def _get_importlib_metadata_metadata(package_name):
     # keep multiple values and which are single-value. Let's explicitly maintain a list for metadata keys that
     # are arrays:
     #    https://packaging.python.org/specifications/core-metadata
-    keys = frozenset((
-        "Platform",
-        "Supported-Platform",
-        "Classifier",
-        "Provides-Dist",
-        "Requires-Dist",
-        "Requires-External",
-        "Project-URL",
-        "Provides-Extra",
-    ))
+    keys = frozenset(
+        (
+            "Platform",
+            "Supported-Platform",
+            "Classifier",
+            "Provides-Dist",
+            "Requires-Dist",
+            "Requires-External",
+            "Project-URL",
+            "Provides-Extra",
+        )
+    )
     for key in keys:
         value = importlib_metadata.metadata(package_name).get_all(key)
         if value:
@@ -87,9 +97,10 @@ def _get_importlib_metadata_metadata(package_name):
     sys.exit(0)
 
 
-def _get_importlib_metadata_version(package_name):
+def _get_importlib_metadata_version(package_name):  # type: (str) -> None
     """"Retrieve version based for the given package."""
     import sys
+
     sys.path = sys.path[::-1]
 
     import importlib_metadata
@@ -98,9 +109,10 @@ def _get_importlib_metadata_version(package_name):
     sys.exit(0)
 
 
-def _get_importlib_metadata_requires(package_name):
+def _get_importlib_metadata_requires(package_name):  # type: (str) -> None
     """"Retrieve requires based for the given package."""
     import sys
+
     sys.path = sys.path[::-1]
 
     import importlib_metadata
@@ -110,9 +122,10 @@ def _get_importlib_metadata_requires(package_name):
     sys.exit(0)
 
 
-def _get_importlib_metadata_entry_points(package_name):
+def _get_importlib_metadata_entry_points(package_name):  # type: (str) -> None
     """Retrieve information about entry-points for the given package."""
     import sys
+
     sys.path = sys.path[::-1]
 
     import importlib_metadata
@@ -123,9 +136,10 @@ def _get_importlib_metadata_entry_points(package_name):
     sys.exit(0)
 
 
-def _get_importlib_metadata_files(package_name):
+def _get_importlib_metadata_files(package_name):  # type: (str) -> None
     """Retrieve information about files present for the given package."""
     import sys
+
     sys.path = sys.path[::-1]
 
     from importlib_metadata import files
@@ -139,7 +153,15 @@ def _get_importlib_metadata_files(package_name):
     sys.exit(0)
 
 
-def execute_env_function(python_bin, function, *, env=None, raise_on_error=True, is_json=False, **function_arguments):
+def execute_env_function(
+    python_bin,  # type: str
+    function,  # type: Callable[[Any], None]
+    *,
+    env=None,  # type: Optional[Dict[str, str]]
+    raise_on_error=True,  # type: bool
+    is_json=False,  # type: bool
+    **function_arguments,  # type: Any
+):  # type: (...) -> Optional[Union[str, Dict[str, Any]]]
     """Execute the given function in Python interpreter."""
     kwargs = ""
     for argument, value in function_arguments.items():
@@ -160,13 +182,15 @@ def execute_env_function(python_bin, function, *, env=None, raise_on_error=True,
         raise ValueError("Failed to successfully execute function in Python interpreter: {}".format(res.stderr))
 
     if res.return_code == 0:
-        return res.stdout
+        stdout = res.stdout  # type: Union[str, Dict[str, Any]]
+        return stdout
 
     _LOGGER.error("Failed to successfully execute function in Python interpreter: %r", res.stderr)
     return None
 
 
 def get_package_metadata(python_bin, package_name):
+    # type: (str, str) -> Dict[str, Any]
     """Get metadata information from the installed package."""
     # A simple trick when running importlib_metadata - importlib_metadata is present as
     # a dependency of this package, but it is not installed in the created virtual environment.
@@ -213,7 +237,7 @@ def get_package_metadata(python_bin, package_name):
     }
 
 
-def find_distribution_name(python_bin, package_name):
+def find_distribution_name(python_bin, package_name):  # type: (str, str) -> str
     """Find distribution name based on the package name."""
-    result = execute_env_function(python_bin, _find_distribution_name, package_name=package_name)
+    result = str(execute_env_function(python_bin, _find_distribution_name, package_name=package_name))
     return result
