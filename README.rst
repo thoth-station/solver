@@ -306,13 +306,6 @@ specification, specifically the following section:
 Installation and Deployment
 ===========================
 
-.. code-block:: console
-
-  git clone git@github.com:thoth-station/solver.git thoth-solver
-  cd thoth-solver
-  PYTHONPATH='.' ./thoth-solver-cli --help
-
-
 This project is also released on
 `PyPI <https://pypi.org/project/thoth-solver>`_, so the latest release can be
 installed via pip or `Pipenv <https://pipenv.readthedocs.io>`_:
@@ -327,3 +320,27 @@ the ``openshift/`` directory present in the root of `solver's Git repository
 <https://github.com/thoth-station/solver>`_. The actual deployment is done
 using Ansible playbooks available in the `Thoth's core repository
 <https://github.com/thoth-station/core>`_.
+
+
+Running solver locally
+======================
+
+To run solver locally, first clone the repo and install the project:
+
+.. code-block:: console
+
+  git clone git@github.com:thoth-station/solver.git thoth-solver
+  cd thoth-solver
+  pipenv install --dev
+  PYTHONPATH='.' ./thoth-solver-cli --help
+
+Now you can run the solver:
+
+.. code-block:: console
+
+  pipenv run python3 ./thoth-solver --verbose python -r 'selinon==1.0.0' -i https://pypi.org/simple --no-transitive
+
+Follow follow the developer's guide docs to get `more
+information about developer's setup
+<https://github.com/thoth-station/thoth/blob/master/docs/developers_guide.rst>`_
+if you plan to develop this utility.
