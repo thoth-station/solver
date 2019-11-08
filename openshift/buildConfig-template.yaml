@@ -81,13 +81,12 @@ objects:
           rm -rf ${THOTH_SOLVER_TMP_DIR} &&\
           unset THOTH_SOLVER_TMP_DIR &&\
           dnf clean all &&\
+          virtualenv -p python3.7 venv &&\
+          venv/bin/python3 -m pip install pipdeptree &&\
           chmod 777 /home/solver
 
           WORKDIR /home/solver
           USER solver
-
-          # Prepare virtual environment for the solver.
-          RUN virtualenv -p python3.7 venv && venv/bin/python3 -m pip install pipdeptree
         type: Git
         git:
           uri: ${GITHUB_URL}
@@ -159,13 +158,12 @@ objects:
             rm -rf ${THOTH_SOLVER_TMP_DIR} &&\
             unset THOTH_SOLVER_TMP_DIR &&\
             dnf clean all &&\
+            virtualenv -p python3.6 venv &&\
+            venv/bin/python3 -m pip install pipdeptree &&\
             chmod 777 /home/solver
 
           WORKDIR /home/solver
           USER solver
-
-          # Prepare virtual environment for the solver.
-          RUN virtualenv -p python3.6 venv && venv/bin/python3 -m pip install pipdeptree
 
           ENTRYPOINT ["thoth-solver"]
           CMD ["python"]
@@ -235,13 +233,13 @@ objects:
           rm -rf ${THOTH_SOLVER_TMP_DIR} &&\
           unset THOTH_SOLVER_TMP_DIR &&\
           dnf clean all &&\
+          virtualenv -p python3.6 venv &&\
+          venv/bin/python3 -m pip install pipdeptree &&\
           chmod 777 /home/solver
 
           WORKDIR /home/solver
           USER solver
 
-          # Prepare virtual environment for the solver.
-          RUN virtualenv -p python3.6 venv && venv/bin/python3 -m pip install pipdeptree
         type: Git
         git:
           uri: ${GITHUB_URL}
@@ -304,14 +302,13 @@ objects:
               pip3 install . &&\
               cd / &&\
               rm -rf ${THOTH_SOLVER_TMP_DIR} &&\
-              unset THOTH_SOLVER_TMP_DIR
+              unset THOTH_SOLVER_TMP_DIR &&\
+              virtualenv -p python3.6 venv &&\
+              venv/bin/python3 -m pip install pipdeptree &&\
+              chmod -R 777 /home/solver
 
-          RUN chmod -R 777 /home/solver
           WORKDIR /home/solver
           USER solver
-
-          # Prepare virtual environment for the solver.
-          RUN virtualenv -p python3.6 venv && venv/bin/python3 -m pip install pipdeptree
 
           CMD ["python"]
           ENTRYPOINT ["thoth-solver"]
