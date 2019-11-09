@@ -14,7 +14,7 @@ metadata:
       This is Thoth Solver Fedora 28+ and UBI8 BuildConfig, this template is meant to
       be used by Bots, but could also be used by humans...
     template.openshift.io/provider-display-name: Red Hat, Inc.
-    thoth-station.ninja/template-version: 0.9.0
+    thoth-station.ninja/template-version: 0.9.1
   labels:
     template: solver-buildconfig
     app: thoth
@@ -45,7 +45,7 @@ objects:
     metadata:
       name: solver-fedora-29-py37
       annotations:
-        thoth-station.ninja/template-version: 0.9.0
+        thoth-station.ninja/template-version: 0.9.1
       labels:
         app: thoth
         component: solver
@@ -117,7 +117,7 @@ objects:
     metadata:
       name: solver-fedora-29-py36
       annotations:
-        thoth-station.ninja/template-version: 0.9.0
+        thoth-station.ninja/template-version: 0.9.1
       labels:
         app: thoth
         component: solver
@@ -197,7 +197,7 @@ objects:
     metadata:
       name: solver-fedora-28-py36
       annotations:
-        thoth-station.ninja/template-version: 0.9.0
+        thoth-station.ninja/template-version: 0.9.1
       labels:
         app: thoth
         component: solver
@@ -270,7 +270,7 @@ objects:
     metadata:
       name: "solver-rhel-8.0-py36"
       annotations:
-        thoth-station.ninja/template-version: 0.9.0
+        thoth-station.ninja/template-version: 0.9.1
       labels:
         app: "thoth"
         component: "solver"
@@ -284,7 +284,7 @@ objects:
           name: "solver-rhel-8.0-py36:${IMAGE_STREAM_TAG}"
       source:
         dockerfile: |
-          FROM registry.access.redhat.com/ubi8/python-36:1-24
+          FROM registry.access.redhat.com/ubi8/python-36:1-62
 
           ENV LANG=en_US.UTF-8 \
               THOTH_SOLVER_TMP_DIR='/tmp/thoth-solver-install'
