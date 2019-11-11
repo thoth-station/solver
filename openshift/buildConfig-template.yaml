@@ -75,8 +75,8 @@ objects:
           COPY ./ ${THOTH_SOLVER_TMP_DIR}
           RUN \
           cd ${THOTH_SOLVER_TMP_DIR} &&\
-          pip3 install --upgrade setuptools pip &&\
-          pip3 install . &&\
+          /usr/bin/python3.7 -m pip install --upgrade setuptools pip &&\
+          /usr/bin/python3.7 -m pip install . &&\
           cd / &&\
           rm -rf ${THOTH_SOLVER_TMP_DIR} &&\
           unset THOTH_SOLVER_TMP_DIR &&\
@@ -142,18 +142,11 @@ objects:
             dnf install --setopt=tsflags=nodocs -y python36 python3-pip && \
             mkdir -p ${THOTH_SOLVER_TMP_DIR}
 
-          RUN \
-            PYTHON_LIB_PATH=/usr/lib64/python3.6/site-packages && \
-            rm -fr /usr/bin/python && \
-            ln -s /usr/bin/python3.6 /usr/bin/python && \
-            rm -fr /usr/bin/pip && \
-            ln -s /usr/bin/pip-3 /usr/bin/pip
-
           # Install thoth-solver itself
           COPY ./ ${THOTH_SOLVER_TMP_DIR}
           RUN \
             cd ${THOTH_SOLVER_TMP_DIR} &&\
-            pip install . &&\
+            /usr/bin/python3.6 -m pip install . &&\
             cd / &&\
             rm -rf ${THOTH_SOLVER_TMP_DIR} &&\
             unset THOTH_SOLVER_TMP_DIR &&\
@@ -227,8 +220,8 @@ objects:
           COPY ./ ${THOTH_SOLVER_TMP_DIR}
           RUN \
           cd ${THOTH_SOLVER_TMP_DIR} &&\
-          pip3 install --upgrade setuptools pip &&\
-          pip3 install . &&\
+          /usr/bin/python3.6 -m pip install --upgrade setuptools pip &&\
+          /usr/bin/python3.6 -m pip install . &&\
           cd / &&\
           rm -rf ${THOTH_SOLVER_TMP_DIR} &&\
           unset THOTH_SOLVER_TMP_DIR &&\
@@ -298,8 +291,8 @@ objects:
           # Install thoth-solver itself
           COPY ./ ${THOTH_SOLVER_TMP_DIR}
           RUN cd ${THOTH_SOLVER_TMP_DIR} &&\
-              pip3 install --upgrade setuptools pip &&\
-              pip3 install . &&\
+              /usr/bin/python3.6 -m pip install --upgrade setuptools pip &&\
+              /usr/bin/python3.6 -m pip install . &&\
               cd / &&\
               rm -rf ${THOTH_SOLVER_TMP_DIR} &&\
               unset THOTH_SOLVER_TMP_DIR &&\
