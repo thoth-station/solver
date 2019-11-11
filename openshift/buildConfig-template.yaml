@@ -291,8 +291,8 @@ objects:
           # Install thoth-solver itself
           COPY ./ ${THOTH_SOLVER_TMP_DIR}
           RUN cd ${THOTH_SOLVER_TMP_DIR} &&\
-              pip3 install --upgrade setuptools pip &&\
-              pip3 install . &&\
+              /usr/bin/python3.6 -m pip install --upgrade setuptools pip &&\
+              /usr/bin/python3.6 -m pip install . &&\
               cd / &&\
               rm -rf ${THOTH_SOLVER_TMP_DIR} &&\
               unset THOTH_SOLVER_TMP_DIR &&\
