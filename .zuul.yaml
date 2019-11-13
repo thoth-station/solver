@@ -17,6 +17,26 @@
             vars:
               cluster: "paas.psi.redhat.com"
               namespace: "thoth-test-core"
+              buildConfigName: "solver-fedora-31-py37"
+        - "trigger-build":
+            vars:
+              cluster: "paas.psi.redhat.com"
+              namespace: "thoth-test-core"
+              buildConfigName: "solver-fedora-31-py36"
+        - "trigger-build":
+            vars:
+              cluster: "paas.psi.redhat.com"
+              namespace: "thoth-test-core"
+              buildConfigName: "solver-fedora-30-py37"
+        - "trigger-build":
+            vars:
+              cluster: "paas.psi.redhat.com"
+              namespace: "thoth-test-core"
+              buildConfigName: "solver-fedora-30-py36"
+        - "trigger-build":
+            vars:
+              cluster: "paas.psi.redhat.com"
+              namespace: "thoth-test-core"
               buildConfigName: "solver-fedora-29-py37"
         - "trigger-build":
             vars:
