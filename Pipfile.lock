@@ -200,10 +200,10 @@
         },
         "google-auth": {
             "hashes": [
-                "sha256:8b67e34a07055b9785948ff9d3e044f93be9019f4f69711b04450087ae150817",
-                "sha256:cf60c71698f90177e044c8df1e2915a6da372a99d2af0e236d76c426aaf4f114"
+                "sha256:84105be98837fb8436e9d0bcb7a279fd85fa1d97bb35a077e70ba2fb95bcc983",
+                "sha256:baf1b3f8b29a5f96f66753ad848473699322b63f4d68964e510554b12d002443"
             ],
-            "version": "==1.7.0"
+            "version": "==1.7.1"
         },
         "idna": {
             "hashes": [
@@ -566,10 +566,10 @@
         },
         "thoth-common": {
             "hashes": [
-                "sha256:278f23070ccf462407ed7c5b582431fe7a53c7c414fb4fd87fa851800f282404"
+                "sha256:45e1c4047bd8ea5a18aa0424c2fe613242f9f7c35c58d47921f692537f8e6568"
             ],
             "index": "pypi",
-            "version": "==0.9.15"
+            "version": "==0.9.16"
         },
         "thoth-python": {
             "hashes": [
