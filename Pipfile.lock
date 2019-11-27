@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "1264ff2123211df1f3f9c39e1882cdee55bb6cb82d1874cb88d7e19182989ef1"
+            "sha256": "027caf0c74193c6bf02aa1214a845b5051f1fb56141a5281c73dd35232feb918"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -532,10 +532,10 @@
         },
         "sentry-sdk": {
             "hashes": [
-                "sha256:e3302e8df82e68599eeeef564f08d15aa62efc1cb013d8e1cccc5bf526d375a4",
-                "sha256:e795f1744066493f9e1eb3d17e0ee19a042a45789b9edd9f553b8b61bc8d399e"
+                "sha256:a7c2c8d3f53b6b57454830cd6a4b73d272f1ba91952f59e6545b3cf885f3c22f",
+                "sha256:bfc486af718c268cf49ff43d6334ed4db7333ace420240b630acdd8f8a3a8f60"
             ],
-            "version": "==0.13.3"
+            "version": "==0.13.4"
         },
         "six": {
             "hashes": [
@@ -545,12 +545,8 @@
             "version": "==1.13.0"
         },
         "thoth-analyzer": {
-            "hashes": [
-                "sha256:2748dac8497c479ba7c17a82ea449082484f9222d4a385ad1e894904d85b51e3",
-                "sha256:535b6295019a16c538ba614f0fb92d258a6de6503eb626c3b9fe55554d32d648"
-            ],
-            "index": "pypi",
-            "version": "==0.1.4"
+            "git": "https://github.com/fridex/analyzer",
+            "ref": "d821036805df25249053971ade3bc39dc890349a"
         },
         "thoth-common": {
             "hashes": [

@@ -11,7 +11,7 @@ importlib-metadata = "*"
 packaging = "*"
 pipdeptree = "*"
 requests = "*"
-thoth-analyzer = "*"
+thoth-analyzer = {git = "https://github.com/fridex/analyzer",ref = "document-id"}
 thoth-common = "*"
 thoth-python = "*"
 virtualenv = "*"
