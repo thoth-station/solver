@@ -47,6 +47,10 @@ parameters:
     description: "Identifier of a job run."
     displayName: "Job identifier"
     required: true
+  - name: THOTH_DOCUMENT_ID
+    description: "A unique identifier of the resulting document in a Thoth deployment."
+    displayName: "Document identifier"
+    required: true
   - name: THOTH_SOLVER_PACKAGES
     description: "Packages to be resolved"
     displayName: "Packages to be analyzed by solver"
@@ -98,6 +102,8 @@ objects:
                   value: solver-rhel-8.0-py36
                 - name: THOTH_LOG_SOLVER
                   value: "${THOTH_LOG_SOLVER}"
+                - name: THOTH_DOCUMENT_ID
+                  value: "${THOTH_DOCUMENT_ID}"
                 - name: THOTH_SOLVER_NO_TRANSITIVE
                   value: "${THOTH_SOLVER_NO_TRANSITIVE}"
                 - name: THOTH_SOLVER_PACKAGES
