@@ -38,6 +38,11 @@ parameters:
     description: "A comma separated list of indexes to scan during solver run"
     displayName: "Python Package Indexes"
     value: ""
+  - name: THOTH_FORCE_SYNC
+    description: Perform force sync - sync data even if they are reported to be existing
+    displayName: Perform force sync
+    required: true
+    value: "0"
   - name: THOTH_LOG_SOLVER
     description: "Log solver actions"
     displayName: "Log solver actions"
