@@ -50,103 +50,103 @@ parameters:
     value: INFO
 
 objects:
-  apiVersion: argoproj.io/v1alpha1
-  kind: Workflow
-  metadata:
-    generateName: solver-
-    annotations:
-      thoth-station.ninja/template-version: 0.10.0-dev
-    labels:
-      app: thoth
-      component: solver
-  spec:
-    serviceAccountName: argo
-    entrypoint: solve-and-sync
-    arguments:
-      parameters:
-        - name: "THOTH_SOLVER_NAME"
-          value: "${THOTH_SOLVER_NAME}"
-        - name: "THOTH_SOLVER_WORKFLOW_ID"
-          value: "${THOTH_SOLVER_WORKFLOW_ID}"
-        - name: "THOTH_LOG_SOLVER"
-          value: "${THOTH_LOG_SOLVER}"
-        - name: "THOTH_SOLVER_NO_TRANSITIVE"
-          value: "${THOTH_SOLVER_NO_TRANSITIVE}"
-        - name: "THOTH_SOLVER_PACKAGES"
-          value: "${THOTH_SOLVER_PACKAGES}"
-        - name: "THOTH_SOLVER_INDEXES"
-          value: "${THOTH_SOLVER_INDEXES}"
-        - name: "THOTH_FORCE_SYNC"
-          value: "${THOTH_FORCE_SYNC}"
-    volumes:
-      - name: workdir
-        emptyDir: {}
-    templates:
-      - name: "solve-and-sync"
-        archiveLocation:
-          archiveLogs: true
-        dag:
-          tasks:
-            - name: "solverrhel80py36"
-              templateRef:
-                name: "solver-rhel-8.0-py36"
-                template: "solve"
-              arguments:
-                parameters:
-                  - name: "THOTH_SOLVER_DOCUMENT_ID"
-                    value: >
-                      "solver-{{workflow.parameters.THOTH_SOLVER_NAME}}-{{workflow.parameters.THOTH_SOLVER_WORKFLOW_ID}}"
-                  - name: "THOTH_LOG_SOLVER"
-                    value: "{{workflow.parameters.THOTH_LOG_SOLVER}}"
-                  - name: "THOTH_SOLVER_NO_TRANSITIVE"
-                    value: "{{workflow.parameters.THOTH_SOLVER_NO_TRANSITIVE}}"
-                  - name: "THOTH_SOLVER_PACKAGES"
-                    value: "{{workflow.parameters.THOTH_SOLVER_PACKAGES}}"
-                  - name: "THOTH_SOLVER_INDEXES"
-                    value: "{{workflow.parameters.THOTH_SOLVER_INDEXES}}"
+  - apiVersion: argoproj.io/v1alpha1
+    kind: Workflow
+    metadata:
+      generateName: solver-
+      annotations:
+        thoth-station.ninja/template-version: 0.10.0-dev
+      labels:
+        app: thoth
+        component: solver
+    spec:
+      serviceAccountName: argo
+      entrypoint: solve-and-sync
+      arguments:
+        parameters:
+          - name: "THOTH_SOLVER_NAME"
+            value: "${THOTH_SOLVER_NAME}"
+          - name: "THOTH_SOLVER_WORKFLOW_ID"
+            value: "${THOTH_SOLVER_WORKFLOW_ID}"
+          - name: "THOTH_LOG_SOLVER"
+            value: "${THOTH_LOG_SOLVER}"
+          - name: "THOTH_SOLVER_NO_TRANSITIVE"
+            value: "${THOTH_SOLVER_NO_TRANSITIVE}"
+          - name: "THOTH_SOLVER_PACKAGES"
+            value: "${THOTH_SOLVER_PACKAGES}"
+          - name: "THOTH_SOLVER_INDEXES"
+            value: "${THOTH_SOLVER_INDEXES}"
+          - name: "THOTH_FORCE_SYNC"
+            value: "${THOTH_FORCE_SYNC}"
+      volumes:
+        - name: workdir
+          emptyDir: {}
+      templates:
+        - name: "solve-and-sync"
+          archiveLocation:
+            archiveLogs: true
+          dag:
+            tasks:
+              - name: "solverrhel80py36"
+                templateRef:
+                  name: "solver-rhel-8.0-py36"
+                  template: "solve"
+                arguments:
+                  parameters:
+                    - name: "THOTH_SOLVER_DOCUMENT_ID"
+                      value: >
+                        "solver-{{workflow.parameters.THOTH_SOLVER_NAME}}-{{workflow.parameters.THOTH_SOLVER_WORKFLOW_ID}}"
+                    - name: "THOTH_LOG_SOLVER"
+                      value: "{{workflow.parameters.THOTH_LOG_SOLVER}}"
+                    - name: "THOTH_SOLVER_NO_TRANSITIVE"
+                      value: "{{workflow.parameters.THOTH_SOLVER_NO_TRANSITIVE}}"
+                    - name: "THOTH_SOLVER_PACKAGES"
+                      value: "{{workflow.parameters.THOTH_SOLVER_PACKAGES}}"
+                    - name: "THOTH_SOLVER_INDEXES"
+                      value: "{{workflow.parameters.THOTH_SOLVER_INDEXES}}"
 
-            - name: "graph-sync-solverrhel80py36"
-              dependencies:
-                - "solverrhel80py36"
-              templateRef:
-                name: "graph-sync"
-                template: "solver"
-              arguments:
-                artifacts:
-                  - name: solver-document
-                    from: "{{tasks.solverrhel80py36.outputs.artifacts.solver-document}}"
-                parameters:
-                  - name: "THOTH_SOLVER_DOCUMENT_ID"
-                    value: >
-                      "solver-{{workflow.parameters.THOTH_SOLVER_NAME}}-{{workflow.parameters.THOTH_SOLVER_WORKFLOW_ID}}"
-                  - name: "THOTH_FORCE_SYNC"
-                    value: "{{workflow.parameters.THOTH_FORCE_SYNC}}"
+              - name: "graph-sync-solverrhel80py36"
+                dependencies:
+                  - "solverrhel80py36"
+                templateRef:
+                  name: "graph-sync"
+                  template: "solver"
+                arguments:
+                  artifacts:
+                    - name: solver-document
+                      from: "{{tasks.solverrhel80py36.outputs.artifacts.solver-document}}"
+                  parameters:
+                    - name: "THOTH_SOLVER_DOCUMENT_ID"
+                      value: >
+                        "solver-{{workflow.parameters.THOTH_SOLVER_NAME}}-{{workflow.parameters.THOTH_SOLVER_WORKFLOW_ID}}"
+                    - name: "THOTH_FORCE_SYNC"
+                      value: "{{workflow.parameters.THOTH_FORCE_SYNC}}"
 
-            # - name: debug-dump-solver-document
-            #   dependencies:
-            #     - solverrhel80py36
-            #   template: dump-solver-document
-            #   arguments:
-            #     artifacts:
-            #       - name: solver-document
-            #         from: "{{tasks.solverrhel80py36.outputs.artifacts.solver-document}}"
+              # - name: debug-dump-solver-document
+              #   dependencies:
+              #     - solverrhel80py36
+              #   template: dump-solver-document
+              #   arguments:
+              #     artifacts:
+              #       - name: solver-document
+              #         from: "{{tasks.solverrhel80py36.outputs.artifacts.solver-document}}"
 
-      - name: dump-solver-document
-        inputs:
-          artifacts:
-            - name: solver-document
-              path: "/mnt/solver/document/{{workflow.parameters.THOTH_SOLVER_WORKFLOW_ID}}"
-        container:
-          image: "argoproj/argoexec:latest"
-          command: [sh, -c]
-          args:
-            [
-              "cat /mnt/solver/document/{{workflow.parameters.THOTH_SOLVER_WORKFLOW_ID}}",
-            ]
-          resources:
-            limits:
-              cpu: 250m
-              memory: 256Mi
-            requests:
-              cpu: 250m
-              memory: 256Mi
+        - name: dump-solver-document
+          inputs:
+            artifacts:
+              - name: solver-document
+                path: "/mnt/solver/document/{{workflow.parameters.THOTH_SOLVER_WORKFLOW_ID}}"
+          container:
+            image: "argoproj/argoexec:latest"
+            command: [sh, -c]
+            args:
+              [
+                "cat /mnt/solver/document/{{workflow.parameters.THOTH_SOLVER_WORKFLOW_ID}}",
+              ]
+            resources:
+              limits:
+                cpu: 250m
+                memory: 256Mi
+              requests:
+                cpu: 250m
+                memory: 256Mi
