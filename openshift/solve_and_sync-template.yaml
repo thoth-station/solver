@@ -61,6 +61,8 @@ objects:
         component: solver
     spec:
       serviceAccountName: argo
+      podGC:
+        strategy: OnWorkflowSuccess
       entrypoint: solve-and-sync
       arguments:
         parameters:
