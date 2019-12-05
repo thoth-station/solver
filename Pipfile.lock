@@ -351,9 +351,9 @@
         },
         "pyelftools": {
             "hashes": [
-                "sha256:89c6da6f56280c37a5ff33468591ba9a124e17d71fe42de971818cbff46c1b24"
+                "sha256:cc0ea0de82b240a73ef4056fce44acbb4727dca7d66759371aff2bad457ed711"
             ],
-            "version": "==0.25"
+            "version": "==0.26"
         },
         "pyparsing": {
             "hashes": [
@@ -481,11 +481,11 @@
         },
         "thoth-analyzer": {
             "hashes": [
-                "sha256:125a089478059976a20eede8164510ad9a613f52ee4f7bff6883dce096c75bea",
-                "sha256:97d06b802ea7f1b3d4f906fdb870c9bfa5613c519032228d60f05fd504fffd25"
+                "sha256:18be2c475b77abda9e3d96fd5bc0bd7a51c1de30922b6bf43bdaa2e9b528c368",
+                "sha256:af82c5cdc2527cf1aeafcd85cf34a16c542a379c49f3d346a48537122b9136f0"
             ],
             "index": "pypi",
-            "version": "==0.1.5"
+            "version": "==0.1.6"
         },
         "thoth-common": {
             "hashes": [
