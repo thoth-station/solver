@@ -96,9 +96,7 @@ objects:
                 arguments:
                   parameters:
                     - name: "THOTH_SOLVER_DOCUMENT_ID"
-                      value: >-
-                        "solver-{{workflow.parameters.THOTH_SOLVER_NAME}}-"
-                        "{{workflow.parameters.THOTH_SOLVER_WORKFLOW_ID}}"
+                      value: "solver-{{workflow.parameters.THOTH_SOLVER_NAME}}-{{workflow.parameters.THOTH_SOLVER_WORKFLOW_ID}}"
                     - name: "THOTH_LOG_SOLVER"
                       value: "{{workflow.parameters.THOTH_LOG_SOLVER}}"
                     - name: "THOTH_SOLVER_NO_TRANSITIVE"
@@ -120,8 +118,6 @@ objects:
                       from: "{{tasks.solverrhel80py36.outputs.artifacts.solver-document}}"
                   parameters:
                     - name: "THOTH_SOLVER_DOCUMENT_ID"
-                      value: >-
-                        "solver-{{workflow.parameters.THOTH_SOLVER_NAME}}-"
-                        "{{workflow.parameters.THOTH_SOLVER_WORKFLOW_ID}}"
+                      value: "solver-{{workflow.parameters.THOTH_SOLVER_NAME}}-{{workflow.parameters.THOTH_SOLVER_WORKFLOW_ID}}"
                     - name: "THOTH_FORCE_SYNC"
                       value: "{{workflow.parameters.THOTH_FORCE_SYNC}}"
