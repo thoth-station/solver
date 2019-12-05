@@ -98,7 +98,7 @@ def _get_importlib_metadata_metadata(package_name):  # type: (str) -> None
 
 
 def _get_importlib_metadata_version(package_name):  # type: (str) -> None
-    """Retrieve version based for the given package."""
+    """Retrieve version based on the given package."""
     import sys
 
     sys.path = sys.path[::-1]
@@ -110,7 +110,7 @@ def _get_importlib_metadata_version(package_name):  # type: (str) -> None
 
 
 def _get_importlib_metadata_requires(package_name):  # type: (str) -> None
-    """Retrieve requires based for the given package."""
+    """Retrieve requires based on the given package."""
     import sys
 
     sys.path = sys.path[::-1]
