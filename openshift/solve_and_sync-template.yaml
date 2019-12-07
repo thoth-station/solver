@@ -1,0 +1,123 @@
+apiVersion: v1
+kind: Template
+metadata:
+  name: solver
+  annotations:
+    description: "Thoth: Solver Job Template"
+    openshift.io/display-name: "Thoth: Solver"
+    version: 0.10.0-dev
+    tags: thoth,ai-stacks,aistacks,solver,machinlearning
+    template.openshift.io/documentation-url: https://github.com/Thoth-Station/
+    template.openshift.io/long-description: >
+      This template defines resources needed to run solvers in Thoth, it is used
+      to create new OpenShift Jobs running the analyzer.
+    template.openshift.io/provider-display-name: "Red Hat, Inc."
+  labels:
+    template: solver
+    app: thoth
+    component: solver
+
+parameters:
+  - name: THOTH_SOLVER_WORKFLOW_ID
+    description: "a UUID for the workflow instance"
+    displayName: "Workflow UUID"
+    required: true
+  - name: THOTH_SOLVER_NAME
+    description: "Name of the solver to be used, for example: rhel-8.0-py37"
+    displayName: "Solver Name"
+    required: true
+  - name: THOTH_SOLVER_PACKAGES
+    description: "Packages to be resolved"
+    displayName: "Packages to be analyzed by solver"
+    required: true
+  - name: THOTH_SOLVER_NO_TRANSITIVE
+    description: "Do not resolve transitive dependencies"
+    displayName: "No transitive dependencies"
+    required: true
+  - name: THOTH_SOLVER_INDEXES
+    description: "A comma separated list of indexes to scan during solver run"
+    displayName: "Python Package Indexes"
+    value: ""
+  - name: THOTH_FORCE_SYNC
+    description: Perform force sync - sync data even if they are reported to be existing
+    displayName: Perform force sync
+    required: true
+    value: "0"
+  - name: THOTH_LOG_SOLVER
+    description: "Log solver actions"
+    displayName: "Log solver actions"
+    required: true
+    value: INFO
+
+objects:
+  - apiVersion: argoproj.io/v1alpha1
+    kind: Workflow
+    metadata:
+      generateName: "solver-${THOTH_SOLVER_WORKFLOW_ID}-"
+      annotations:
+        thoth-station.ninja/template-version: 0.10.0-dev
+      labels:
+        app: thoth
+        component: solver
+    spec:
+      serviceAccountName: argo
+      podGC:
+        strategy: OnWorkflowSuccess
+      entrypoint: solve-and-sync
+      arguments:
+        parameters:
+          - name: "THOTH_SOLVER_NAME"
+            value: "${THOTH_SOLVER_NAME}"
+          - name: "THOTH_SOLVER_WORKFLOW_ID"
+            value: "${THOTH_SOLVER_WORKFLOW_ID}"
+          - name: "THOTH_LOG_SOLVER"
+            value: "${THOTH_LOG_SOLVER}"
+          - name: "THOTH_SOLVER_NO_TRANSITIVE"
+            value: "${THOTH_SOLVER_NO_TRANSITIVE}"
+          - name: "THOTH_SOLVER_PACKAGES"
+            value: "${THOTH_SOLVER_PACKAGES}"
+          - name: "THOTH_SOLVER_INDEXES"
+            value: "${THOTH_SOLVER_INDEXES}"
+          - name: "THOTH_FORCE_SYNC"
+            value: "${THOTH_FORCE_SYNC}"
+      volumes:
+        - name: workdir
+          emptyDir: {}
+      templates:
+        - name: "solve-and-sync"
+          archiveLocation:
+            archiveLogs: true
+          dag:
+            tasks:
+              - name: "solverrhel80py36"
+                templateRef:
+                  name: "solver-rhel-8.0-py36"
+                  template: "solve"
+                arguments:
+                  parameters:
+                    - name: "THOTH_SOLVER_DOCUMENT_ID"
+                      value: "solver-{{workflow.parameters.THOTH_SOLVER_NAME}}-{{workflow.parameters.THOTH_SOLVER_WORKFLOW_ID}}"
+                    - name: "THOTH_LOG_SOLVER"
+                      value: "{{workflow.parameters.THOTH_LOG_SOLVER}}"
+                    - name: "THOTH_SOLVER_NO_TRANSITIVE"
+                      value: "{{workflow.parameters.THOTH_SOLVER_NO_TRANSITIVE}}"
+                    - name: "THOTH_SOLVER_PACKAGES"
+                      value: "{{workflow.parameters.THOTH_SOLVER_PACKAGES}}"
+                    - name: "THOTH_SOLVER_INDEXES"
+                      value: "{{workflow.parameters.THOTH_SOLVER_INDEXES}}"
+
+              - name: "graph-sync-solverrhel80py36"
+                dependencies:
+                  - "solverrhel80py36"
+                templateRef:
+                  name: "graph-sync"
+                  template: "solver"
+                arguments:
+                  artifacts:
+                    - name: solver-document
+                      from: "{{tasks.solverrhel80py36.outputs.artifacts.solver-document}}"
+                  parameters:
+                    - name: "THOTH_SOLVER_DOCUMENT_ID"
+                      value: "solver-{{workflow.parameters.THOTH_SOLVER_NAME}}-{{workflow.parameters.THOTH_SOLVER_WORKFLOW_ID}}"
+                    - name: "THOTH_FORCE_SYNC"
+                      value: "{{workflow.parameters.THOTH_FORCE_SYNC}}"
