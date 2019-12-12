@@ -7,14 +7,14 @@ metadata:
       This is Thoth Solver Fedora 28+ and UBI8 BuildConfig, this template is meant to
       be used by Bots, but could also be used by humans...
     openshift.io/display-name: "Thoth Core: Solver Fedora 28+ BuildConfig"
-    version: 1.4.1
+    version: 1.5.0
     tags: thoth,ai-stacks,aistacks,solver,machinlearning
     template.openshift.io/documentation-url: https://github.com/Thoth-Station/
     template.openshift.io/long-description: >
       This is Thoth Solver Fedora 28+ and UBI8 BuildConfig, this template is meant to
       be used by Bots, but could also be used by humans...
     template.openshift.io/provider-display-name: Red Hat, Inc.
-    thoth-station.ninja/template-version: 1.4.1
+    thoth-station.ninja/template-version: 1.5.0
   labels:
     template: solver-buildconfig
     app: thoth
@@ -45,7 +45,7 @@ objects:
     metadata:
       name: solver-fedora-31-py38
       annotations:
-        thoth-station.ninja/template-version: 1.4.1
+        thoth-station.ninja/template-version: 1.5.0
       labels:
         app: thoth
         component: solver
@@ -119,7 +119,7 @@ objects:
     metadata:
       name: solver-fedora-31-py36
       annotations:
-        thoth-station.ninja/template-version: 1.4.1
+        thoth-station.ninja/template-version: 1.5.0
       labels:
         app: thoth
         component: solver
@@ -194,7 +194,7 @@ objects:
     metadata:
       name: solver-fedora-30-py37
       annotations:
-        thoth-station.ninja/template-version: 1.4.1
+        thoth-station.ninja/template-version: 1.5.0
       labels:
         app: thoth
         component: solver
@@ -265,7 +265,7 @@ objects:
     metadata:
       name: solver-fedora-30-py36
       annotations:
-        thoth-station.ninja/template-version: 1.4.1
+        thoth-station.ninja/template-version: 1.5.0
       labels:
         app: thoth
         component: solver
