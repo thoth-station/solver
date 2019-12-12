@@ -1,0 +1,375 @@
+apiVersion: v1
+kind: Template
+metadata:
+  name: solver
+  annotations:
+    description: "Thoth: Solver Job Template"
+    openshift.io/display-name: "Thoth: Solver"
+    version: 0.9.1
+    tags: thoth,ai-stacks,aistacks,solver,machinlearning
+    template.openshift.io/documentation-url: https://github.com/Thoth-Station/
+    template.openshift.io/long-description: >
+      This template defines resources needed to run solvers in Thoth, it is used
+      to create new OpenShift Jobs running the analyzer.
+    template.openshift.io/provider-display-name: "Red Hat, Inc."
+    thoth-station.ninja/template-version: 0.9.1
+  labels:
+    template: solver
+    app: thoth
+    component: solver
+
+parameters:
+  - description: Registry the ImageStream to be use lives in
+    displayName: ImageStream Registry
+    required: true
+    name: IMAGE_STREAM_REGISTRY
+    value: "docker-registry.default.svc:5000"
+
+  - description: Namespace the ImageStream to be use lives in
+    displayName: ImageStream Project
+    required: true
+    name: IMAGE_STREAM_NAMESPACE
+    value: "thoth-infra-stage"
+
+  - description: Tag of the ImageStream to be use
+    displayName: ImageStream Tag
+    required: true
+    name: IMAGE_STREAM_TAG
+    value: "latest"
+
+  - name: THOTH_SOLVER_NO_TRANSITIVE
+    description: "Do not resolve transitive dependencies"
+    displayName: "No transitive dependencies"
+    required: true
+  - name: THOTH_SOLVER_JOB_ID
+    description: "Identifier of a job run."
+    displayName: "Job identifier"
+    required: true
+  - name: THOTH_SOLVER_PACKAGES
+    description: "Packages to be resolved"
+    displayName: "Packages to be analyzed by solver"
+    required: true
+  - name: THOTH_SOLVER_OUTPUT
+    description: "Output to send solver results to"
+    displayName: "Solver output"
+    required: true
+  - name: THOTH_LOG_SOLVER
+    description: "Log solver actions"
+    displayName: "Log solver actions"
+    required: true
+    value: INFO
+  - name: THOTH_SOLVER_INDEXES
+    description: "A comma separated list of indexes to scan during solver run"
+    displayName: "Python Package Indexes"
+    value: ""
+
+objects:
+  - apiVersion: batch/v1
+    kind: Job
+    metadata:
+      name: "${THOTH_SOLVER_JOB_ID}"
+      annotations:
+        thoth-station.ninja/template-version: 0.9.1
+      labels:
+        app: thoth
+        component: solver
+        solver-type: solver-rhel-8.0-py36
+        operator: graph-sync
+        task: solver
+        mark: cleanup
+    spec:
+      template:
+        metadata:
+          labels:
+            app: thoth
+            component: solver
+            solver-type: solver-rhel-8.0-py36
+            task: solver
+            mark: cleanup
+            ttl: "2h"
+        spec:
+          restartPolicy: OnFailure
+          containers:
+            - name: solver
+              env:
+                - name: THOTH_SOLVER
+                  value: solver-rhel-8.0-py36
+                - name: THOTH_LOG_SOLVER
+                  value: "${THOTH_LOG_SOLVER}"
+                - name: THOTH_SOLVER_NO_TRANSITIVE
+                  value: "${THOTH_SOLVER_NO_TRANSITIVE}"
+                - name: THOTH_SOLVER_PACKAGES
+                  value: "${THOTH_SOLVER_PACKAGES}"
+                - name: THOTH_SOLVER_OUTPUT
+                  value: "${THOTH_SOLVER_OUTPUT}"
+                - name: THOTH_SOLVER_INDEXES
+                  value: "${THOTH_SOLVER_INDEXES}"
+                - name: THOTH_SOLVER_VIRTUALENV
+                  value: "/home/solver/venv"
+                - name: SENTRY_DSN
+                  valueFrom:
+                    secretKeyRef:
+                      name: thoth
+                      key: sentry-dsn
+              image: "${IMAGE_STREAM_REGISTRY}/${IMAGE_STREAM_NAMESPACE}/solver-rhel-8.0-py36:${IMAGE_STREAM_TAG}"
+              livenessProbe:
+                failureThreshold: 1
+                initialDelaySeconds: 21600
+                periodSeconds: 10
+                tcpSocket:
+                  port: 80
+              resources:
+                limits:
+                  cpu: 1
+                  memory: 1Gi
+                requests:
+                  cpu: 1
+                  memory: 1Gi
+
+  - apiVersion: batch/v1
+    kind: Job
+    metadata:
+      name: "${THOTH_SOLVER_JOB_ID}"
+      annotations:
+        thoth-station.ninja/template-version: 0.9.1
+      labels:
+        app: thoth
+        component: solver
+        solver-type: solver-fedora-31-py37
+        operator: graph-sync
+        task: solver
+        mark: cleanup
+    spec:
+      template:
+        metadata:
+          labels:
+            app: thoth
+            component: solver
+            solver-type: solver-fedora-31-py37
+            mark: cleanup
+            task: solver
+            ttl: 2h
+        spec:
+          restartPolicy: OnFailure
+          containers:
+            - name: solver
+              env:
+                - name: THOTH_SOLVER
+                  value: solver-fedora-31-py37
+                - name: THOTH_LOG_SOLVER
+                  value: "${THOTH_LOG_SOLVER}"
+                - name: THOTH_SOLVER_NO_TRANSITIVE
+                  value: "${THOTH_SOLVER_NO_TRANSITIVE}"
+                - name: THOTH_SOLVER_PACKAGES
+                  value: "${THOTH_SOLVER_PACKAGES}"
+                - name: THOTH_SOLVER_OUTPUT
+                  value: "${THOTH_SOLVER_OUTPUT}"
+                - name: THOTH_SOLVER_INDEXES
+                  value: "${THOTH_SOLVER_INDEXES}"
+                - name: THOTH_SOLVER_VIRTUALENV
+                  value: "/home/solver/venv"
+                - name: SENTRY_DSN
+                  valueFrom:
+                    secretKeyRef:
+                      name: thoth
+                      key: sentry-dsn
+              image: "${IMAGE_STREAM_REGISTRY}/${IMAGE_STREAM_NAMESPACE}/solver-fedora-31-py37:${IMAGE_STREAM_TAG}"
+              livenessProbe:
+                failureThreshold: 1
+                initialDelaySeconds: 21600
+                periodSeconds: 10
+                tcpSocket:
+                  port: 80
+              resources:
+                limits:
+                  cpu: 1
+                  memory: 1Gi
+                requests:
+                  cpu: 1
+                  memory: 1Gi
+
+  - apiVersion: batch/v1
+    kind: Job
+    metadata:
+      name: "${THOTH_SOLVER_JOB_ID}"
+      annotations:
+        thoth-station.ninja/template-version: 0.9.1
+      labels:
+        app: thoth
+        component: solver
+        solver-type: solver-fedora-31-py36
+        operator: graph-sync
+        task: solver
+        mark: cleanup
+    spec:
+      template:
+        metadata:
+          labels:
+            app: thoth
+            component: solver
+            solver-type: solver-fedora-31-py36
+            mark: cleanup
+            task: solver
+            ttl: 2h
+        spec:
+          restartPolicy: OnFailure
+          containers:
+            - name: solver
+              env:
+                - name: THOTH_SOLVER
+                  value: solver-fedora-31-py36
+                - name: THOTH_LOG_SOLVER
+                  value: "${THOTH_LOG_SOLVER}"
+                - name: THOTH_SOLVER_NO_TRANSITIVE
+                  value: "${THOTH_SOLVER_NO_TRANSITIVE}"
+                - name: THOTH_SOLVER_PACKAGES
+                  value: "${THOTH_SOLVER_PACKAGES}"
+                - name: THOTH_SOLVER_OUTPUT
+                  value: "${THOTH_SOLVER_OUTPUT}"
+                - name: THOTH_SOLVER_INDEXES
+                  value: "${THOTH_SOLVER_INDEXES}"
+                - name: THOTH_SOLVER_VIRTUALENV
+                  value: "/home/solver/venv"
+                - name: SENTRY_DSN
+                  valueFrom:
+                    secretKeyRef:
+                      name: thoth
+                      key: sentry-dsn
+              image: "${IMAGE_STREAM_REGISTRY}/${IMAGE_STREAM_NAMESPACE}/solver-fedora-31-py36:${IMAGE_STREAM_TAG}"
+              livenessProbe:
+                failureThreshold: 1
+                initialDelaySeconds: 21600
+                periodSeconds: 10
+                tcpSocket:
+                  port: 80
+              resources:
+                limits:
+                  cpu: 1
+                  memory: 1Gi
+                requests:
+                  cpu: 1
+                  memory: 1Gi
+
+  - apiVersion: batch/v1
+    kind: Job
+    metadata:
+      name: "${THOTH_SOLVER_JOB_ID}"
+      annotations:
+        thoth-station.ninja/template-version: 0.9.1
+      labels:
+        app: thoth
+        component: solver
+        solver-type: solver-fedora-30-py37
+        operator: graph-sync
+        task: solver
+        mark: cleanup
+    spec:
+      template:
+        metadata:
+          labels:
+            app: thoth
+            component: solver
+            solver-type: solver-fedora-30-py37
+            mark: cleanup
+            task: solver
+            ttl: 2h
+        spec:
+          restartPolicy: OnFailure
+          containers:
+            - name: solver
+              env:
+                - name: THOTH_SOLVER
+                  value: solver-fedora-30-py37
+                - name: THOTH_LOG_SOLVER
+                  value: "${THOTH_LOG_SOLVER}"
+                - name: THOTH_SOLVER_NO_TRANSITIVE
+                  value: "${THOTH_SOLVER_NO_TRANSITIVE}"
+                - name: THOTH_SOLVER_PACKAGES
+                  value: "${THOTH_SOLVER_PACKAGES}"
+                - name: THOTH_SOLVER_OUTPUT
+                  value: "${THOTH_SOLVER_OUTPUT}"
+                - name: THOTH_SOLVER_INDEXES
+                  value: "${THOTH_SOLVER_INDEXES}"
+                - name: THOTH_SOLVER_VIRTUALENV
+                  value: "/home/solver/venv"
+                - name: SENTRY_DSN
+                  valueFrom:
+                    secretKeyRef:
+                      name: thoth
+                      key: sentry-dsn
+              image: "${IMAGE_STREAM_REGISTRY}/${IMAGE_STREAM_NAMESPACE}/solver-fedora-30-py37:${IMAGE_STREAM_TAG}"
+              livenessProbe:
+                failureThreshold: 1
+                initialDelaySeconds: 21600
+                periodSeconds: 10
+                tcpSocket:
+                  port: 80
+              resources:
+                limits:
+                  cpu: 1
+                  memory: 1Gi
+                requests:
+                  cpu: 1
+                  memory: 1Gi
+
+  - apiVersion: batch/v1
+    kind: Job
+    metadata:
+      name: "${THOTH_SOLVER_JOB_ID}"
+      annotations:
+        thoth-station.ninja/template-version: 0.9.1
+      labels:
+        app: thoth
+        component: solver
+        solver-type: solver-fedora-30-py36
+        operator: graph-sync
+        task: solver
+        mark: cleanup
+    spec:
+      template:
+        metadata:
+          labels:
+            app: thoth
+            component: solver
+            solver-type: solver-fedora-30-py36
+            mark: cleanup
+            task: solver
+            ttl: 2h
+        spec:
+          restartPolicy: OnFailure
+          containers:
+            - name: solver
+              env:
+                - name: THOTH_SOLVER
+                  value: solver-fedora-30-py36
+                - name: THOTH_LOG_SOLVER
+                  value: "${THOTH_LOG_SOLVER}"
+                - name: THOTH_SOLVER_NO_TRANSITIVE
+                  value: "${THOTH_SOLVER_NO_TRANSITIVE}"
+                - name: THOTH_SOLVER_PACKAGES
+                  value: "${THOTH_SOLVER_PACKAGES}"
+                - name: THOTH_SOLVER_OUTPUT
+                  value: "${THOTH_SOLVER_OUTPUT}"
+                - name: THOTH_SOLVER_INDEXES
+                  value: "${THOTH_SOLVER_INDEXES}"
+                - name: THOTH_SOLVER_VIRTUALENV
+                  value: "/home/solver/venv"
+                - name: SENTRY_DSN
+                  valueFrom:
+                    secretKeyRef:
+                      name: thoth
+                      key: sentry-dsn
+              image: "${IMAGE_STREAM_REGISTRY}/${IMAGE_STREAM_NAMESPACE}/solver-fedora-30-py36:${IMAGE_STREAM_TAG}"
+              livenessProbe:
+                failureThreshold: 1
+                initialDelaySeconds: 21600
+                periodSeconds: 10
+                tcpSocket:
+                  port: 80
+              resources:
+                limits:
+                  cpu: 1
+                  memory: 1Gi
+                requests:
+                  cpu: 1
+                  memory: 1Gi
