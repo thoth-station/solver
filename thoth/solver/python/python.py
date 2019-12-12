@@ -297,22 +297,24 @@ def _do_resolve_index(python_bin, solver, all_solvers, requirements, exclude_pac
 
         version_spec = str(dependency.specifier)
         _LOGGER.info(
-            "Resolving package %r with version specifier %r from %r",
-            dependency.name,
-            version_spec,
-            source.url
+            "Resolving package %r with version specifier %r from %r", dependency.name, version_spec, source.url
         )
         resolved_versions = _resolve_versions(solver, source, dependency.name, version_spec)
         if not resolved_versions:
             _LOGGER.warning("No versions were resolved for dependency %r in version %r", dependency.name, version_spec)
-            unresolved.append(
-                {
-                    "package_name": dependency.name,
-                    "version_spec": version_spec,
-                    "index_url": index_url,
-                    "is_provided": dependency.name in source.get_packages(),
-                }
-            )
+            error_report = {
+                "package_name": dependency.name,
+                "version_spec": version_spec,
+                "index_url": index_url,
+                "is_provided_package": source.provides_package(dependency.name),
+                "is_provided_package_version": None,
+            }
+            if version_spec.startswith("=="):
+                error_report["is_provided_package_version"] = source.provides_package_version(
+                    dependency.name, version_spec[len("=="):]
+                )
+
+            unresolved.append(error_report)
         else:
             for version in resolved_versions:
                 _LOGGER.info("Adding package %r in version %r for solving", dependency.name, version)
@@ -353,7 +355,8 @@ def _do_resolve_index(python_bin, solver, all_solvers, requirements, exclude_pac
                     "package_version": package_version,
                     "type": "command_error",
                     "details": details,
-                    "is_provided": source.provides_package_version(package_name, package_version),
+                    "is_provided_package": source.provides_package(package_name),
+                    "is_provided_package_version": source.provides_package_version(package_name, package_version),
                 }
             )
             continue
