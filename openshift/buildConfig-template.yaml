@@ -68,7 +68,7 @@ objects:
           RUN \
           useradd -m solver && \
           dnf update --setopt=tsflags=nodocs -y && \
-          dnf install -y python38 && \
+          dnf install --setopt=tsflags=nodocs -y python38 && \
           mkdir -p ${THOTH_SOLVER_TMP_DIR}
 
           # Install thoth-solver itself
