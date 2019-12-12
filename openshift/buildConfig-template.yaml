@@ -67,7 +67,8 @@ objects:
 
           RUN \
           useradd -m solver && \
-          dnf update --setopt=tsflags=nodocs -y python38 && \
+          dnf update --setopt=tsflags=nodocs -y && \
+          dnf install -y python38 && \
           mkdir -p ${THOTH_SOLVER_TMP_DIR}
 
           # Install thoth-solver itself
@@ -81,7 +82,7 @@ objects:
           dnf clean all &&\
           virtualenv -p python3.8 /home/solver/venv &&\
           /home/solver/venv/bin/python3 -m pip install pipdeptree &&\
-          chmod 777 /home/solver
+          chmod 777 -R /home/solver
 
           WORKDIR /home/solver
           USER solver
@@ -156,7 +157,7 @@ objects:
             dnf clean all &&\
             virtualenv -p python3.6 /home/solver/venv &&\
             /home/solver/venv/bin/python3 -m pip install pipdeptree &&\
-            chmod 777 /home/solver
+            chmod 777 -R /home/solver
 
           WORKDIR /home/solver
           USER solver
@@ -191,7 +192,7 @@ objects:
   - kind: BuildConfig
     apiVersion: v1
     metadata:
-      name: solver-fedora-30-py38
+      name: solver-fedora-30-py37
       annotations:
         thoth-station.ninja/template-version: 1.4.1
       labels:
@@ -199,12 +200,12 @@ objects:
         component: solver
         app.kubernetes.io/name: "thoth"
         app.kubernetes.io/component: "solver"
-        app.thoth-station.ninja/solver: "fedora-30-py38"
+        app.thoth-station.ninja/solver: "fedora-30-py37"
     spec:
       output:
         to:
           kind: ImageStreamTag
-          name: "solver-fedora-30-py38:${IMAGE_STREAM_TAG}"
+          name: "solver-fedora-30-py37:${IMAGE_STREAM_TAG}"
       source:
         dockerfile: |
           FROM fedora:30
@@ -216,7 +217,7 @@ objects:
 
           RUN \
           useradd -m solver && \
-          dnf update --setopt=tsflags=nodocs -y python38 && \
+          dnf update --setopt=tsflags=nodocs -y python37 && \
           mkdir -p ${THOTH_SOLVER_TMP_DIR}
 
           # Install thoth-solver itself
@@ -228,9 +229,9 @@ objects:
           rm -rf ${THOTH_SOLVER_TMP_DIR} &&\
           unset THOTH_SOLVER_TMP_DIR &&\
           dnf clean all &&\
-          virtualenv -p python3.8 /home/solver/venv &&\
+          virtualenv -p python3.7 /home/solver/venv &&\
           /home/solver/venv/bin/python3 -m pip install pipdeptree &&\
-          chmod 777 /home/solver
+          chmod 777 -R /home/solver
 
           WORKDIR /home/solver
           USER solver
@@ -302,7 +303,7 @@ objects:
             dnf clean all &&\
             virtualenv -p python3.6 /home/solver/venv &&\
             /home/solver/venv/bin/python3 -m pip install pipdeptree &&\
-            chmod 777 /home/solver
+            chmod 777 -R /home/solver
 
           WORKDIR /home/solver
           USER solver
@@ -377,7 +378,7 @@ objects:
           dnf clean all &&\
           virtualenv -p python3.7 /home/solver/venv &&\
           /home/solver/venv/bin/python3 -m pip install pipdeptree &&\
-          chmod 777 /home/solver
+          chmod 777 -R /home/solver
 
           WORKDIR /home/solver
           USER solver
@@ -449,7 +450,7 @@ objects:
             dnf clean all &&\
             virtualenv -p python3.6 /home/solver/venv &&\
             /home/solver/venv/bin/python3 -m pip install pipdeptree &&\
-            chmod 777 /home/solver
+            chmod 777 -R /home/solver
 
           WORKDIR /home/solver
           USER solver
@@ -524,7 +525,7 @@ objects:
           dnf clean all &&\
           virtualenv -p python3.6 /home/solver/venv &&\
           /home/solver/venv/bin/python3 -m pip install pipdeptree &&\
-          chmod 777 /home/solver
+          chmod 777 -R /home/solver
 
           WORKDIR /home/solver
           USER solver

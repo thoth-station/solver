@@ -25,15 +25,15 @@ objects:
     apiVersion: v1
     metadata:
       labels:
-        build: solver-fedora-31-py37
+        build: solver-fedora-31-py38
         app: thoth
         component: solver
         app.kubernetes.io/name: "thoth"
         app.kubernetes.io/component: "solver"
-        app.thoth-station.ninja/solver: "fedora-31-py37"
+        app.thoth-station.ninja/solver: "fedora-31-py38"
       annotations:
         thoth-station.ninja/template-version: 1.4.1
-      name: solver-fedora-31-py37
+      name: solver-fedora-31-py38
     spec:
       name: latest
       lookupPolicy:
