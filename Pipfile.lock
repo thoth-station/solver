@@ -129,10 +129,10 @@
         },
         "dictdiffer": {
             "hashes": [
-                "sha256:97cf4ef98ebc1acf737074aed41e379cf48ab5ff528c92109dfb8e2e619e6809",
-                "sha256:b3ad476fc9cca60302b52c50e1839342d2092aeaba586d69cbf9249f87f52463"
+                "sha256:1adec0d67cdf6166bda96ae2934ddb5e54433998ceab63c984574d187cc563d2",
+                "sha256:d79d9a39e459fe33497c858470ca0d2e93cb96621751de06d631856adfd9c390"
             ],
-            "version": "==0.8.0"
+            "version": "==0.8.1"
         },
         "distro": {
             "hashes": [
@@ -293,9 +293,9 @@
         },
         "openshift": {
             "hashes": [
-                "sha256:8af7e1e1fd85af79e363b1a8a323f091764b3d9f2e9640bf32cbd11e52d4324f"
+                "sha256:ce7411a5689e6d3831bb5dc08a8c324860d71e3dd5547ba44f4d139cfa57c34b"
             ],
-            "version": "==0.10.0"
+            "version": "==0.10.1"
         },
         "packaging": {
             "hashes": [
@@ -490,11 +490,11 @@
         },
         "thoth-common": {
             "hashes": [
-                "sha256:1ab69b68d124c94d12f0a793918cfe90a8007e00c0105711dd25da5024a42e23",
-                "sha256:a2994a8aa54e96b057a3d0275908c24b75b4106ed885b4231dc7ea83452a2576"
+                "sha256:a8d9f7bb4f1457ae004f3fdfe27ad87725e0c167cc4ece3536d196ae47171875",
+                "sha256:d18958b36aa6060ed8f14cce16d39d696b7db8b78e7e76e46c68d0c584a876b4"
             ],
             "index": "pypi",
-            "version": "==0.9.21"
+            "version": "==0.9.22"
         },
         "thoth-python": {
             "hashes": [
