@@ -71,7 +71,7 @@ def _install_requirement(python_bin, package, version=None, index_url=None, clea
     try:
         cmd = "{} -m pip install --force-reinstall --no-cache-dir --no-deps {}".format(python_bin, quote(package))
         if version:
-            cmd += "=={}".format(quote(version))
+            cmd += "==={}".format(quote(version))
         if index_url:
             cmd += ' --index-url "{}" '.format(quote(index_url))
             # Supply trusted host by default so we do not get errors - it safe to
