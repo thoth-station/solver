@@ -7,14 +7,14 @@ metadata:
       This is Thoth Solver Fedora 28+ and UBI8 BuildConfig, this template is meant to
       be used by Bots, but could also be used by humans...
     openshift.io/display-name: "Thoth Core: Solver Fedora 28+ BuildConfig"
-    version: 1.6.0
+    version: 1.7.0
     tags: thoth,ai-stacks,aistacks,solver,machinlearning
     template.openshift.io/documentation-url: https://github.com/Thoth-Station/
     template.openshift.io/long-description: >
       This is Thoth Solver Fedora 28+ and UBI8 BuildConfig, this template is meant to
       be used by Bots, but could also be used by humans...
     template.openshift.io/provider-display-name: Red Hat, Inc.
-    thoth-station.ninja/template-version: 1.6.0
+    thoth-station.ninja/template-version: 1.7.0
   labels:
     template: solver-buildconfig
     app: thoth
@@ -43,9 +43,83 @@ objects:
   - kind: BuildConfig
     apiVersion: v1
     metadata:
+      name: solver-fedora-32-py38
+      annotations:
+        thoth-station.ninja/template-version: 1.7.0
+      labels:
+        app: thoth
+        component: solver
+        app.kubernetes.io/name: "thoth"
+        app.kubernetes.io/component: "solver"
+        app.thoth-station.ninja/solver: "fedora-32-py38"
+    spec:
+      output:
+        to:
+          kind: ImageStreamTag
+          name: "solver-fedora-32-py38:${IMAGE_STREAM_TAG}"
+      source:
+        dockerfile: |
+          FROM fedora:32
+
+          ENV \
+          LANG=en_US.UTF-8 \
+          THOTH_SOLVER_TMP_DIR='/tmp/thoth-solver-install'
+
+          RUN \
+          useradd -m solver && \
+          dnf update --setopt=tsflags=nodocs -y && \
+          dnf install --setopt=tsflags=nodocs -y python38 && \
+          mkdir -p ${THOTH_SOLVER_TMP_DIR}
+
+          # Install thoth-solver itself
+          COPY ./ ${THOTH_SOLVER_TMP_DIR}
+          RUN \
+          cd ${THOTH_SOLVER_TMP_DIR} &&\
+          pip3 install . &&\
+          cd / &&\
+          rm -rf ${THOTH_SOLVER_TMP_DIR} &&\
+          unset THOTH_SOLVER_TMP_DIR &&\
+          dnf clean all &&\
+          virtualenv -p python3.8 /home/solver/venv &&\
+          /home/solver/venv/bin/python3 -m pip install pipdeptree &&\
+          chmod 777 -R /home/solver
+
+          WORKDIR /home/solver
+          USER solver
+
+          ENTRYPOINT ["thoth-solver"]
+          CMD ["python"]
+        type: Git
+        git:
+          uri: ${GITHUB_URL}
+          ref: ${GITHUB_REF}
+      resources:
+        limits:
+          memory: '512Mi'
+          cpu: '500m'
+        requests:
+          memory: '512Mi'
+          cpu: '500m'
+      strategy:
+        dockerStrategy:
+          from:
+            kind: ImageStreamTag
+            name: fedora:32
+        type: Docker
+      triggers:
+        - type: ImageChange
+          imageChange: {}
+        - type: "Generic"
+          generic:
+            secretReference:
+              name: generic-webhook-secret
+
+  - kind: BuildConfig
+    apiVersion: v1
+    metadata:
       name: solver-fedora-31-py38
       annotations:
-        thoth-station.ninja/template-version: 1.6.0
+        thoth-station.ninja/template-version: 1.7.0
       labels:
         app: thoth
         component: solver
@@ -119,7 +193,7 @@ objects:
     metadata:
       name: solver-fedora-31-py37
       annotations:
-        thoth-station.ninja/template-version: 1.6.0
+        thoth-station.ninja/template-version: 1.7.0
       labels:
         app: thoth
         component: solver
@@ -192,7 +266,7 @@ objects:
     metadata:
       name: solver-fedora-31-py36
       annotations:
-        thoth-station.ninja/template-version: 1.6.0
+        thoth-station.ninja/template-version: 1.7.0
       labels:
         app: thoth
         component: solver
@@ -267,7 +341,7 @@ objects:
     metadata:
       name: solver-fedora-30-py37
       annotations:
-        thoth-station.ninja/template-version: 1.6.0
+        thoth-station.ninja/template-version: 1.7.0
       labels:
         app: thoth
         component: solver
@@ -338,7 +412,7 @@ objects:
     metadata:
       name: solver-fedora-30-py36
       annotations:
-        thoth-station.ninja/template-version: 1.6.0
+        thoth-station.ninja/template-version: 1.7.0
       labels:
         app: thoth
         component: solver
