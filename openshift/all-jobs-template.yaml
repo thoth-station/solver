@@ -5,14 +5,14 @@ metadata:
   annotations:
     description: "Thoth: Solver Job Template"
     openshift.io/display-name: "Thoth: Solver"
-    version: 0.11.0
+    version: 0.11.1
     tags: thoth,ai-stacks,aistacks,solver,machinlearning
     template.openshift.io/documentation-url: https://github.com/Thoth-Station/
     template.openshift.io/long-description: >
       This template defines resources needed to run solvers in Thoth, it is used
       to create new OpenShift Jobs running the analyzer.
     template.openshift.io/provider-display-name: "Red Hat, Inc."
-    thoth-station.ninja/template-version: 0.11.0
+    thoth-station.ninja/template-version: 0.11.1
   labels:
     template: solver
     app: thoth
@@ -69,7 +69,7 @@ objects:
     metadata:
       name: "${THOTH_SOLVER_JOB_ID}"
       annotations:
-        thoth-station.ninja/template-version: 0.11.0
+        thoth-station.ninja/template-version: 0.11.1
       labels:
         app: thoth
         component: solver
@@ -114,7 +114,7 @@ objects:
               image: "${IMAGE_STREAM_REGISTRY}/${IMAGE_STREAM_NAMESPACE}/solver-rhel-8.0-py36:${IMAGE_STREAM_TAG}"
               livenessProbe:
                 failureThreshold: 1
-                initialDelaySeconds: 21600
+                initialDelaySeconds: 900
                 periodSeconds: 10
                 tcpSocket:
                   port: 80
@@ -131,7 +131,7 @@ objects:
     metadata:
       name: "${THOTH_SOLVER_JOB_ID}"
       annotations:
-        thoth-station.ninja/template-version: 0.11.0
+        thoth-station.ninja/template-version: 0.11.1
       labels:
         app: thoth
         component: solver
@@ -176,7 +176,7 @@ objects:
               image: "${IMAGE_STREAM_REGISTRY}/${IMAGE_STREAM_NAMESPACE}/solver-fedora-31-py38:${IMAGE_STREAM_TAG}"
               livenessProbe:
                 failureThreshold: 1
-                initialDelaySeconds: 21600
+                initialDelaySeconds: 900
                 periodSeconds: 10
                 tcpSocket:
                   port: 80
@@ -193,7 +193,7 @@ objects:
     metadata:
       name: "${THOTH_SOLVER_JOB_ID}"
       annotations:
-        thoth-station.ninja/template-version: 0.11.0
+        thoth-station.ninja/template-version: 0.11.1
       labels:
         app: thoth
         component: solver
@@ -238,7 +238,7 @@ objects:
               image: "${IMAGE_STREAM_REGISTRY}/${IMAGE_STREAM_NAMESPACE}/solver-fedora-31-py37:${IMAGE_STREAM_TAG}"
               livenessProbe:
                 failureThreshold: 1
-                initialDelaySeconds: 21600
+                initialDelaySeconds: 900
                 periodSeconds: 10
                 tcpSocket:
                   port: 80
@@ -255,7 +255,7 @@ objects:
     metadata:
       name: "${THOTH_SOLVER_JOB_ID}"
       annotations:
-        thoth-station.ninja/template-version: 0.11.0
+        thoth-station.ninja/template-version: 0.11.1
       labels:
         app: thoth
         component: solver
@@ -300,7 +300,7 @@ objects:
               image: "${IMAGE_STREAM_REGISTRY}/${IMAGE_STREAM_NAMESPACE}/solver-fedora-31-py36:${IMAGE_STREAM_TAG}"
               livenessProbe:
                 failureThreshold: 1
-                initialDelaySeconds: 21600
+                initialDelaySeconds: 900
                 periodSeconds: 10
                 tcpSocket:
                   port: 80
@@ -317,7 +317,7 @@ objects:
     metadata:
       name: "${THOTH_SOLVER_JOB_ID}"
       annotations:
-        thoth-station.ninja/template-version: 0.11.0
+        thoth-station.ninja/template-version: 0.11.1
       labels:
         app: thoth
         component: solver
@@ -362,7 +362,7 @@ objects:
               image: "${IMAGE_STREAM_REGISTRY}/${IMAGE_STREAM_NAMESPACE}/solver-fedora-30-py38:${IMAGE_STREAM_TAG}"
               livenessProbe:
                 failureThreshold: 1
-                initialDelaySeconds: 21600
+                initialDelaySeconds: 900
                 periodSeconds: 10
                 tcpSocket:
                   port: 80
@@ -379,7 +379,7 @@ objects:
     metadata:
       name: "${THOTH_SOLVER_JOB_ID}"
       annotations:
-        thoth-station.ninja/template-version: 0.11.0
+        thoth-station.ninja/template-version: 0.11.1
       labels:
         app: thoth
         component: solver
@@ -424,7 +424,7 @@ objects:
               image: "${IMAGE_STREAM_REGISTRY}/${IMAGE_STREAM_NAMESPACE}/solver-fedora-30-py36:${IMAGE_STREAM_TAG}"
               livenessProbe:
                 failureThreshold: 1
-                initialDelaySeconds: 21600
+                initialDelaySeconds: 900
                 periodSeconds: 10
                 tcpSocket:
                   port: 80
