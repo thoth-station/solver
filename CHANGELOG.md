@@ -527,3 +527,43 @@
 * Add README file
 * Introduce exclude packages option
 * Initial implementation import
+
+## Release 1.5.0 (2020-01-08T18:08:54)
+* :pushpin: Automatic update of dependency thoth-python from 0.8.0 to 0.9.0
+* :pushpin: Automatic update of dependency packaging from 19.2 to 20.0
+* Format using black, add ignore comments for dict specific types
+* Move package parsing logic to thoth-python
+* :pushpin: Automatic update of dependency thoth-common from 0.9.22 to 0.9.23
+* :pushpin: Automatic update of dependency thoth-python from 0.7.1 to 0.8.0
+* :pushpin: Automatic update of dependency pytest-timeout from 1.3.3 to 1.3.4
+* Increase memory requirements for solvers
+* Decrease liveness probe to avoid long-living jobs
+* Happy new year!
+* Use arbitrary equality for solvers
+* Solver Fedora 31 with Python 3.7
+* :pushpin: Automatic update of dependency mypy from 0.760 to 0.761
+* :pushpin: Automatic update of dependency mypy from 0.750 to 0.760
+* :pushpin: Automatic update of dependency virtualenv from 16.7.8 to 16.7.9
+* :pushpin: Automatic update of dependency pytest from 5.3.1 to 5.3.2
+* :pushpin: Automatic update of dependency thoth-common from 0.9.21 to 0.9.22
+* :pushpin: Automatic update of dependency importlib-metadata from 1.2.0 to 1.3.0
+* Do not install docs
+* Bump version in templates
+* Adjust image streams
+* Build Fedora 30 and 31 with Python 3.8
+* Use Python 3.8 instead of Python 3.7
+* :pushpin: Automatic update of dependency thoth-analyzer from 0.1.6 to 0.1.7
+* Add Thamos documentation
+* Point documentation to other libraries
+* Add Google Analytics
+* changed the line lenght a little
+* fixed two typos
+* some better formating
+* using the garbage collector to delete successfull workflows 🚚
+* :green_heart: removed the debug code
+* :green_heart: added coverage saving as xml
+* :green_heart: fixed three D300
+* this is an array not an object
+* added THOTH_FORCE_SYNC
+* :sparkles: added the OpenShift Template for the Argo Workflow
+* all solver jobs for production and stage cluster
