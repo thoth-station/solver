@@ -299,7 +299,10 @@ def _do_resolve_index(python_bin, solver, all_solvers, requirements, exclude_pac
         _fill_hashes(source, package_name, package_version, extracted_metadata)
 
         for dependency in extracted_metadata["dependencies"]:
-            dependency_name, dependency_specifier = dependency["normalized_package_name"], dependency["specifier"]
+            dependency_name, dependency_specifier = (
+                dependency["normalized_package_name"],  # type: ignore
+                dependency["specifier"],  # type: ignore
+            )
 
             for dep_solver in all_solvers:
                 _LOGGER.info(
@@ -317,7 +320,7 @@ def _do_resolve_index(python_bin, solver, all_solvers, requirements, exclude_pac
                     dependency_specifier,
                     resolved_versions,
                 )
-                dependency["resolved_versions"].append(
+                dependency["resolved_versions"].append(  # type: ignore
                     {"versions": resolved_versions, "index": dep_solver.releases_fetcher.index_url}
                 )
 
@@ -382,9 +385,9 @@ def resolve(requirements, index_urls, python_version, exclude_packages, transiti
             transitive=transitive,
         )
 
-        result["tree"].extend(solver_result["tree"])
-        result["errors"].extend(solver_result["errors"])
-        result["unparsed"].extend(solver_result["unparsed"])
-        result["unresolved"].extend(solver_result["unresolved"])
+        result["tree"].extend(solver_result["tree"])  # type: ignore
+        result["errors"].extend(solver_result["errors"])  # type: ignore
+        result["unparsed"].extend(solver_result["unparsed"])  # type: ignore
+        result["unresolved"].extend(solver_result["unresolved"])  # type: ignore
 
     return result
