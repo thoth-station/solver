@@ -1,0 +1,80 @@
+---
+apiVersion: argoproj.io/v1alpha1
+kind: WorkflowTemplate
+metadata:
+  name: solver-rhel-8.0-py36
+  annotations:
+    thoth-station.ninja/template-version: 0.10.0-dev
+  labels:
+    app: thoth
+    component: solver
+spec:
+  templates:
+    - name: solve
+      inputs:
+        parameters:
+          - name: "THOTH_SOLVER_DOCUMENT_ID"
+          - name: "THOTH_LOG_SOLVER"
+            value: "INFO"
+          - name: "THOTH_SOLVER_NO_TRANSITIVE"
+            value: "1"
+          - name: "THOTH_SOLVER_PACKAGES"
+          - name: "THOTH_SOLVER_INDEXES"
+            value: "https://pypi.org/simple"
+      outputs:
+        artifacts:
+          - name: solver-document
+            path: "/mnt/workdir/{{inputs.parameters.THOTH_SOLVER_DOCUMENT_ID}}"
+            archive:
+              none: {}
+            s3:
+              key: "argo/solver/{{inputs.parameters.THOTH_SOLVER_DOCUMENT_ID}}"
+              endpoint: "s3.upshift.redhat.com"
+              bucket: "thoth"
+              insecure: true
+              accessKeySecret:
+                name: argo-artifact-repository
+                key: accessKey
+              secretKeySecret:
+                name: argo-artifact-repository
+                key: secretKey
+      container:
+        name: solver
+        image: "solver-rhel-8.0-py36"
+        env:
+          - name: THOTH_SOLVER
+            value: solver-rhel-8.0-py36
+          - name: THOTH_SOLVER_VIRTUALENV
+            value: "/home/solver/venv"
+          - name: THOTH_LOG_SOLVER
+            value: "{{inputs.parameters.THOTH_LOG_SOLVER}}"
+          - name: THOTH_SOLVER_NO_TRANSITIVE
+            value: "{{inputs.parameters.THOTH_SOLVER_NO_TRANSITIVE}}"
+          - name: THOTH_SOLVER_PACKAGES
+            value: "{{inputs.parameters.THOTH_SOLVER_PACKAGES}}"
+          - name: THOTH_SOLVER_OUTPUT
+            value: "/mnt/workdir/{{inputs.parameters.THOTH_SOLVER_DOCUMENT_ID}}"
+          - name: THOTH_SOLVER_INDEXES
+            value: "{{inputs.parameters.THOTH_SOLVER_INDEXES}}"
+          - name: "THOTH_DOCUMENT_ID"
+            value: "{{inputs.parameters.THOTH_SOLVER_DOCUMENT_ID}}"
+          - name: THOTH_DEPLOYMENT_NAME
+            valueFrom:
+              configMapKeyRef:
+                key: storage-bucket-name
+                name: thoth
+          - name: SENTRY_DSN
+            valueFrom:
+              secretKeyRef:
+                name: thoth
+                key: sentry-dsn
+        volumeMounts:
+          - name: workdir
+            mountPath: /mnt/workdir
+        resources:
+          limits:
+            cpu: 500m
+            memory: 512Mi
+          requests:
+            cpu: 250m
+            memory: 256Mi

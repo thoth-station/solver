@@ -53,7 +53,7 @@ objects:
   - apiVersion: argoproj.io/v1alpha1
     kind: Workflow
     metadata:
-      generateName: "solver-${THOTH_SOLVER_WORKFLOW_ID}-"
+      generateName: "solver-${THOTH_SOLVER_WORKFLOW_ID}"
       annotations:
         thoth-station.ninja/template-version: 0.10.0-dev
       labels:
