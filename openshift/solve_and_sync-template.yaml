@@ -89,12 +89,14 @@ objects:
             archiveLogs: true
           dag:
             tasks:
-              - name: "solverrhel80py36"
+              - name: "solverany"
                 templateRef:
-                  name: "solver-rhel-8.0-py36"
+                  name: "solver-any"
                   template: "solve"
                 arguments:
                   parameters:
+                    - name: "THOTH_SOLVER_NAME"
+                      value: "{{workflow.parameters.THOTH_SOLVER_NAME}}"
                     - name: "THOTH_SOLVER_DOCUMENT_ID"
                       value: "solver-{{workflow.parameters.THOTH_SOLVER_NAME}}-{{workflow.parameters.THOTH_SOLVER_WORKFLOW_ID}}"
                     - name: "THOTH_LOG_SOLVER"
@@ -106,16 +108,16 @@ objects:
                     - name: "THOTH_SOLVER_INDEXES"
                       value: "{{workflow.parameters.THOTH_SOLVER_INDEXES}}"
 
-              - name: "graph-sync-solverrhel80py36"
+              - name: "graph-sync-solverany"
                 dependencies:
-                  - "solverrhel80py36"
+                  - "solverany"
                 templateRef:
                   name: "graph-sync"
                   template: "solver"
                 arguments:
                   artifacts:
                     - name: solver-document
-                      from: "{{tasks.solverrhel80py36.outputs.artifacts.solver-document}}"
+                      from: "{{tasks.solverany.outputs.artifacts.solver-document}}"
                   parameters:
                     - name: "THOTH_SOLVER_DOCUMENT_ID"
                       value: "solver-{{workflow.parameters.THOTH_SOLVER_NAME}}-{{workflow.parameters.THOTH_SOLVER_WORKFLOW_ID}}"
