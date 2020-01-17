@@ -7,14 +7,14 @@ metadata:
       This is Thoth Solver Fedora 28+ and UBI8 BuildConfig, this template is meant to
       be used by Bots, but could also be used by humans...
     openshift.io/display-name: "Thoth Core: Solver Fedora 28+ BuildConfig"
-    version: 1.6.0
+    version: 1.7.0
     tags: thoth,ai-stacks,aistacks,solver,machinlearning
     template.openshift.io/documentation-url: https://github.com/Thoth-Station/
     template.openshift.io/long-description: >
       This is Thoth Solver Fedora 28+ and UBI8 BuildConfig, this template is meant to
       be used by Bots, but could also be used by humans...
     template.openshift.io/provider-display-name: Red Hat, Inc.
-    thoth-station.ninja/template-version: 1.6.0
+    thoth-station.ninja/template-version: 1.7.0
   labels:
     template: solver-buildconfig
     app: thoth
@@ -45,7 +45,7 @@ objects:
     metadata:
       name: solver-fedora-31-py38
       annotations:
-        thoth-station.ninja/template-version: 1.6.0
+        thoth-station.ninja/template-version: 1.7.0
       labels:
         app: thoth
         component: solver
@@ -119,7 +119,7 @@ objects:
     metadata:
       name: solver-fedora-31-py37
       annotations:
-        thoth-station.ninja/template-version: 1.6.0
+        thoth-station.ninja/template-version: 1.7.0
       labels:
         app: thoth
         component: solver
@@ -192,7 +192,7 @@ objects:
     metadata:
       name: solver-fedora-31-py36
       annotations:
-        thoth-station.ninja/template-version: 1.6.0
+        thoth-station.ninja/template-version: 1.7.0
       labels:
         app: thoth
         component: solver
@@ -267,7 +267,7 @@ objects:
     metadata:
       name: solver-fedora-30-py37
       annotations:
-        thoth-station.ninja/template-version: 1.6.0
+        thoth-station.ninja/template-version: 1.7.0
       labels:
         app: thoth
         component: solver
@@ -338,7 +338,7 @@ objects:
     metadata:
       name: solver-fedora-30-py36
       annotations:
-        thoth-station.ninja/template-version: 1.6.0
+        thoth-station.ninja/template-version: 1.7.0
       labels:
         app: thoth
         component: solver
@@ -631,7 +631,7 @@ objects:
   - kind: BuildConfig
     apiVersion: v1
     metadata:
-      name: "solver-rhel-8.0-py36"
+      name: "solver-rhel-8-py36"
       annotations:
         thoth-station.ninja/template-version: 1.4.0
       labels:
@@ -639,12 +639,12 @@ objects:
         component: "solver"
         app.kubernetes.io/name: "thoth"
         app.kubernetes.io/component: "solver"
-        app.thoth-station.ninja/solver: "rhel-8.0-py36"
+        app.thoth-station.ninja/solver: "rhel-8-py36"
     spec:
       output:
         to:
           kind: "ImageStreamTag"
-          name: "solver-rhel-8.0-py36:${IMAGE_STREAM_TAG}"
+          name: "solver-rhel-8-py36:${IMAGE_STREAM_TAG}"
       source:
         dockerfile: |
           FROM registry.access.redhat.com/ubi8/python-36:1-58
@@ -718,7 +718,7 @@ objects:
       output:
         to:
           kind: "ImageStreamTag"
-          name: "solver-rhel-8.0-py36:${IMAGE_STREAM_TAG}"
+          name: "solver-rhel-8-py36:${IMAGE_STREAM_TAG}"
       source:
         dockerfile: |
           FROM registry.access.redhat.com/ubi8/python-36:1-62

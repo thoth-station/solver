@@ -5,7 +5,7 @@ metadata:
   annotations:
     description: "Thoth: Solver Job Template"
     openshift.io/display-name: "Thoth: Solver"
-    version: 0.10.0-dev
+    version: 0.11.0
     tags: thoth,ai-stacks,aistacks,solver,machinlearning
     template.openshift.io/documentation-url: https://github.com/Thoth-Station/
     template.openshift.io/long-description: >
@@ -55,7 +55,7 @@ objects:
     metadata:
       generateName: "solver-${THOTH_SOLVER_WORKFLOW_ID}"
       annotations:
-        thoth-station.ninja/template-version: 0.10.0-dev
+        thoth-station.ninja/template-version: 0.11.0
       labels:
         app: thoth
         component: solver
