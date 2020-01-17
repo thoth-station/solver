@@ -40,10 +40,10 @@ spec:
                 key: secretKey
       container:
         name: solver
-        image: "solver-{{inputs.parameters.THOTH_SOLVER_NAME}}"
+        image: "{{inputs.parameters.THOTH_SOLVER_NAME}}"
         env:
           - name: THOTH_SOLVER
-            value: "solver-{{inputs.parameters.THOTH_SOLVER_NAME}}"
+            value: "{{inputs.parameters.THOTH_SOLVER_NAME}}"
           - name: THOTH_SOLVER_VIRTUALENV
             value: "/home/solver/venv"
           - name: THOTH_LOG_SOLVER
