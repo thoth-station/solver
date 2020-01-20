@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: Template
 metadata:
-  name: solver
+  name: solver-workload-operator
   annotations:
     description: "Thoth: Solver Job Template"
     openshift.io/display-name: "Thoth: Solver"
