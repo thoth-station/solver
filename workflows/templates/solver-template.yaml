@@ -23,7 +23,7 @@ spec:
           - name: "THOTH_SOLVER_INDEXES"
       outputs:
         artifacts:
-          - name: solver-document
+          - name: document
             path: "/mnt/workdir/{{inputs.parameters.THOTH_SOLVER_DOCUMENT_ID}}"
             archive:
               none: {}
