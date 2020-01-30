@@ -172,10 +172,10 @@
         },
         "jinja2": {
             "hashes": [
-                "sha256:6e7a3c2934694d59ad334c93dd1b6c96699cf24c53fdb8ec848ac6b23e685734",
-                "sha256:d6609ae5ec3d56212ca7d802eda654eaf2310000816ce815361041465b108be4"
+                "sha256:93187ffbc7808079673ef52771baa950426fd664d3aad1d0fa3e95644360e250",
+                "sha256:b0eaf100007721b5c16c1fc1eecb87409464edc10469ddc9a22a27a99123be49"
             ],
-            "version": "==2.11.0"
+            "version": "==2.11.1"
         },
         "kubernetes": {
             "hashes": [
@@ -435,10 +435,10 @@
         },
         "ruamel.yaml": {
             "hashes": [
-                "sha256:91d6bfe4fce401a00388deb0f5d29e10d2d3683a868c1113ae16bbc351ceb6a4",
-                "sha256:966e5a049eebf011c90424b9ec7dab6358cee8de0907354b27a27f20a8c4c2ec"
+                "sha256:9d59fa89985c55155d35c886663e357813404ae8f94638cb673135b8c8c1a7c7",
+                "sha256:dba517a7e330b6caf476b757022d21efa13c32694bfba1e057ce59a374f18f0a"
             ],
-            "version": "==0.16.6"
+            "version": "==0.16.7"
         },
         "ruamel.yaml.clib": {
             "hashes": [
@@ -496,11 +496,11 @@
         },
         "thoth-common": {
             "hashes": [
-                "sha256:5932f17818d94f78d32ff19004a1f2b32810f9b15bb1d737f1fee77aae0b2fdd",
-                "sha256:aaedee40bc17e041f0e95d936b8d12608dd7f1b62e00889889f71d7e62ad06fc"
+                "sha256:304e1cf54ebcd4c3a18afd8afd75fa8c195a5e3d1ed501bcbbadcac40f846918",
+                "sha256:693f87290c19b64e42f84182059fe1c87e7c675583ff9fbe7bfde8fed8a82303"
             ],
             "index": "pypi",
-            "version": "==0.10.0"
+            "version": "==0.10.1"
         },
         "thoth-python": {
             "hashes": [
