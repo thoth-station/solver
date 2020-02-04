@@ -83,6 +83,8 @@ objects:
       volumes:
         - name: workdir
           emptyDir: {}
+        - name: output
+          emptyDir: {}
       templates:
         - name: "solve-and-sync"
           archiveLocation:
