@@ -256,10 +256,10 @@
         },
         "mock": {
             "hashes": [
-                "sha256:83657d894c90d5681d62155c82bda9c1187827525880eda8ff5df4ec813437c3",
-                "sha256:d157e52d4e5b938c550f39eb2fd15610db062441a9c2747d3dbfa9298211d0f8"
+                "sha256:56358390ebde40c927ec5666626be7d4310a2533ae3aed5c2dd7b55b80687f48",
+                "sha256:8fff3fd7c5796ea78ae2847f32e87ad4e111e03fef6e90d03b5efb4882211d78"
             ],
-            "version": "==3.0.5"
+            "version": "==4.0.0"
         },
         "multidict": {
             "hashes": [
@@ -496,11 +496,11 @@
         },
         "thoth-common": {
             "hashes": [
-                "sha256:9167fd5147783204ab1e43879a8f43b24a2e5022287e7704e1086be85dfc7f94",
-                "sha256:c354170f25ba11562a3857129e9fb6f015a3201a7e69dabbe8405449180d225f"
+                "sha256:855e34122315f3b4b64edcb2682af8e39da59c97edc90518bc17511d85c93d8b",
+                "sha256:efd2a0b74eac2352c35928f43209928913408aa5e355eea7dafe896daaf4cc6c"
             ],
             "index": "pypi",
-            "version": "==0.10.2"
+            "version": "==0.10.3"
         },
         "thoth-python": {
             "hashes": [
