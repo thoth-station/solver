@@ -14,7 +14,7 @@ metadata:
     template.openshift.io/provider-display-name: "Red Hat, Inc."
     thoth-station.ninja/template-version: 0.10.0
   labels:
-    template: solver
+    template: solver-workload-operator
     app: thoth
     component: solver
 
