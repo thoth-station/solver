@@ -524,11 +524,11 @@
         },
         "thoth-common": {
             "hashes": [
-                "sha256:b0592552be149272d6a2fcee75061b9bc9a36a94a0e20df236b0fea434e73052",
-                "sha256:cf7dbafab13c7f5ecb325ab3fe0697152fd28d0bc6f814fa552a79e4da2974fc"
+                "sha256:ddc90cf67e3eae0a56c2dc151a1244e933b09a9b700e2b02d7a6c20d51b054c0",
+                "sha256:f0ee90918995ece2d900d460b63f6a801762366015335d47663d9cbd424f4d66"
             ],
             "index": "pypi",
-            "version": "==0.10.7"
+            "version": "==0.10.8"
         },
         "thoth-python": {
             "hashes": [
