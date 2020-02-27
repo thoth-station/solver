@@ -118,8 +118,8 @@ objects:
                   template: "graph-sync"
                 arguments:
                   artifacts:
-                    - name: document
-                      from: "{{tasks.solverany.outputs.artifacts.document}}"
+                    - name: outputdocument
+                      from: "{{tasks.solverany.outputs.artifacts.outputdocument}}"
                   parameters:
                     - name: "THOTH_DOCUMENT_ID"
                       value: "{{workflow.parameters.THOTH_SOLVER_NAME}}-{{workflow.parameters.THOTH_SOLVER_WORKFLOW_ID}}"
