@@ -96,6 +96,10 @@ objects:
             value: "${THOTH_SOLVER_INDEXES}"
           - name: "THOTH_FORCE_SYNC"
             value: "${THOTH_FORCE_SYNC}"
+          - name: ceph_bucket_prefix
+          - name: ceph_bucket_name
+          - name: ceph_host
+          - name: deployment_name
       volumes:
         - name: workdir
           emptyDir: {}
@@ -116,7 +120,7 @@ objects:
                     - name: "THOTH_SOLVER_NAME"
                       value: "{{workflow.parameters.THOTH_SOLVER_NAME}}"
                     - name: "THOTH_SOLVER_DOCUMENT_ID"
-                      value: "{{workflow.parameters.THOTH_SOLVER_NAME}}-{{workflow.parameters.THOTH_SOLVER_WORKFLOW_ID}}"
+                      value: "{{workflow.parameters.THOTH_SOLVER_NAME}}{{workflow.parameters.THOTH_SOLVER_WORKFLOW_ID}}"
                     - name: "THOTH_LOG_SOLVER"
                       value: "{{workflow.parameters.THOTH_LOG_SOLVER}}"
                     - name: "THOTH_SOLVER_NO_TRANSITIVE"
@@ -125,6 +129,14 @@ objects:
                       value: "{{workflow.parameters.THOTH_SOLVER_PACKAGES}}"
                     - name: "THOTH_SOLVER_INDEXES"
                       value: "{{workflow.parameters.THOTH_SOLVER_INDEXES}}"
+                    - name: "THOTH_S3_ENDPOINT_URL"
+                      value: "{{workflow.parameters.ceph_host}}"
+                    - name: "THOTH_CEPH_BUCKET_NAME"
+                      value: "{{workflow.parameters.ceph_bucket_name}}"
+                    - name: "THOTH_CEPH_BUCKET_PREFIX"
+                      value: "{{workflow.parameters.ceph_bucket_prefix}}"
+                    - name: "THOTH_DEPLOYMENT_NAME"
+                      value: "{{workflow.parameters.deployment_name}}"
 
               - name: "graph-sync-solverany"
                 dependencies:
@@ -138,7 +150,7 @@ objects:
                       from: "{{tasks.solverany.outputs.artifacts.outputdocument}}"
                   parameters:
                     - name: "THOTH_DOCUMENT_ID"
-                      value: "{{workflow.parameters.THOTH_SOLVER_NAME}}-{{workflow.parameters.THOTH_SOLVER_WORKFLOW_ID}}"
+                      value: "{{workflow.parameters.THOTH_SOLVER_NAME}}{{workflow.parameters.THOTH_SOLVER_WORKFLOW_ID}}"
                     - name: "THOTH_FORCE_SYNC"
                       value: "{{workflow.parameters.THOTH_FORCE_SYNC}}"
 

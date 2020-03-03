@@ -21,6 +21,10 @@ spec:
             value: "1"
           - name: "THOTH_SOLVER_PACKAGES"
           - name: "THOTH_SOLVER_INDEXES"
+          - name: "THOTH_S3_ENDPOINT_URL"
+          - name: "THOTH_CEPH_BUCKET_NAME"
+          - name: "THOTH_CEPH_BUCKET_PREFIX"
+          - name: "THOTH_DEPLOYMENT_NAME"
       outputs:
         artifacts:
           - name: outputdocument
@@ -28,10 +32,9 @@ spec:
             archive:
               none: {}
             s3:
-              # TODO: Take these hardcoded values of Ceph output from cm
-              key: "data/thoth/thoth-psi-stage/solver/{{inputs.parameters.THOTH_SOLVER_DOCUMENT_ID}}"
-              endpoint: "s3.upshift.redhat.com"
-              bucket: "thoth"
+              key: "{{inputs.parameters.THOTH_CEPH_BUCKET_PREFIX}}/{{inputs.parameters.THOTH_DEPLOYMENT_NAME}}/solver/{{inputs.parameters.THOTH_SOLVER_DOCUMENT_ID}}"
+              endpoint: "{{inputs.parameters.THOTH_S3_ENDPOINT_URL}}"
+              bucket: "{{inputs.parameters.THOTH_CEPH_BUCKET_NAME}}"
               insecure: true
               accessKeySecret:
                 name: argo-artifact-repository
