@@ -49,20 +49,20 @@ parameters:
     required: true
     value: INFO
 
-  - description: Registry the ImageStream to be use lives in
+  - name: IMAGE_STREAM_REGISTRY
+    description: Registry the ImageStream to be use lives in
     displayName: ImageStream Registry
     required: true
-    name: IMAGE_STREAM_REGISTRY
     value: "docker-registry.default.svc:5000"
-  - description: Namespace the ImageStream to be use lives in
+  - name: IMAGE_STREAM_NAMESPACE
+    description: Namespace the ImageStream to be use lives in
     displayName: ImageStream Project
     required: true
-    name: IMAGE_STREAM_NAMESPACE
     value: "thoth-infra-stage"
-  - description: Tag of the ImageStream to be use
+  - name: IMAGE_STREAM_TAG
+    description: Tag of the ImageStream to be use
     displayName: ImageStream Tag
     required: true
-    name: IMAGE_STREAM_TAG
     value: "latest"
 
 objects:
@@ -96,6 +96,12 @@ objects:
             value: "${THOTH_SOLVER_INDEXES}"
           - name: "THOTH_FORCE_SYNC"
             value: "${THOTH_FORCE_SYNC}"
+          - name: "IMAGE_STREAM_REGISTRY"
+            value: "${IMAGE_STREAM_REGISTRY}"
+          - name: "IMAGE_STREAM_NAMESPACE"
+            value: "${IMAGE_STREAM_NAMESPACE}"
+          - name: "IMAGE_STREAM_TAG"
+            value: "${IMAGE_STREAM_TAG}"
           - name: ceph_bucket_prefix
           - name: ceph_bucket_name
           - name: ceph_host
@@ -129,6 +135,12 @@ objects:
                       value: "{{workflow.parameters.THOTH_SOLVER_PACKAGES}}"
                     - name: "THOTH_SOLVER_INDEXES"
                       value: "{{workflow.parameters.THOTH_SOLVER_INDEXES}}"
+                    - name: "IMAGE_STREAM_REGISTRY"
+                      value: "{{workflow.parameters.IMAGE_STREAM_REGISTRY}}"
+                    - name: "IMAGE_STREAM_NAMESPACE"
+                      value: "{{workflow.parameters.IMAGE_STREAM_NAMESPACE}}"
+                    - name: "IMAGE_STREAM_TAG"
+                      value: "{{workflow.parameters.IMAGE_STREAM_TAG}}"
                     - name: "THOTH_S3_ENDPOINT_URL"
                       value: "{{workflow.parameters.ceph_host}}"
                     - name: "THOTH_CEPH_BUCKET_NAME"
