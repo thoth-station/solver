@@ -22,7 +22,6 @@ pytest-timeout = "*"
 pytest-cov = "*"
 pytest-venv = "*"
 mypy = "*"
-typeshed = "*"
 pytest-mypy = "*"
 
 [requires]
