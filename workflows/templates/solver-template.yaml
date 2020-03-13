@@ -33,9 +33,9 @@ spec:
             archive:
               none: {}
             s3:
-              key: >
-                "inputs.parameters.THOTH_CEPH_BUCKET_PREFIX}}/{{inputs.parameters.THOTH_DEPLOYMENT_NAME}}
-                /solver/{{inputs.parameters.THOTH_SOLVER_DOCUMENT_ID}}"
+              key: "inputs.parameters.THOTH_CEPH_BUCKET_PREFIX}}/\
+              {{inputs.parameters.THOTH_DEPLOYMENT_NAME}}/\
+              solver/{{inputs.parameters.THOTH_SOLVER_DOCUMENT_ID}}"
               endpoint: "{{inputs.parameters.THOTH_S3_ENDPOINT_URL}}"
               bucket: "{{inputs.parameters.THOTH_CEPH_BUCKET_NAME}}"
               insecure: true
@@ -47,9 +47,9 @@ spec:
                 key: secretKey
       container:
         name: solver
-        image: >-
-          "{{inputs.parameters.IMAGE_STREAM_REGISTRY}}/{{inputs.parameters.IMAGE_STREAM_NAMESPACE}}
-          /{{inputs.parameters.THOTH_SOLVER_NAME}}:{{inputs.parameters.IMAGE_STREAM_TAG}}"
+        image: "{{inputs.parameters.IMAGE_STREAM_REGISTRY}}/\
+        {{inputs.parameters.IMAGE_STREAM_NAMESPACE}}/\
+        {{inputs.parameters.THOTH_SOLVER_NAME}}:{{inputs.parameters.IMAGE_STREAM_TAG}}"
         env:
           - name: THOTH_SOLVER
             value: "{{inputs.parameters.THOTH_SOLVER_NAME}}"
