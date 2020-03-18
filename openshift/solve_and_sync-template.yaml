@@ -5,7 +5,7 @@ metadata:
   annotations:
     description: "Thoth: Solver Job Template"
     openshift.io/display-name: "Thoth: Solver"
-    version: 0.11.0
+    version: 0.2.0
     tags: thoth,ai-stacks,aistacks,solver,machinlearning
     template.openshift.io/documentation-url: https://github.com/Thoth-Station/
     template.openshift.io/long-description: >
@@ -49,13 +49,29 @@ parameters:
     required: true
     value: INFO
 
+  - name: IMAGE_STREAM_REGISTRY
+    description: Registry the ImageStream to be use lives in
+    displayName: ImageStream Registry
+    required: true
+    value: "docker-registry.default.svc:5000"
+  - name: IMAGE_STREAM_NAMESPACE
+    description: Namespace the ImageStream to be use lives in
+    displayName: ImageStream Project
+    required: true
+    value: "thoth-infra-stage"
+  - name: IMAGE_STREAM_TAG
+    description: Tag of the ImageStream to be use
+    displayName: ImageStream Tag
+    required: true
+    value: "latest"
+
 objects:
   - apiVersion: argoproj.io/v1alpha1
     kind: Workflow
     metadata:
-      generateName: "solver-${THOTH_SOLVER_WORKFLOW_ID}"
+      name: "${THOTH_SOLVER_WORKFLOW_ID}"
       annotations:
-        thoth-station.ninja/template-version: 0.11.0
+        thoth-station.ninja/template-version: 0.2.0
       labels:
         app: thoth
         component: solver
@@ -80,6 +96,16 @@ objects:
             value: "${THOTH_SOLVER_INDEXES}"
           - name: "THOTH_FORCE_SYNC"
             value: "${THOTH_FORCE_SYNC}"
+          - name: "IMAGE_STREAM_REGISTRY"
+            value: "${IMAGE_STREAM_REGISTRY}"
+          - name: "IMAGE_STREAM_NAMESPACE"
+            value: "${IMAGE_STREAM_NAMESPACE}"
+          - name: "IMAGE_STREAM_TAG"
+            value: "${IMAGE_STREAM_TAG}"
+          - name: ceph_bucket_prefix
+          - name: ceph_bucket_name
+          - name: ceph_host
+          - name: deployment_name
       volumes:
         - name: workdir
           emptyDir: {}
@@ -100,7 +126,7 @@ objects:
                     - name: "THOTH_SOLVER_NAME"
                       value: "{{workflow.parameters.THOTH_SOLVER_NAME}}"
                     - name: "THOTH_SOLVER_DOCUMENT_ID"
-                      value: "{{workflow.parameters.THOTH_SOLVER_NAME}}-{{workflow.parameters.THOTH_SOLVER_WORKFLOW_ID}}"
+                      value: "{{workflow.parameters.THOTH_SOLVER_WORKFLOW_ID}}"
                     - name: "THOTH_LOG_SOLVER"
                       value: "{{workflow.parameters.THOTH_LOG_SOLVER}}"
                     - name: "THOTH_SOLVER_NO_TRANSITIVE"
@@ -109,6 +135,20 @@ objects:
                       value: "{{workflow.parameters.THOTH_SOLVER_PACKAGES}}"
                     - name: "THOTH_SOLVER_INDEXES"
                       value: "{{workflow.parameters.THOTH_SOLVER_INDEXES}}"
+                    - name: "IMAGE_STREAM_REGISTRY"
+                      value: "{{workflow.parameters.IMAGE_STREAM_REGISTRY}}"
+                    - name: "IMAGE_STREAM_NAMESPACE"
+                      value: "{{workflow.parameters.IMAGE_STREAM_NAMESPACE}}"
+                    - name: "IMAGE_STREAM_TAG"
+                      value: "{{workflow.parameters.IMAGE_STREAM_TAG}}"
+                    - name: "THOTH_S3_ENDPOINT_URL"
+                      value: "{{workflow.parameters.ceph_host}}"
+                    - name: "THOTH_CEPH_BUCKET_NAME"
+                      value: "{{workflow.parameters.ceph_bucket_name}}"
+                    - name: "THOTH_CEPH_BUCKET_PREFIX"
+                      value: "{{workflow.parameters.ceph_bucket_prefix}}"
+                    - name: "THOTH_DEPLOYMENT_NAME"
+                      value: "{{workflow.parameters.deployment_name}}"
 
               - name: "graph-sync-solverany"
                 dependencies:
@@ -118,10 +158,16 @@ objects:
                   template: "graph-sync"
                 arguments:
                   artifacts:
-                    - name: document
-                      from: "{{tasks.solverany.outputs.artifacts.document}}"
+                    - name: outputdocument
+                      from: "{{tasks.solverany.outputs.artifacts.outputdocument}}"
                   parameters:
                     - name: "THOTH_DOCUMENT_ID"
-                      value: "{{workflow.parameters.THOTH_SOLVER_NAME}}-{{workflow.parameters.THOTH_SOLVER_WORKFLOW_ID}}"
+                      value: "{{workflow.parameters.THOTH_SOLVER_WORKFLOW_ID}}"
                     - name: "THOTH_FORCE_SYNC"
                       value: "{{workflow.parameters.THOTH_FORCE_SYNC}}"
+                    - name: "IMAGE_STREAM_REGISTRY"
+                      value: "{{workflow.parameters.IMAGE_STREAM_REGISTRY}}"
+                    - name: "IMAGE_STREAM_NAMESPACE"
+                      value: "{{workflow.parameters.IMAGE_STREAM_NAMESPACE}}"
+                    - name: "IMAGE_STREAM_TAG"
+                      value: "{{workflow.parameters.IMAGE_STREAM_TAG}}"
