@@ -149,10 +149,10 @@
         },
         "distro": {
             "hashes": [
-                "sha256:362dde65d846d23baee4b5c058c8586f219b5a54be1cf5fc6ff55c4578392f57",
-                "sha256:eedf82a470ebe7d010f1872c17237c79ab04097948800029994fa458e52fb4b4"
+                "sha256:0e58756ae38fbd8fc3020d54badb8eae17c5b9dcbed388b17bb55b8a5928df92",
+                "sha256:df74eed763e18d10d0da624258524ae80486432cd17392d9c3d96f5e83cd2799"
             ],
-            "version": "==1.4.0"
+            "version": "==1.5.0"
         },
         "filelock": {
             "hashes": [
@@ -531,11 +531,11 @@
         },
         "thoth-common": {
             "hashes": [
-                "sha256:34c3b4f884eda0981773d8cf78e907f3742a53fd3d18ad31075d6a91b2e9b490",
-                "sha256:5799536a92cdfab2ae1c7d01dcedc186a2879d67f9d051550a4a809cbb86475b"
+                "sha256:5c7d9fd4b972a4a4d0c6d0278447bec82508cc82a35d6671ce68687ffca4d524",
+                "sha256:9d7cc09169615e4f763ddbc3f9951f281532e262b228fb77899d737b98877839"
             ],
             "index": "pypi",
-            "version": "==0.10.11"
+            "version": "==0.12.4"
         },
         "thoth-python": {
             "hashes": [
