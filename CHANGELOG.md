@@ -567,3 +567,55 @@
 * added THOTH_FORCE_SYNC
 * :sparkles: added the OpenShift Template for the Argo Workflow
 * all solver jobs for production and stage cluster
+
+## Release 1.5.1 (2020-03-30T12:29:05)
+* :pushpin: Automatic update of dependency importlib-metadata from 1.5.0 to 1.6.0
+* Add .github files
+* Fix detection of libraries that are shared with thoth-solver itself
+* Missing paranthesis prevent sync in Ceph
+* Adjust strings
+* Add env variables to graph-sync
+* remove jobs from template
+* Remove default values
+* Add correct image url with parameters
+* Introduce variables for storage on Ceph
+* Add solvers
+* Adjust template for solvers
+* :pushpin: Automatic update of dependency thoth-common from 0.10.8 to 0.10.9
+* :pushpin: Automatic update of dependency thoth-common from 0.10.7 to 0.10.8
+* :pushpin: Automatic update of dependency pytest-mypy from 0.4.2 to 0.5.0
+* :pushpin: Automatic update of dependency requests from 2.22.0 to 2.23.0
+* Use solver-workload-operator name for stage solver jobs
+* :pushpin: Automatic update of dependency thoth-common from 0.10.6 to 0.10.7
+* :pushpin: Automatic update of dependency thoth-common from 0.10.5 to 0.10.6
+* Update .thoth.yaml
+* :pushpin: Automatic update of dependency thoth-common from 0.10.4 to 0.10.5
+* :pushpin: Automatic update of dependency thoth-common from 0.10.3 to 0.10.4
+* :pushpin: Automatic update of dependency thoth-common from 0.10.2 to 0.10.3
+* Adjust name and volume in templates
+* :pushpin: Automatic update of dependency thoth-common from 0.10.1 to 0.10.2
+* :pushpin: Automatic update of dependency thoth-common from 0.10.0 to 0.10.1
+* :pushpin: Automatic update of dependency pytest from 5.3.4 to 5.3.5
+* :pushpin: Automatic update of dependency thoth-common from 0.9.31 to 0.10.0
+* :pushpin: Automatic update of dependency importlib-metadata from 1.4.0 to 1.5.0
+* Add parameter to sync only on graph database
+* :pushpin: Automatic update of dependency thoth-common from 0.9.30 to 0.9.31
+* :pushpin: Automatic update of dependency thoth-common from 0.9.29 to 0.9.30
+* :pushpin: Automatic update of dependency packaging from 20.0 to 20.1
+* :pushpin: Automatic update of dependency pytest from 5.3.3 to 5.3.4
+* :pushpin: Automatic update of dependency thoth-common from 0.9.28 to 0.9.29
+* :pushpin: Automatic update of dependency autopep8 from 1.4.4 to 1.5
+* Update template name
+* :pushpin: Automatic update of dependency pytest from 5.3.2 to 5.3.3
+* Standardize solver name variable
+* Rename solver-rhel-8.0 to solver-rhel-8
+* :pushpin: Automatic update of dependency thoth-common from 0.9.27 to 0.9.28
+* standardize templates
+* Add workflows templates
+* :pushpin: Automatic update of dependency thoth-common from 0.9.26 to 0.9.27
+* :pushpin: Automatic update of dependency thoth-analyzer from 0.1.7 to 0.1.8
+* :pushpin: Automatic update of dependency thoth-common from 0.9.25 to 0.9.26
+* :pushpin: Automatic update of dependency thoth-common from 0.9.24 to 0.9.25
+* :pushpin: Automatic update of dependency importlib-metadata from 1.3.0 to 1.4.0
+* :pushpin: Automatic update of dependency thoth-common from 0.9.23 to 0.9.24
+* :pushpin: Automatic update of dependency thoth-python from 0.9.0 to 0.9.1
