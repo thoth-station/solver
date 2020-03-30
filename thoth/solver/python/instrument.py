@@ -34,7 +34,7 @@ from thoth.analyzer import run_command
 from .._typing import MYPY_CHECK_RUNNING
 
 if MYPY_CHECK_RUNNING:  # pragma: no cover
-    from typing import Dict, Any, Optional, Callable, Union
+    from typing import Dict, Any, Optional, Callable, Union, List
 
 
 _LOGGER = logging.getLogger(__name__)
@@ -63,9 +63,6 @@ def _find_distribution_name(package_name):  # type: (str) -> None
 def _get_importlib_metadata_metadata(package_name):  # type: (str) -> None
     """Retrieve all the metadata for the given package."""
     import sys
-
-    sys.path = sys.path[::-1]
-
     import importlib_metadata
     import json
 
@@ -100,9 +97,6 @@ def _get_importlib_metadata_metadata(package_name):  # type: (str) -> None
 def _get_importlib_metadata_version(package_name):  # type: (str) -> None
     """Retrieve version based on the given package."""
     import sys
-
-    sys.path = sys.path[::-1]
-
     import importlib_metadata
 
     print(importlib_metadata.version(package_name), end="")
@@ -112,9 +106,6 @@ def _get_importlib_metadata_version(package_name):  # type: (str) -> None
 def _get_importlib_metadata_requires(package_name):  # type: (str) -> None
     """Retrieve requires based on the given package."""
     import sys
-
-    sys.path = sys.path[::-1]
-
     import importlib_metadata
     import json
 
@@ -125,9 +116,6 @@ def _get_importlib_metadata_requires(package_name):  # type: (str) -> None
 def _get_importlib_metadata_entry_points(package_name):  # type: (str) -> None
     """Retrieve information about entry-points for the given package."""
     import sys
-
-    sys.path = sys.path[::-1]
-
     import importlib_metadata
     import json
 
@@ -139,9 +127,6 @@ def _get_importlib_metadata_entry_points(package_name):  # type: (str) -> None
 def _get_importlib_metadata_files(package_name):  # type: (str) -> None
     """Retrieve information about files present for the given package."""
     import sys
-
-    sys.path = sys.path[::-1]
-
     from importlib_metadata import files
     import json
 
@@ -153,15 +138,24 @@ def _get_importlib_metadata_files(package_name):  # type: (str) -> None
     sys.exit(0)
 
 
+def _get_import_path():  # type: () -> None
+    """Get import path configured for the given Python interpreter."""
+    import json
+    import sys
+
+    json.dump({"path": sys.path}, sys.stdout)
+    sys.exit(0)
+
+
 def execute_env_function(
     python_bin,  # type: str
-    function,  # type: Callable[[Any], None]
+    function,  # type: Union[Callable[[Any], None], Callable[[], None]]
     *,
     env=None,  # type: Optional[Dict[str, str]]
     raise_on_error=True,  # type: bool
     is_json=False,  # type: bool
     **function_arguments,  # type: Any
-):  # type: (...) -> Optional[Union[str, Dict[str, Any]]]
+):  # type: (...) -> Optional[Union[str, Dict[str, Any], List[str]]]
     """Execute the given function in Python interpreter."""
     kwargs = ""
     for argument, value in function_arguments.items():
@@ -194,43 +188,46 @@ def get_package_metadata(python_bin, package_name):
     """Get metadata information from the installed package."""
     # A simple trick when running importlib_metadata - importlib_metadata is present as
     # a dependency of this package, but it is not installed in the created virtual environment.
-    # Inject the current path to the created environment. Note however,
-    # we need to make sure importlib_metadata correctly handles metadata of packages which are dependencies of this
-    # package - each function executed in the virtual environment should reverse sys.path to give precedence
-    # in importing packages from virtual environment, and then, import from the environment where solver runs in.
+    # Inject the current path to the created environment. Note however, the path configured in
+    # the virtual environment needs to take precedence.
+    venv_path = [
+        f for f in execute_env_function(python_bin, _get_import_path, is_json=True)["path"]  # type: ignore
+        if f and f not in sys.path
+    ]
+
     return {
         "metadata": execute_env_function(
             python_bin,
             _get_importlib_metadata_metadata,
-            env={"PYTHONPATH": ":".join(sys.path)},
+            env={"PYTHONPATH": ":".join(venv_path + sys.path)},
             is_json=True,
             package_name=package_name,
         ),
         "requires": execute_env_function(
             python_bin,
             _get_importlib_metadata_requires,
-            env={"PYTHONPATH": ":".join(sys.path)},
+            env={"PYTHONPATH": ":".join(venv_path + sys.path)},
             is_json=True,
             package_name=package_name,
         ),
         "entry_points": execute_env_function(
             python_bin,
             _get_importlib_metadata_entry_points,
-            env={"PYTHONPATH": ":".join(sys.path)},
+            env={"PYTHONPATH": ":".join(venv_path + sys.path)},
             is_json=True,
             package_name=package_name,
         ),
         "files": execute_env_function(
             python_bin,
             _get_importlib_metadata_files,
-            env={"PYTHONPATH": ":".join(sys.path)},
+            env={"PYTHONPATH": ":".join(venv_path + sys.path)},
             is_json=True,
             package_name=package_name,
         ),
         "version": execute_env_function(
             python_bin,
             _get_importlib_metadata_version,
-            env={"PYTHONPATH": ":".join(sys.path)},
+            env={"PYTHONPATH": ":".join(venv_path + sys.path)},
             is_json=False,
             package_name=package_name,
         ),
