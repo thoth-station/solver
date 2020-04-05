@@ -778,11 +778,11 @@
         },
         "pytest-mypy": {
             "hashes": [
-                "sha256:ea5da19d7343d4ccd98c3fe39cc30dee2743b9fbf00999b2a863e3ead78e353c",
-                "sha256:f55dfbdd9e6749f5af3896e8ad813b611c3acadcec16ba728738777ccf9ce1d4"
+                "sha256:bb70bb64768a87dbbee250eee7932c84d1e8ccf68c4ce0651304b9598d072d6b",
+                "sha256:f766b229b2760f99524f2c40c24e3288d4853334e560ab5b59a4ebffb2d4cb1d"
             ],
             "index": "pypi",
-            "version": "==0.6.0"
+            "version": "==0.6.1"
         },
         "pytest-timeout": {
             "hashes": [
