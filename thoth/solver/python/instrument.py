@@ -169,11 +169,12 @@ def execute_env_function(
     _LOGGER.debug("Executing the following command in Python interpreter (env: %r): %r", env, cmd)
     res = run_command(cmd, env=env, is_json=is_json, raise_on_error=False)
 
-    _LOGGER.debug("stdout during command execution: %s", res.stdout)
     _LOGGER.debug("stderr during command execution: %s", res.stderr)
 
     if raise_on_error and res.return_code != 0:
         raise ValueError("Failed to successfully execute function in Python interpreter: {}".format(res.stderr))
+
+    _LOGGER.debug("stdout during command execution: %s", res.stdout)
 
     if res.return_code == 0:
         stdout = res.stdout  # type: Union[str, Dict[str, Any]]
