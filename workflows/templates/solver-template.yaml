@@ -4,7 +4,7 @@ kind: WorkflowTemplate
 metadata:
   name: solver-any
   annotations:
-    thoth-station.ninja/template-version: 0.6.0-dev
+    thoth-station.ninja/template-version: 0.6.1
   labels:
     app: thoth
     component: solver
@@ -87,3 +87,4 @@ spec:
           requests:
             cpu: 500m
             memory: 1Gi
+        activeDeadlineSeconds: 1800
