@@ -77,6 +77,7 @@ objects:
         component: solver
     spec:
       serviceAccountName: argo
+      activeDeadlineSeconds: 2100
       ttlStrategy:
         secondsAfterSuccess: 900  # Keep solver workflow available for 15 minutes
         # secondsAfterFailure kept unset to keep failed solvers, solvers should never fail.
