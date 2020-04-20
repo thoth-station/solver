@@ -539,11 +539,11 @@
         },
         "thoth-python": {
             "hashes": [
-                "sha256:a43ec97d2c1d575505b0f50574cb2cd01c5e8cadd38f707d7761a3ab4e4733e7",
-                "sha256:f4422f51a618348285388882e004f7e68d5ce4e482154bd18d074278741e104d"
+                "sha256:7c36312fe6eadbef069eddc338374be37f01da8902d9d53a9f6e77b4746086dd",
+                "sha256:93805aa8ccfc00f09297f233323f0645f3f89cbbbd00dc3c2e7c07ff7a967c3a"
             ],
             "index": "pypi",
-            "version": "==0.9.1"
+            "version": "==0.9.2"
         },
         "toml": {
             "hashes": [
