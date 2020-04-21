@@ -619,3 +619,28 @@
 * :pushpin: Automatic update of dependency importlib-metadata from 1.3.0 to 1.4.0
 * :pushpin: Automatic update of dependency thoth-common from 0.9.23 to 0.9.24
 * :pushpin: Automatic update of dependency thoth-python from 0.9.0 to 0.9.1
+
+## Release 1.5.2 (2020-04-21T10:17:29)
+* :pushpin: Automatic update of dependency autopep8 from 1.5.1 to 1.5.2
+* :pushpin: Automatic update of dependency thoth-python from 0.9.1 to 0.9.2
+* :pushpin: Automatic update of dependency virtualenv from 20.0.17 to 20.0.18
+* :pushpin: Automatic update of dependency virtualenv from 20.0.16 to 20.0.17
+* :pushpin: Automatic update of dependency thoth-common from 0.12.8 to 0.12.9
+* consistency in using secrets
+* :pushpin: Automatic update of dependency thoth-common from 0.12.7 to 0.12.8
+* Give solver 30 minutes to compute results
+* :pushpin: Automatic update of dependency thoth-common from 0.12.6 to 0.12.7
+* :pushpin: Automatic update of dependency autopep8 from 1.5 to 1.5.1
+* Setup workflow TTL strategy to reduce preassure causing OOM
+* Fix when no output was produced and JSON flag was set to true
+* :pushpin: Automatic update of dependency pytest-mypy from 0.6.0 to 0.6.1
+* :pushpin: Automatic update of dependency virtualenv from 20.0.15 to 20.0.16
+* Use RHEL 8
+* More resources for bigger stacks
+* :pushpin: Automatic update of dependency thoth-common from 0.12.5 to 0.12.6
+* :pushpin: Automatic update of dependency thoth-common from 0.12.4 to 0.12.5
+* :pushpin: Automatic update of dependency pytest-mypy from 0.5.0 to 0.6.0
+* :pushpin: Automatic update of dependency thoth-common from 0.10.11 to 0.12.4
+* :pushpin: Automatic update of dependency virtualenv from 20.0.10 to 20.0.15
+* Remove hack/ as it is no longer needed
+* :pushpin: Automatic update of dependency pytest from 5.4.0 to 5.4.1
