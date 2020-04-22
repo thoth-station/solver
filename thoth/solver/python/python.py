@@ -22,6 +22,7 @@ from contextlib import contextmanager
 import logging
 import os
 from shlex import quote
+import sysconfig
 from urllib.parse import urlparse
 
 from packaging.markers import default_environment
@@ -362,6 +363,7 @@ def resolve(requirements, index_urls, python_version, exclude_packages, transiti
         "unresolved": [],
         "environment": default_environment(),
         "environment_packages": environment_packages,
+        "platform": sysconfig.get_platform(),
     }
 
     all_solvers = []
