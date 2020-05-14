@@ -107,7 +107,7 @@ def get_ecosystem_solver(ecosystem_name):  # type: (str) -> Solver
         source = Source(url="https://pypi.org/simple", warehouse_api_url="https://pypi.org/pypi", warehouse=True)
 
         return PythonSolver(
-            dependency_parser=PythonDependencyParser(), releases_fetcher=PythonReleasesFetcher(source=source)
+            dependency_parser=PythonDependencyParser(), releases_fetcher=PythonReleasesFetcher(source=source),
         )
 
     raise NotImplementedError("Unknown ecosystem: {}".format(ecosystem_name))

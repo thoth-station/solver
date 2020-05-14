@@ -69,7 +69,7 @@ def cli(ctx=None, verbose=0):
 @cli.command()
 @click.pass_context
 @click.option(
-    "--requirements", "-r", type=str, envvar="THOTH_SOLVER_PACKAGES", required=True, help="Requirements to be solved."
+    "--requirements", "-r", type=str, envvar="THOTH_SOLVER_PACKAGES", required=True, help="Requirements to be solved.",
 )
 @click.option(
     "--index",

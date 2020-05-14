@@ -85,7 +85,7 @@ class TestPython(SolverTestCase):
     }
 
     @pytest.mark.parametrize(
-        "metadata_file_path,metadata_file_extracted_path", [("tensorflow.json", "tensorflow_extracted.json")]
+        "metadata_file_path,metadata_file_extracted_path", [("tensorflow.json", "tensorflow_extracted.json")],
     )
     def test_extract_metadata(self, metadata_file_path, metadata_file_extracted_path):
         metadata = json.loads((Path(self.data_dir) / "metadata" / metadata_file_path).read_text())

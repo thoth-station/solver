@@ -267,8 +267,10 @@ latex_elements = {
 # (source start file, target name, title,
 #  author, documentclass [howto, manual, or own class]).
 latex_documents = [
-    (master_doc, 'ThothSolver.tex', 'Thoth Solver Documentation',
-     'Thoth team', 'manual'),
+    (
+        master_doc, 'ThothSolver.tex', 'Thoth Solver Documentation',
+        'Thoth team', 'manual',
+    ),
 ]
 
 # The name of an image file (relative to this directory) to place at the top of
@@ -293,7 +295,7 @@ latex_documents = [
 #
 # latex_appendices = []
 
-# It false, will not define \strong, \code, 	itleref, \crossref ... but only
+# It false, will not define \strong, \code,     itleref, \crossref ... but only
 # \sphinxstrong, ..., \sphinxtitleref, ... To help avoid clash with user added
 # packages.
 #
@@ -309,8 +311,10 @@ latex_documents = [
 # One entry per manual page. List of tuples
 # (source start file, name, description, authors, manual section).
 man_pages = [
-    (master_doc, 'thothsolver', 'Thoth Solver Documentation',
-     [author], 1)
+    (
+        master_doc, 'thothsolver', 'Thoth Solver Documentation',
+        [author], 1,
+    ),
 ]
 
 # If true, show URL addresses after external links.
@@ -324,9 +328,11 @@ man_pages = [
 # (source start file, target name, title, author,
 #  dir menu entry, description, category)
 texinfo_documents = [
-    (master_doc, 'ThothSolver', 'Thoth Solver Documentation',
-     author, 'ThothSolver', 'One line description of project.',
-     'Miscellaneous'),
+    (
+        master_doc, 'ThothSolver', 'Thoth Solver Documentation',
+        author, 'ThothSolver', 'One line description of project.',
+        'Miscellaneous',
+    ),
 ]
 
 # Documents to append as an appendix to all manuals.
