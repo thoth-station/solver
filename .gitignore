@@ -7,3 +7,4 @@ docs/source/thoth.*.rst
 build/
 .coverage
 .mypy_cache/
+.lock
