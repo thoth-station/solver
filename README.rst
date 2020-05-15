@@ -22,7 +22,7 @@ Tool provided by this project will tell you how dependencies could be resolved:
 
 .. code-block:: console
 
-  thoth-solver -vvv pypi -r requirements.txt 
+  thoth-solver -vvv pypi -r requirements.txt
 
 The output of this solver is a dependency analysis for the given software stack
 - in the example above, package ``tensorflow`` in any release with analysis of

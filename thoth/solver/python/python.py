@@ -97,11 +97,11 @@ def _install_requirement(python_bin, package, version=None, index_url=None, clea
                 )
 
             _LOGGER.debug(
-                "Restoring previous environment setup after installation of %r (%s)", package, previous_version
+                "Restoring previous environment setup after installation of %r (%s)", package, previous_version,
             )
             if previous_version:
                 cmd = "{} -m pip install --force-reinstall --no-cache-dir --no-deps {}=={}".format(
-                    python_bin, quote(package), quote(previous_version["package"]["installed_version"])
+                    python_bin, quote(package), quote(previous_version["package"]["installed_version"]),
                 )
                 _LOGGER.debug("Running %r", cmd)
                 result = run_command(cmd, raise_on_error=False)
@@ -223,7 +223,7 @@ def _do_resolve_index(python_bin, solver, all_solvers, requirements, exclude_pac
 
         version_spec = str(dependency.specifier)
         _LOGGER.info(
-            "Resolving package %r with version specifier %r from %r", dependency.name, version_spec, source.url
+            "Resolving package %r with version specifier %r from %r", dependency.name, version_spec, source.url,
         )
         resolved_versions = _resolve_versions(solver, source, dependency.name, version_spec)
         if not resolved_versions:
@@ -237,7 +237,7 @@ def _do_resolve_index(python_bin, solver, all_solvers, requirements, exclude_pac
             }
             if version_spec.startswith("=="):
                 error_report["is_provided_package_version"] = source.provides_package_version(
-                    dependency.name, version_spec[len("=="):]
+                    dependency.name, version_spec[len("=="):],
                 )
 
             unresolved.append(error_report)
@@ -283,7 +283,7 @@ def _do_resolve_index(python_bin, solver, all_solvers, requirements, exclude_pac
                     "details": details,
                     "is_provided_package": source.provides_package(package_name),
                     "is_provided_package_version": source.provides_package_version(package_name, package_version),
-                }
+                },
             )
             continue
 
@@ -313,7 +313,7 @@ def _do_resolve_index(python_bin, solver, all_solvers, requirements, exclude_pac
                     dep_solver.releases_fetcher.index_url,
                 )
                 resolved_versions = _resolve_versions(
-                    dep_solver, dep_solver.releases_fetcher.source, dependency_name, dependency_specifier or ""
+                    dep_solver, dep_solver.releases_fetcher.source, dependency_name, dependency_specifier or "",
                 )
                 _LOGGER.debug(
                     "Resolved versions for package %r with range specifier %r: %s",
@@ -322,7 +322,7 @@ def _do_resolve_index(python_bin, solver, all_solvers, requirements, exclude_pac
                     resolved_versions,
                 )
                 dependency["resolved_versions"].append(  # type: ignore
-                    {"versions": resolved_versions, "index": dep_solver.releases_fetcher.index_url}
+                    {"versions": resolved_versions, "index": dep_solver.releases_fetcher.index_url},
                 )
 
                 if not transitive:
@@ -333,7 +333,7 @@ def _do_resolve_index(python_bin, solver, all_solvers, requirements, exclude_pac
                     seen_entry = (dependency_name, version)
                     if seen_entry not in packages_seen:
                         _LOGGER.debug(
-                            "Adding package %r in version %r for next resolution round", dependency_name, version
+                            "Adding package %r in version %r for next resolution round", dependency_name, version,
                         )
                         packages_seen.add(seen_entry)
                         queue.append((dependency_name, version))
@@ -373,8 +373,8 @@ def resolve(requirements, index_urls, python_version, exclude_packages, transiti
 
         all_solvers.append(
             PythonSolver(
-                dependency_parser=PythonDependencyParser(), releases_fetcher=PythonReleasesFetcher(source=source)
-            )
+                dependency_parser=PythonDependencyParser(), releases_fetcher=PythonReleasesFetcher(source=source),
+            ),
         )
 
     for solver in all_solvers:

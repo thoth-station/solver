@@ -45,7 +45,7 @@ class TestPythonSolver(SolverTestCase):
             ("1.0.0rc4", "https://pypi.org/simple"),
             ("1.0.0", "https://pypi.org/simple"),
             ("1.1.0", "https://pypi.org/simple"),
-        }
+        },
     }
 
     @pytest.mark.parametrize(
@@ -68,7 +68,7 @@ class TestPythonSolver(SolverTestCase):
                         ("1.0.0rc3", "https://pypi.org/simple"),
                         ("1.0.0rc4", "https://pypi.org/simple"),
                         ("1.0.0", "https://pypi.org/simple"),
-                    }
+                    },
                 },
             ),
             (

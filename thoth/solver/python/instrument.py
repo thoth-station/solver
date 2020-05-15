@@ -82,7 +82,7 @@ def _get_importlib_metadata_metadata(package_name):  # type: (str) -> None
             "Requires-External",
             "Project-URL",
             "Provides-Extra",
-        )
+        ),
     )
     for key in keys:
         value = importlib_metadata.metadata(package_name).get_all(key)
@@ -132,8 +132,11 @@ def _get_importlib_metadata_files(package_name):  # type: (str) -> None
 
     print(
         json.dumps(
-            [{"hash": f.hash.__dict__ if f.hash else None, "size": f.size, "path": str(f)} for f in files(package_name)]
-        )
+            [
+                {"hash": f.hash.__dict__ if f.hash else None, "size": f.size, "path": str(f)}
+                for f in files(package_name)
+            ],
+        ),
     )
     sys.exit(0)
 
@@ -192,7 +195,8 @@ def get_package_metadata(python_bin, package_name):
     # Inject the current path to the created environment. Note however, the path configured in
     # the virtual environment needs to take precedence.
     venv_path = [
-        f for f in execute_env_function(python_bin, _get_import_path, is_json=True)["path"]  # type: ignore
+        f
+        for f in execute_env_function(python_bin, _get_import_path, is_json=True)["path"]  # type: ignore
         if f and f not in sys.path
     ]
 
