@@ -1,11 +1,11 @@
-apiVersion: v1
+apiVersion: template.openshift.io/v1
 kind: Template
 metadata:
   name: solver
   annotations:
     description: "Thoth: Solver Job Template"
     openshift.io/display-name: "Thoth: Solver"
-    version: 0.2.1
+    version: 0.2.2
     tags: thoth,ai-stacks,aistacks,solver,machinlearning
     template.openshift.io/documentation-url: https://github.com/Thoth-Station/
     template.openshift.io/long-description: >
@@ -71,7 +71,7 @@ objects:
     metadata:
       name: "${THOTH_SOLVER_WORKFLOW_ID}"
       annotations:
-        thoth-station.ninja/template-version: 0.2.1
+        thoth-station.ninja/template-version: 0.2.2
       labels:
         app: thoth
         component: solver
@@ -79,8 +79,7 @@ objects:
       serviceAccountName: argo
       activeDeadlineSeconds: 2100
       ttlStrategy:
-        secondsAfterSuccess: 900  # Keep solver workflow available for 15 minutes
-        # secondsAfterFailure kept unset to keep failed solvers, solvers should never fail.
+        secondsAfterSuccess: 900
       entrypoint: solve-and-sync
       arguments:
         parameters:
