@@ -77,9 +77,11 @@ objects:
         component: solver
     spec:
       serviceAccountName: argo
+      # kill workflow if running too much time
       activeDeadlineSeconds: 2100
-      ttlStrategy:
-        secondsAfterSuccess: 900
+      # delete pods when workflow is completed
+      podGC:
+        strategy: OnWorkflowCompletion
       entrypoint: solve-and-sync
       arguments:
         parameters:
