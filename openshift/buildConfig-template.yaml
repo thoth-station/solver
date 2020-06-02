@@ -923,3 +923,76 @@ objects:
           generic:
             secretReference:
               name: generic-webhook-secret
+  - kind: BuildConfig
+    apiVersion: v1
+    metadata:
+      name: "solver-rhel-8.2-py38"
+      annotations:
+        thoth-station.ninja/template-version: 1.4.0
+      labels:
+        app: "thoth"
+        component: "solver"
+        app.kubernetes.io/name: "thoth"
+        app.kubernetes.io/component: "solver"
+        app.thoth-station.ninja/solver: "rhel-8.2-py38"
+    spec:
+      output:
+        to:
+          kind: "ImageStreamTag"
+          name: "solver-rhel-8-py36:${IMAGE_STREAM_TAG}"
+      source:
+        dockerfile: |
+          FROM registry.access.redhat.com/ubi8/python-38:1-9
+
+          ENV LANG=en_US.UTF-8 \
+              THOTH_SOLVER_TMP_DIR='/tmp/thoth-solver-install'
+
+          USER 0
+          RUN useradd -m solver -s /sbin/nologin -c "Thoth Solver User"
+
+          USER ${USERID}
+          RUN mkdir -p ${THOTH_SOLVER_TMP_DIR}
+
+          # Install thoth-solver itself
+          COPY ./ ${THOTH_SOLVER_TMP_DIR}
+          RUN cd ${THOTH_SOLVER_TMP_DIR} &&\
+              /usr/bin/python3.8 -m pip install --upgrade setuptools pip &&\
+              /usr/bin/python3.8 -m pip install . &&\
+              cd / &&\
+              rm -rf ${THOTH_SOLVER_TMP_DIR} &&\
+              unset THOTH_SOLVER_TMP_DIR &&\
+              virtualenv -p python3.8 /home/solver/venv &&\
+              /home/solver/venv/bin/python3 -m pip install pipdeptree &&\
+              chmod -R 777 /home/solver
+
+          WORKDIR /home/solver
+          USER solver
+
+          CMD ["python"]
+          ENTRYPOINT ["thoth-solver"]
+        type: Git
+        git:
+          uri: "${GITHUB_URL}"
+          ref: "${GITHUB_REF}"
+      resources:
+        limits:
+          memory: "512Mi"
+          cpu: "500m"
+        requests:
+          memory: "512Mi"
+          cpu: "500m"
+      strategy:
+        type: "Docker"
+        dockerStrategy:
+          from:
+            kind: "ImageStreamTag"
+            name: "python-38:latest"
+          pullSecret:
+            name: 6340056-thoth-zuul-pull-secret
+      triggers:
+        - type: "ImageChange"
+          imageChange: {}
+        - type: "Generic"
+          generic:
+            secretReference:
+              name: generic-webhook-secret
