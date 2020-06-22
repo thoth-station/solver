@@ -347,12 +347,12 @@
         },
         "pipdeptree": {
             "hashes": [
-                "sha256:78942d3e6a88af1cea41e04d1c29ff5fbf4dda438aa8d8938ed88db22871cca3",
-                "sha256:98178657b9c952be6d49e639bcf39bc8d0e1b93781b4c518a99e6599852d46e5",
-                "sha256:f54a2388cfe3cbaa08f4702ee8957f0f3f0d6ff65899833ea57f12f2fc4ae0c1"
+                "sha256:35a81058c9568a29c5a9569109304b25f11cd9333fa2661a4d4c2c5da0e3939d",
+                "sha256:5fe866a38113d28d527033ececc57b8e86df86b7c29edbacb33f41ee50f75b31",
+                "sha256:a7e4f744f3ae149cf94dd5e517fae682780c4729f4a279e6fb81a928f57fea23"
             ],
             "index": "pypi",
-            "version": "==0.13.2"
+            "version": "==1.0.0"
         },
         "ptyprocess": {
             "hashes": [
