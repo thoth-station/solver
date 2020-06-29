@@ -532,19 +532,19 @@
         },
         "thoth-common": {
             "hashes": [
-                "sha256:5855231232de88adb19548cb5071c4bff5b3c8c1dbebe57cca8808a8efff0357",
-                "sha256:af048993db889a2a23437cf4af224c0eb8341c355c861a48b1a13e6bcd0125f0"
+                "sha256:b92582dc92a7b385327ecb594f43b855857c4e0acffaedbface86b9e26203d62",
+                "sha256:dc4e36ff6bb500619b4fedb1b5c9b4f57e5d6e3dfdab96b0ddeeb288b9746a07"
             ],
             "index": "pypi",
-            "version": "==0.13.8"
+            "version": "==0.13.12"
         },
         "thoth-python": {
             "hashes": [
-                "sha256:7c36312fe6eadbef069eddc338374be37f01da8902d9d53a9f6e77b4746086dd",
-                "sha256:93805aa8ccfc00f09297f233323f0645f3f89cbbbd00dc3c2e7c07ff7a967c3a"
+                "sha256:17eebcfcb52c4b4a834f9c64bc1f0d14f5b5b4c64e7290df75c6e38eaa9d7bf8",
+                "sha256:cfafbf578bcd9a8a9e366281a22fc40b4c4273b255d93a068e0d82d64688a7be"
             ],
             "index": "pypi",
-            "version": "==0.9.2"
+            "version": "==0.10.0"
         },
         "toml": {
             "hashes": [
@@ -578,11 +578,11 @@
         },
         "virtualenv": {
             "hashes": [
-                "sha256:a116629d4e7f4d03433b8afa27f43deba09d48bc48f5ecefa4f015a178efb6cf",
-                "sha256:a730548b27366c5e6cbdf6f97406d861cccece2e22275e8e1a757aeff5e00c70"
+                "sha256:1b253c5d0e76afe24c76ce288cdd5dd01ac7deaa55f644998c74e5a799349522",
+                "sha256:680011aa2995fb8b7c2bbea7da7afd8dcaf382def7a3e02a1b1fba4b402aa8cf"
             ],
             "index": "pypi",
-            "version": "==20.0.21"
+            "version": "==20.0.24"
         },
         "websocket-client": {
             "hashes": [
@@ -849,11 +849,11 @@
         },
         "virtualenv": {
             "hashes": [
-                "sha256:a116629d4e7f4d03433b8afa27f43deba09d48bc48f5ecefa4f015a178efb6cf",
-                "sha256:a730548b27366c5e6cbdf6f97406d861cccece2e22275e8e1a757aeff5e00c70"
+                "sha256:1b253c5d0e76afe24c76ce288cdd5dd01ac7deaa55f644998c74e5a799349522",
+                "sha256:680011aa2995fb8b7c2bbea7da7afd8dcaf382def7a3e02a1b1fba4b402aa8cf"
             ],
             "index": "pypi",
-            "version": "==20.0.21"
+            "version": "==20.0.24"
         },
         "wcwidth": {
             "hashes": [
