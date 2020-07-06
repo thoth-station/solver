@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-
+"""Setup file."""
 import os
 import sys
 from setuptools import setup
@@ -8,11 +8,13 @@ from setuptools.command.test import test as TestCommand
 
 
 def get_requirements():
+    """Get requirements."""
     with open("requirements.txt") as fd:
         return fd.read().splitlines()
 
 
 def get_version():
+    """Get version."""
     with open(os.path.join("thoth", "solver", "__init__.py")) as f:
         content = f.readlines()
 
@@ -44,15 +46,18 @@ class Test(TestCommand):
     user_options = [("pytest-args=", "a", "Arguments to pass into py.test")]
 
     def initialize_options(self):
+        """Initialize options."""
         super().initialize_options()
         self.pytest_args = None
 
     def finalize_options(self):
+        """Finalize options."""
         super().finalize_options()
         self.test_args = []
         self.test_suite = True
 
     def run_tests(self):
+        """Run tests."""
         import pytest
 
         passed_args = list(self._IMPLICIT_PYTEST_ARGS)

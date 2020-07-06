@@ -19,7 +19,7 @@
 """Test instrumentation inside a virtual environment."""
 
 import pytest
-from base import SolverTestCase
+from tests.base_test import SolverTestCase
 
 from thoth.solver.python.instrument import find_distribution_name
 from thoth.solver.python.instrument import get_package_metadata
