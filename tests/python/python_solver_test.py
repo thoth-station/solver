@@ -19,7 +19,7 @@
 """Test resolving versions given the version range in Python ecosystem."""
 
 import pytest
-from base import SolverTestCase
+from tests.base_test import SolverTestCase
 
 from thoth.solver import get_ecosystem_solver
 
@@ -79,6 +79,7 @@ class TestPythonSolver(SolverTestCase):
         ],
     )
     def test_solve_dependencies(self, package_specification, resolved_versions):
+        """Test solve dependencies."""
         solver = get_ecosystem_solver("pypi")
         test_resolved_versions = solver.solve([package_specification])
         test_resolved_versions = {k: set(v) for k, v in test_resolved_versions.items()}

@@ -8,4 +8,6 @@ build/
 .coverage
 .mypy_cache/
 .lock
+/.idea
 coverage.xml
+.env

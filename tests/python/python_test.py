@@ -21,7 +21,7 @@
 import pytest
 import json
 from pathlib import Path
-from base import SolverTestCase
+from tests.base_test import SolverTestCase
 
 from thoth.solver.python.python import extract_metadata
 from thoth.solver.python.python import parse_requirement_str
@@ -88,6 +88,7 @@ class TestPython(SolverTestCase):
         "metadata_file_path,metadata_file_extracted_path", [("tensorflow.json", "tensorflow_extracted.json")],
     )
     def test_extract_metadata(self, metadata_file_path, metadata_file_extracted_path):
+        """Test extracted metadata."""
         metadata = json.loads((Path(self.data_dir) / "metadata" / metadata_file_path).read_text())
         metadata_extracted = json.loads((Path(self.data_dir) / "metadata" / metadata_file_extracted_path).read_text())
         assert extract_metadata(metadata, "https://pypi.org/simple") == metadata_extracted
@@ -106,12 +107,14 @@ class TestPython(SolverTestCase):
         ],
     )
     def test_parse_requirement_str(self, requirement_str, expected_requirement):
+        """Test parse requirement string."""
         result = parse_requirement_str(requirement_str)
         if result.get("extras"):
             result["extras"] = set(result["extras"])
         assert result == expected_requirement
 
     def test_pipdeptree_one(self, venv):
+        """Test pipdetree one."""
         venv.install("selinon==1.1.0")
         output = pipdeptree(venv.python, "selinon")
         assert "dependencies" in output
@@ -119,10 +122,12 @@ class TestPython(SolverTestCase):
         assert output == {"package": {"package_name": "selinon", "key": "selinon", "installed_version": "1.1.0"}}
 
     def test_pipdeptree_multiple(self, venv):
+        """Test pipdetree multiple."""
         venv.install("selinon==1.1.0")
         output = pipdeptree(venv.python)
         assert len(output) > 1
 
     def test_get_environment_packages(self, venv):
+        """Test get environment packages."""
         venv.install("selinon==1.1.0")
         assert {"package_name": "selinon", "package_version": "1.1.0"} in get_environment_packages(venv.python)
