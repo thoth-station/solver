@@ -1,7 +1,7 @@
 attr
 autopep8
 click
-importlib-metadata
+importlib-metadata; python_version < '3.8'
 packaging
 pipdeptree
 requests
