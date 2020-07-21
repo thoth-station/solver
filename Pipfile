@@ -7,7 +7,7 @@ name = "pypi"
 attr = "*"
 "autopep8" = "*"
 click = "*"
-importlib-metadata = "*"
+importlib-metadata = {version="*", markers="python_version < '3.8'"}
 packaging = "*"
 pipdeptree = "*"
 requests = "*"
