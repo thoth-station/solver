@@ -63,7 +63,10 @@ def _find_distribution_name(package_name):  # type: (str) -> None
 def _get_importlib_metadata_metadata(package_name):  # type: (str) -> None
     """Retrieve all the metadata for the given package."""
     import sys
-    import importlib_metadata
+    try:
+        import importlib_metadata
+    except ImportError:
+        import importlib.metadata as importlib_metadata
     import json
 
     result = dict(importlib_metadata.metadata(package_name).items())
@@ -97,7 +100,10 @@ def _get_importlib_metadata_metadata(package_name):  # type: (str) -> None
 def _get_importlib_metadata_version(package_name):  # type: (str) -> None
     """Retrieve version based on the given package."""
     import sys
-    import importlib_metadata
+    try:
+        import importlib_metadata
+    except ImportError:
+        import importlib.metadata as importlib_metadata
 
     print(importlib_metadata.version(package_name), end="")
     sys.exit(0)
@@ -106,7 +112,10 @@ def _get_importlib_metadata_version(package_name):  # type: (str) -> None
 def _get_importlib_metadata_requires(package_name):  # type: (str) -> None
     """Retrieve requires based on the given package."""
     import sys
-    import importlib_metadata
+    try:
+        import importlib_metadata
+    except ImportError:
+        import importlib.metadata as importlib_metadata
     import json
 
     print(json.dumps(importlib_metadata.requires(package_name)))
@@ -116,7 +125,10 @@ def _get_importlib_metadata_requires(package_name):  # type: (str) -> None
 def _get_importlib_metadata_entry_points(package_name):  # type: (str) -> None
     """Retrieve information about entry-points for the given package."""
     import sys
-    import importlib_metadata
+    try:
+        import importlib_metadata
+    except ImportError:
+        import importlib.metadata as importlib_metadata
     import json
 
     entry_points = importlib_metadata.distribution(package_name).entry_points
@@ -127,14 +139,17 @@ def _get_importlib_metadata_entry_points(package_name):  # type: (str) -> None
 def _get_importlib_metadata_files(package_name):  # type: (str) -> None
     """Retrieve information about files present for the given package."""
     import sys
-    from importlib_metadata import files
+    try:
+        import importlib_metadata
+    except ImportError:
+        import importlib.metadata as importlib_metadata
     import json
 
     print(
         json.dumps(
             [
                 {"hash": f.hash.__dict__ if f.hash else None, "size": f.size, "path": str(f)}
-                for f in files(package_name)
+                for f in importlib_metadata.files(package_name)
             ],
         ),
     )
