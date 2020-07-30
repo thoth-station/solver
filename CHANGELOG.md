@@ -644,3 +644,61 @@
 * :pushpin: Automatic update of dependency virtualenv from 20.0.10 to 20.0.15
 * Remove hack/ as it is no longer needed
 * :pushpin: Automatic update of dependency pytest from 5.4.0 to 5.4.1
+
+## Release 1.6.0 (2020-07-30T18:17:09)
+* :alien: support solver image build with ci pipeline
+* :mega: thoth solver dockerfiles (#597)
+* :pushpin: Automatic update of dependency pytest from 6.0.0 to 6.0.1 (#596)
+* :pushpin: Automatic update of dependency virtualenv from 20.0.27 to 20.0.28 (#595)
+* Fix mypy errors for duplicate imports
+* :pushpin: Automatic update of dependency pytest from 5.4.3 to 6.0.0
+* :pushpin: Automatic update of dependency thoth-common from 0.14.2 to 0.16.0
+* Make thoth-solver work with Python 3.8+
+* :pushpin: Automatic update of dependency pytest-timeout from 1.4.1 to 1.4.2 (#583)
+* :pushpin: Automatic update of dependency virtualenv from 20.0.26 to 20.0.27 (#582)
+* :pushpin: Automatic update of dependency thoth-common from 0.14.1 to 0.14.2 (#581)
+* Add environment marker for importlib-metadata (#585)
+* :pushpin: Automatic update of dependency mypy from 0.781 to 0.782
+* :pushpin: Automatic update of dependency virtualenv from 20.0.25 to 20.0.26 (#578)
+* Remove templates that are handled by thoth-application (#577)
+* :pushpin: Automatic update of dependency thoth-common from 0.13.12 to 0.14.1 (#576)
+* Fixed precommit errors (#575)
+* Update OWNERS
+* :pushpin: Automatic update of dependency virtualenv from 20.0.24 to 20.0.25
+* :pushpin: Automatic update of dependency importlib-metadata from 1.6.1 to 1.7.0
+* :pushpin: Automatic update of dependency virtualenv from 20.0.21 to 20.0.24
+* :pushpin: Automatic update of dependency thoth-python from 0.9.2 to 0.10.0
+* :pushpin: Automatic update of dependency thoth-common from 0.13.8 to 0.13.12
+* :pushpin: Automatic update of dependency mypy from 0.780 to 0.781
+* :pushpin: Automatic update of dependency pytest-cov from 2.9.0 to 2.10.0
+* :pushpin: Automatic update of dependency pipdeptree from 0.13.2 to 1.0.0
+* :pushpin: Automatic update of dependency requests from 2.23.0 to 2.24.0
+* :pushpin: Automatic update of dependency pytest-timeout from 1.3.4 to 1.4.1
+* Keep workflows for SLI
+* :pushpin: Automatic update of dependency importlib-metadata from 1.6.0 to 1.6.1
+* :pushpin: Automatic update of dependency mypy from 0.770 to 0.780
+* :pushpin: Automatic update of dependency pytest from 5.4.2 to 5.4.3
+* added a 'tekton trigger tag_release pipeline issue'
+* :pushpin: Automatic update of dependency autopep8 from 1.5.2 to 1.5.3
+* :pushpin: Automatic update of dependency thoth-common from 0.13.7 to 0.13.8
+* introduce ttl for workflow
+* introduce logic for gc and workflows life
+* :pushpin: Automatic update of dependency thoth-common from 0.13.6 to 0.13.7
+* :pushpin: Automatic update of dependency pytest-cov from 2.8.1 to 2.9.0
+* :pushpin: Automatic update of dependency thoth-common from 0.13.5 to 0.13.6
+* :pushpin: Automatic update of dependency thoth-common from 0.13.4 to 0.13.5
+* :pushpin: Automatic update of dependency thoth-common from 0.13.3 to 0.13.4
+* :pushpin: Automatic update of dependency virtualenv from 20.0.20 to 20.0.21
+* :pushpin: Automatic update of dependency packaging from 20.3 to 20.4
+* :bug: :fire: hotfix for the BC
+* :arrow_up: relocked dependencies due to jsonformatter
+* a lot of reformatting by black and pre-commit
+* added Fedora32 Python 3.8 and 3.7 solver buildconfigs
+* :pushpin: Automatic update of dependency thoth-common from 0.13.1 to 0.13.2
+* :pushpin: Automatic update of dependency thoth-common from 0.13.0 to 0.13.1
+* :pushpin: Automatic update of dependency click from 7.1.1 to 7.1.2
+* :pushpin: Automatic update of dependency pytest-mypy from 0.6.1 to 0.6.2
+* :pushpin: Automatic update of dependency thoth-common from 0.12.10 to 0.13.0
+* :pushpin: Automatic update of dependency thoth-common from 0.12.9 to 0.12.10
+* Propagate information about platform from solver run
+* Add workflow timeout to avoid solver running for many hours and stopping other pending solvers to start
