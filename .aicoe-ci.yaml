@@ -1,0 +1,4 @@
+check:
+  - thoth-pytest
+  - thoth-precommit
+  - thoth-custom-build
