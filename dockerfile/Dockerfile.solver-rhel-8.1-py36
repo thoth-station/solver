@@ -1,0 +1,28 @@
+FROM registry.access.redhat.com/ubi8/python-36:1-62
+
+ENV LANG=en_US.UTF-8 \
+    THOTH_SOLVER_TMP_DIR='/tmp/thoth-solver-install'
+
+USER 0
+RUN useradd -m solver -s /sbin/nologin -c "Thoth Solver User"
+
+USER ${USERID}
+RUN mkdir -p ${THOTH_SOLVER_TMP_DIR}
+
+# Install thoth-solver itself
+COPY ./ ${THOTH_SOLVER_TMP_DIR}
+RUN cd ${THOTH_SOLVER_TMP_DIR} &&\
+    /usr/bin/python3.6 -m pip install --upgrade setuptools pip &&\
+    /usr/bin/python3.6 -m pip install . &&\
+    cd / &&\
+    rm -rf ${THOTH_SOLVER_TMP_DIR} &&\
+    unset THOTH_SOLVER_TMP_DIR &&\
+    virtualenv -p python3.6 /home/solver/venv &&\
+    /home/solver/venv/bin/python3 -m pip install pipdeptree &&\
+    chmod -R 777 /home/solver
+
+WORKDIR /home/solver
+USER solver
+
+CMD ["python"]
+ENTRYPOINT ["thoth-solver"]
