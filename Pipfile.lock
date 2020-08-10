@@ -817,11 +817,11 @@
         },
         "pytest-venv": {
             "hashes": [
-                "sha256:4d0f78e0a6b2f6817061fbfbf4fb9c4a289034808946306fc11ee5ad9156e055",
-                "sha256:ec842cbc60affbea6b1136bf9876ca858d0b77f6c58740e69a6e0ef708f43ea3"
+                "sha256:169fc8e3555cedfd21cf6208446ad9082ee7a041b60e2d370f1c684fb28d282f",
+                "sha256:5c095aeb7ca6e84bb995c895f3c688bd6b0923967fd7252c55207ce1929c7cd1"
             ],
             "index": "pypi",
-            "version": "==0.2"
+            "version": "==0.2.1"
         },
         "six": {
             "hashes": [
