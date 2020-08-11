@@ -3,6 +3,9 @@ Thoth Solver
 
 Dependency solver used in `Thoth project <https://thoth-station.ninja>`_.
 
+For a `detailed explanation see this blog post
+<https://towardsdatascience.com/how-to-beat-pythons-pip-solving-python-dependencies-8d00529b72fa>`_.
+
 Project Scope
 =============
 
