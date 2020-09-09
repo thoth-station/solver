@@ -63,6 +63,7 @@ def cli(ctx=None, verbose=0):
     if verbose:
         _LOG.setLevel(logging.DEBUG)
 
+    _LOG.info("Thoth Dependency Solver v%s", analyzer_version)
     _LOG.debug("Debug mode is on")
 
 
