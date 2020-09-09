@@ -163,7 +163,7 @@ def _resolve_versions(solver, source, package_name, version_spec):
         resolved_versions = solver.solve([package_name + (version_spec or "")])
     except NotFound:
         _LOGGER.info(
-            "No versions were resovled for %r with version specification %r for package index %r",
+            "No versions were resolved for %r with version specification %r for package index %r",
             package_name,
             version_spec,
             source.url,
