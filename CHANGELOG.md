@@ -702,3 +702,14 @@
 * :pushpin: Automatic update of dependency thoth-common from 0.12.9 to 0.12.10
 * Propagate information about platform from solver run
 * Add workflow timeout to avoid solver running for many hours and stopping other pending solvers to start
+
+## Release 1.6.1 (2020-09-09T12:39:54)
+### Features
+* Add a link to TDS article
+### Improvements
+* Do not use environment marker for importlib-metadata
+### Automatic Updates
+* :pushpin: Automatic update of dependency pytest-venv from 0.2 to 0.2.1 (#606)
+* :pushpin: Automatic update of dependency virtualenv from 20.0.29 to 20.0.30 (#605)
+* :pushpin: Automatic update of dependency autopep8 from 1.5.3 to 1.5.4 (#604)
+* :pushpin: Automatic update of dependency virtualenv from 20.0.28 to 20.0.29 (#602)
