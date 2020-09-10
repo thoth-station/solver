@@ -713,3 +713,9 @@
 * :pushpin: Automatic update of dependency virtualenv from 20.0.29 to 20.0.30 (#605)
 * :pushpin: Automatic update of dependency autopep8 from 1.5.3 to 1.5.4 (#604)
 * :pushpin: Automatic update of dependency virtualenv from 20.0.28 to 20.0.29 (#602)
+
+## Release 1.6.2 (2020-09-10T06:47:59)
+### Features
+* Add version in info log
+### Improvements
+* Correct typo
