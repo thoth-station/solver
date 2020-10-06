@@ -6,6 +6,14 @@ Dependency solver used in `Thoth project <https://thoth-station.ninja>`_.
 For a `detailed explanation see this blog post
 <https://towardsdatascience.com/how-to-beat-pythons-pip-solving-python-dependencies-8d00529b72fa>`_.
 
+This solver is run in different environments (different operating systems with
+various native packages provided) to obtain dependency information about Python
+packages.  An important information is also the fact whether the given Python
+package is installable into the environment (e.g. dependencies on native
+packages being present in the environment). An example could be UBI 8 specific
+solver running Python 3.8 or UBI 8 running Python 3.6 with gcc tooling for
+building native extensions.
+
 Project Scope
 =============
 
