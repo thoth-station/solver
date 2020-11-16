@@ -719,3 +719,31 @@
 * Add version in info log
 ### Improvements
 * Correct typo
+
+## Release 1.6.3 (2020-11-16T10:49:35)
+### Features
+* :guardsman: update maintainers
+* :turtle: solver based on ubi8 and python38 (#639)
+* Extend README with dependency info
+### Automatic Updates
+* :pushpin: Automatic update of dependency requests from 2.24.0 to 2.25.0 (#645)
+* :pushpin: Automatic update of dependency requests from 2.24.0 to 2.25.0 (#640)
+* :pushpin: Automatic update of dependency thoth-common from 0.20.2 to 0.20.4 (#641)
+* :pushpin: Automatic update of dependency pytest from 6.1.1 to 6.1.2 (#642)
+* :pushpin: Automatic update of dependency pytest-mypy from 0.7.0 to 0.8.0 (#643)
+* :pushpin: Automatic update of dependency mypy from 0.782 to 0.790 (#638)
+* :pushpin: Automatic update of dependency mypy from 0.782 to 0.790 (#637)
+* :pushpin: Automatic update of dependency virtualenv from 20.0.33 to 20.1.0 (#636)
+* :pushpin: Automatic update of dependency thoth-common from 0.20.0 to 0.20.2 (#635)
+* :pushpin: Automatic update of dependency virtualenv from 20.0.31 to 20.0.33 (#632)
+* :pushpin: Automatic update of dependency virtualenv from 20.0.31 to 20.0.33 (#631)
+* :pushpin: Automatic update of dependency virtualenv from 20.0.31 to 20.0.33 (#630)
+* :pushpin: Automatic update of dependency pytest from 6.0.2 to 6.1.1 (#629)
+* :pushpin: Automatic update of dependency thoth-python from 0.10.1 to 0.10.2 (#628)
+* :pushpin: Automatic update of dependency virtualenv from 20.0.31 to 20.0.33 (#627)
+* :pushpin: Automatic update of dependency thoth-python from 0.10.1 to 0.10.2 (#626)
+* :pushpin: Automatic update of dependency thoth-common from 0.19.0 to 0.20.0 (#625)
+* :pushpin: Automatic update of dependency importlib-metadata from 1.7.0 to 2.0.0 (#624)
+* :pushpin: Automatic update of dependency pytest from 6.0.1 to 6.0.2
+* :pushpin: Automatic update of dependency thoth-common from 0.18.3 to 0.19.0
+* :pushpin: Automatic update of dependency thoth-common from 0.17.3 to 0.18.3
