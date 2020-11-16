@@ -22,6 +22,31 @@ spec:
       type: image
 
   tasks:
+    - name: solver-rhel-8-py38
+      taskRef:
+        name: tag-build
+      params:
+        - name: git_ref
+          value: $(params.git_ref)
+        - name: repo_name
+          value: $(params.repo_name)
+        - name: registry
+          value: "quay.io"
+        - name: registry_org
+          value: "thoth-station"
+        - name: registry_project
+          value: solver-rhel-8-py38
+        - name: registry_secret
+          value: "thoth-station-thoth-pusher-secret"
+        - name: dockerfile
+          value: dockerfile/Dockerfile.solver-rhel-8-py38
+      resources:
+        inputs:
+          - name: s2i-thoth
+            resource: s2i-thoth
+          - name: repo
+            resource: git-repo
+
     - name: solver-rhel-8-py36
       taskRef:
         name: tag-build
