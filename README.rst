@@ -1,10 +1,36 @@
 Thoth Solver
 ------------
 
-Dependency solver used in `Thoth project <https://thoth-station.ninja>`_.
+Dependency solver used in `Thoth project <https://thoth-station.ninja>`__.
+
+See the listing built solvers used in Thoth:
+
+* `quay.io/thoth-station/solver-rhel-8-py38 <https://quay.io/repository/thoth-station/solver-rhel-8-py38>`__
+
+* `quay.io/thoth-station/solver-rhel-8-py36 <https://quay.io/repository/thoth-station/solver-rhel-8-py36>`__
+
+* `quay.io/thoth-station/solver-fedora-32-py38 <https://quay.io/repository/thoth-station/solver-fedora-32-py38>`__
+
+* `quay.io/thoth-station/solver-fedora-32-py37 <https://quay.io/repository/thoth-station/solver-fedora-32-py37>`__
+
+* `quay.io/thoth-station/solver-fedora-31-py38 <https://quay.io/repository/thoth-station/solver-fedora-31-py38>`__
+
+* `quay.io/thoth-station/solver-fedora-31-py37 <https://quay.io/repository/thoth-station/solver-fedora-31-py37>`__
+
+* `quay.io/thoth-station/solver-fedora-31-py36 <https://quay.io/repository/thoth-station/solver-fedora-31-py36>`__
+
+* `quay.io/thoth-station/solver-fedora-30-py37 <https://quay.io/repository/thoth-station/solver-fedora-30-py37>`__
+
+* `quay.io/thoth-station/solver-fedora-30-py36 <https://quay.io/repository/thoth-station/solver-fedora-30-py36>`__
+
+* `quay.io/thoth-station/solver-fedora-29-py37 <https://quay.io/repository/thoth-station/solver-fedora-29-py37>`__ (no longer used)
+
+* `quay.io/thoth-station/solver-fedora-29-py36 <https://quay.io/repository/thoth-station/solver-fedora-29-py36>`__ (no longer used)
+
+* `quay.io/thoth-station/solver-fedora-28-py36 <https://quay.io/repository/thoth-station/solver-fedora-28-py36>`__ (no longer used)
 
 For a `detailed explanation see this blog post
-<https://towardsdatascience.com/how-to-beat-pythons-pip-solving-python-dependencies-8d00529b72fa>`_.
+<https://dev.to/fridex/how-to-beat-python-s-pip-solving-python-dependencies-2d6e>`__.
 
 This solver is run in different environments (different operating systems with
 various native packages provided) to obtain dependency information about Python
@@ -42,7 +68,7 @@ from Python ecosystem needed for a Python resolver to perform the actual
 ``TensorFlow`` installation.
 
 The tool also allows specifying custom Python package indexes which conform to
-`PEP-503 <https://www.python.org/dev/peps/pep-0503/>`_ - see the ``--index``
+`PEP-503 <https://www.python.org/dev/peps/pep-0503/>`__ - see the ``--index``
 option for analyzing your custom Python packages provided by your repositories.
 
 Produced output
@@ -120,9 +146,9 @@ interesting parts of the output using JSONPath:
 * ``.result.tree[*].package_name`` - name of the analyzed package
 * ``.result.tree[*].package_version`` - version of the analyzed package
 * ``.result.tree[*].sha256`` - sha256 digests of artifacts present on the given Python package index
-* ``.result.tree[*].importlib_metadata`` - metadata associated with the given package, these metadata are obtained using `importlib-metadata <https://pypi.org/project/importlib-metadata/>`_, fallback to standard `importlib.metadata <https://docs.python.org/3.9/library/importlib.metadata.html>`_ on Python3.9+
+* ``.result.tree[*].importlib_metadata`` - metadata associated with the given package, these metadata are obtained using `importlib-metadata <https://pypi.org/project/importlib-metadata/>`__, fallback to standard `importlib.metadata <https://docs.python.org/3.9/library/importlib.metadata.html>`__ on Python3.9+
 
-  * ``.result.tree[*].importlib_metadata.metadata`` - package metadata - see `packaging docs for more info <https://packaging.python.org/specifications/core-metadata/>`_
+  * ``.result.tree[*].importlib_metadata.metadata`` - package metadata - see `packaging docs for more info <https://packaging.python.org/specifications/core-metadata/>`__
   * ``.result.tree[*].importlib_metadata.requires`` - raw strings which declare the given Python package requirements as obtained by ``importlib_metadata.requires``
   * ``.result.tree[*].importlib_metadata.version`` - version as obtained by ``importlib_metadata.requires``
   * ``.result.tree[*].importlib_metadata.files`` - file information about the given package (additionally parsed to provide digest, file size and path) as obtained by ``importlib_metadata.files``
@@ -253,17 +279,17 @@ interesting parts of the output using JSONPath:
 
   The example above shows data associated with ``tensorflow==2.0.0``. The ``files``
   section is intentionally snipped, the file digest is signed as described in
-  `PEP-427 <https://www.python.org/dev/peps/pep-0427/#id16>`_.
+  `PEP-427 <https://www.python.org/dev/peps/pep-0427/#id16>`__.
 
 * ``.result.tree[*].dependencies`` - a list of dependencies which can be resolved given requirements specification of the analyzed package
-* ``.result.tree[*].dependencies[*].extras`` - name of extras signalizing the given package should be installed with extras as specified in `PEP-508 in extras section <https://www.python.org/dev/peps/pep-0508/#extras>`_
-* ``.result.tree[*].dependencies[*].extra`` - name of extra which should be required to take into account this dependency as specified `PEP-508 in extras section <https://www.python.org/dev/peps/pep-0508/#extras>`_
-* ``.result.tree[*].dependencies[*].marker`` - a full specification of the environment marker as described in `PEP-508 in environment markers section <https://www.python.org/dev/peps/pep-0508/#environment-markers>`_
+* ``.result.tree[*].dependencies[*].extras`` - name of extras signalizing the given package should be installed with extras as specified in `PEP-508 in extras section <https://www.python.org/dev/peps/pep-0508/#extras>`__
+* ``.result.tree[*].dependencies[*].extra`` - name of extra which should be required to take into account this dependency as specified `PEP-508 in extras section <https://www.python.org/dev/peps/pep-0508/#extras>`__
+* ``.result.tree[*].dependencies[*].marker`` - a full specification of the environment marker as described in `PEP-508 in environment markers section <https://www.python.org/dev/peps/pep-0508/#environment-markers>`__
 * ``.result.tree[*].dependencies[*].marker_evaluation_error`` - a string capturing error information when marker evaluation failed in the run software environment, otherwise ``null``
 * ``.result.tree[*].dependencies[*].marker_evaluated`` - marker defined by the package, but additionally adjusted for evaluation for the current environment (see notes bellow).
 * ``.result.tree[*].dependencies[*].marker_evaluation_result`` - a boolean representing if the given marker evaluation was evaluated as ``true`` (the given environment accepts marker) or ``false`` (marker not accepted), a special value of `null` signalizes marker evaluation error (see ``marker_evaluation_error`` for more info)
-* ``.result.tree[*].dependencies[*].normalized_package_name`` - a string representing normalized package name as described in `PEP-503 in normalized names section <https://www.python.org/dev/peps/pep-0503/#normalized-names>`_
-* ``.result.tree[*].dependencies[*].specifier`` - a version range specifier which was declared by package which depends on the given dependency conforming to `PEP-440 <https://www.python.org/dev/peps/pep-0440/>`_
+* ``.result.tree[*].dependencies[*].normalized_package_name`` - a string representing normalized package name as described in `PEP-503 in normalized names section <https://www.python.org/dev/peps/pep-0503/#normalized-names>`__
+* ``.result.tree[*].dependencies[*].specifier`` - a version range specifier which was declared by package which depends on the given dependency conforming to `PEP-440 <https://www.python.org/dev/peps/pep-0440/>`__
 * ``.result.tree[*].dependencies[*].resolved_versions`` - a list of versions which were resolved given the version range specifier and specified Python package indexes (passed ``--index`` option can specify multiple indexes which causes package discovery on each of them)
 
 An example of a dependency entry (an entry from one of ``.result.tree[*].dependencies``:
@@ -301,7 +327,7 @@ An example of a dependency entry (an entry from one of ``.result.tree[*].depende
 To evaluate environment markers inside solver environment, there was a need to
 adjust marker so that it can be evaluated in the solver environment - see
 `PEP-508 in environment markers section
-<https://www.python.org/dev/peps/pep-0508/#environment-markers>`_
+<https://www.python.org/dev/peps/pep-0508/#environment-markers>`__
 specification, specifically the following section:
 
 .. code-block::
@@ -318,19 +344,19 @@ Installation and Deployment
 ===========================
 
 This project is also released on
-`PyPI <https://pypi.org/project/thoth-solver>`_, so the latest release can be
-installed via pip or `Pipenv <https://pipenv.readthedocs.io>`_:
+`PyPI <https://pypi.org/project/thoth-solver>`__, so the latest release can be
+installed via pip or `Pipenv <https://pipenv.readthedocs.io>`__:
 
 .. code-block:: console
 
   pipenv install thoth-solver
 
-Solver is run in `project Thoth <https://thoth-station.ninja>`_ to gather
+Solver is run in `project Thoth <https://thoth-station.ninja>`__ to gather
 information about package dependencies. You can find deployment templates in
 the ``openshift/`` directory present in the root of `solver's Git repository
-<https://github.com/thoth-station/solver>`_. The actual deployment is done
+<https://github.com/thoth-station/solver>`__. The actual deployment is done
 using Ansible playbooks available in the `Thoth's core repository
-<https://github.com/thoth-station/core>`_.
+<https://github.com/thoth-station/core>`__.
 
 Installation for Thoth deployment and adding new solvers
 ========================================================
@@ -341,11 +367,11 @@ To create your own solver, take a look at existing templates and extend them/mod
 
 1. Each solver is named ``solver-<operating-system-name>-<operating-system-version>-<python-version>``. An example can be ``solver-rhel-8.0-py36`` (no dots in Python version). If you extend operating system with additional libraries, you can encode this fact in operating system name and operating system version (e.g. ``rhel+gcc92`` or create appropriate aliases). It's important to keep delimiters - dash signs - which are used to parse solver information (``os_name``, ``os_version``, ``python_version``).
 2. Create ImageStream and BuildConfig for each newly introduced solver - both should re-use solver name.
-3. Adjust BuildConfig which uses a `Docker build strategy <https://docs.openshift.com/container-platform/3.4/dev_guide/builds/build_strategies.html#docker-strategy-options>`_) to produce container image.
+3. Adjust BuildConfig which uses a `Docker build strategy <https://docs.openshift.com/container-platform/3.4/dev_guide/builds/build_strategies.html#docker-strategy-options>`__) to produce container image.
 
   1. Use a base container image based on your needs.
   2. Install needed packages and Python interpreter of your choice.
-  3. Always use `a fully qualified path to a Python binary <https://snarky.ca/why-you-should-use-python-m-pip/>`_ to make sure you invoke correct Python interpreter and Python environment.
+  3. Always use `a fully qualified path to a Python binary <https://snarky.ca/why-you-should-use-python-m-pip/>`__ to make sure you invoke correct Python interpreter and Python environment.
   4. Make sure you create a virtual environment for solver used to analyze Python packages in advance during the build - this helps to reduce time needed to analyze a Python package (see already existing BuildConfigs).
 
 4. Open a pull-request to thoth-station/solver repo to register your solver.
@@ -378,5 +404,5 @@ Now you can run the solver:
 
 Follow follow the developer's guide docs to get `more
 information about developer's setup
-<https://github.com/thoth-station/thoth/blob/master/docs/developers_guide.rst>`_
+<https://github.com/thoth-station/thoth/blob/master/docs/developers_guide.rst>`__
 if you plan to develop this utility.
