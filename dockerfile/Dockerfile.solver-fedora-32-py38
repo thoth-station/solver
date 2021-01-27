@@ -1,4 +1,4 @@
-FROM fedora:32
+FROM quay.io/thoth-station/s2i-thoth-f32-py38:v0.23.2
 
 ENV \
   LANG=en_US.UTF-8 \
