@@ -1,4 +1,4 @@
-FROM registry.access.redhat.com/ubi8/python-38:1-41
+FROM quay.io/thoth-station/s2i-thoth-ubi8-py38:v0.23.2
 
 ENV LANG=en_US.UTF-8 \
     THOTH_SOLVER_TMP_DIR='/tmp/thoth-solver-install'
