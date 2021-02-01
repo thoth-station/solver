@@ -4,30 +4,6 @@ requirements_format: pipenv
 overlays_dir: overlays
 
 runtime_environments:
-  - name: solver-fedora-30-py36
-    operating_system:
-      name: "fedora"
-      version: "30"
-    python_version: "3.6"
-    recommendation_type: latest
-    base_image: quay.io/thoth-station/s2i-thoth-f30-py36:v0.23.2
-
-  - name: solver-fedora-30-py37
-    operating_system:
-      name: "fedora"
-      version: "30"
-    python_version: "3.7"
-    recommendation_type: latest
-    base_image: quay.io/thoth-station/s2i-thoth-f30-py37:v0.23.2
-
-  - name: solver-fedora-31-py36
-    operating_system:
-      name: "fedora"
-      version: "31"
-    python_version: "3.6"
-    recommendation_type: latest
-    base_image: quay.io/thoth-station/s2i-thoth-f31-py36:v0.23.2
-
   - name: solver-fedora-31-py37
     operating_system:
       name: "fedora"
