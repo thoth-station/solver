@@ -1,14 +1,80 @@
 host: khemenu.thoth-station.ninja
 tls_verify: false
 requirements_format: pipenv
+overlays_dir: overlays
 
 runtime_environments:
-  - name: rhel:8
+  - name: solver-fedora-30-py36
     operating_system:
-      name: rhel
+      name: "fedora"
+      version: "30"
+    python_version: "3.6"
+    recommendation_type: latest
+    base_image: quay.io/thoth-station/s2i-thoth-f30-py36:v0.23.2
+
+  - name: solver-fedora-30-py37
+    operating_system:
+      name: "fedora"
+      version: "30"
+    python_version: "3.7"
+    recommendation_type: latest
+    base_image: quay.io/thoth-station/s2i-thoth-f30-py37:v0.23.2
+
+  - name: solver-fedora-31-py36
+    operating_system:
+      name: "fedora"
+      version: "31"
+    python_version: "3.6"
+    recommendation_type: latest
+    base_image: quay.io/thoth-station/s2i-thoth-f31-py36:v0.23.2
+
+  - name: solver-fedora-31-py37
+    operating_system:
+      name: "fedora"
+      version: "31"
+    python_version: "3.7"
+    recommendation_type: latest
+    base_image: quay.io/thoth-station/s2i-thoth-f31-py37:v0.23.2
+
+  - name: solver-fedora-31-py38
+    operating_system:
+      name: "fedora"
+      version: "31"
+    python_version: "3.8"
+    recommendation_type: latest
+    base_image: quay.io/thoth-station/s2i-thoth-f31-py38:v0.23.2
+
+  - name: solver-fedora-32-py37
+    operating_system:
+      name: "fedora"
+      version: "32"
+    python_version: "3.7"
+    recommendation_type: latest
+    base_image: quay.io/thoth-station/s2i-thoth-f32-py37:v0.23.2
+
+  - name: solver-fedora-32-py38
+    operating_system:
+      name: "fedora"
+      version: "32"
+    python_version: "3.8"
+    recommendation_type: latest
+    base_image: quay.io/thoth-station/s2i-thoth-f32-py38:v0.23.2
+
+  - name: solver-rhel-8-py36
+    operating_system:
+      name: "rhel"
+      version: "8"
+    python_version: "3.6"
+    recommendation_type: latest
+    base_image: quay.io/thoth-station/s2i-thoth-ubi8-py36:v0.23.2
+
+  - name: solver-rhel-8-py38
+    operating_system:
+      name: "rhel"
       version: "8"
     python_version: "3.8"
     recommendation_type: latest
+    base_image: quay.io/thoth-station/s2i-thoth-ubi8-py38:v0.23.2
 
 managers:
   - name: pipfile-requirements

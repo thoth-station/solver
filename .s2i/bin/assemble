@@ -1,0 +1,6 @@
+#!/bin/bash
+
+python3 -m venv solver-venv
+solver-venv/bin/python3 -m pip install pipdeptree
+
+exec /usr/libexec/s2i/assemble
