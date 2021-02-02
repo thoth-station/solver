@@ -3,6 +3,15 @@ Thoth Solver
 
 Dependency solver used in `Thoth project <https://thoth-station.ninja>`__.
 
+As Python is a dynamic programming language, Thoth runs several types of
+solvers that differ in software environment (operating system, native packages
+present, system symbols and their versions and Python interpreter version). An
+example can be a solver which is running raw RHEL 8.0 with Python 3.6, another
+example can be a solver with Fedora 33 with Python 3.9 installed with different
+version of glibc and some of the ABI symbols of native libraries provided by
+operating system (see also Python manylinux standards and devtools for more
+info).
+
 See the listing built solvers used in Thoth:
 
 * `quay.io/thoth-station/solver-rhel-8-py38 <https://quay.io/repository/thoth-station/solver-rhel-8-py38>`__
@@ -354,35 +363,10 @@ installed via pip or `Pipenv <https://pipenv.readthedocs.io>`__:
 Solver is run in `project Thoth <https://thoth-station.ninja>`__ to gather
 information about package dependencies. You can find deployment templates in
 the ``openshift/`` directory present in the root of `solver's Git repository
-<https://github.com/thoth-station/solver>`__. The actual deployment is done
-using Ansible playbooks available in the `Thoth's core repository
-<https://github.com/thoth-station/core>`__.
-
-Installation for Thoth deployment and adding new solvers
-========================================================
-
-As Python is a dynamic programming language, Thoth runs several types of solvers that differ in software environment (operating system, native packages present, system symbols and their versions and Python interpreter version). An example can be a solver which is running raw RHEL 8.0 with Python 3.6, another example can be a solver with Fedora 31 with Python 3.6 installed with different version of glibc and some of the ABI symbols of native libraries provided by operating system (see also Python manylinux standards and devtools for more info). Thoth is an OpenShift native application so it utilizes OpenShift objects to keep track of solvers - see solver specific BuildConfig, ImageStream and Job templates (all are available in this repo in ``openshift/`` directory).
-
-To create your own solver, take a look at existing templates and extend them/modify them accordingly. Follow the rules mentioned bellow to make sure your solver is fully compliant and issue free:
-
-1. Each solver is named ``solver-<operating-system-name>-<operating-system-version>-<python-version>``. An example can be ``solver-rhel-8.0-py36`` (no dots in Python version). If you extend operating system with additional libraries, you can encode this fact in operating system name and operating system version (e.g. ``rhel+gcc92`` or create appropriate aliases). It's important to keep delimiters - dash signs - which are used to parse solver information (``os_name``, ``os_version``, ``python_version``).
-2. Create ImageStream and BuildConfig for each newly introduced solver - both should re-use solver name.
-3. Adjust BuildConfig which uses a `Docker build strategy <https://docs.openshift.com/container-platform/3.4/dev_guide/builds/build_strategies.html#docker-strategy-options>`__) to produce container image.
-
-  1. Use a base container image based on your needs.
-  2. Install needed packages and Python interpreter of your choice.
-  3. Always use `a fully qualified path to a Python binary <https://snarky.ca/why-you-should-use-python-m-pip/>`__ to make sure you invoke correct Python interpreter and Python environment.
-  4. Make sure you create a virtual environment for solver used to analyze Python packages in advance during the build - this helps to reduce time needed to analyze a Python package (see already existing BuildConfigs).
-
-4. Open a pull-request to thoth-station/solver repo to register your solver.
-5. Install templates into Thoth application (to OpenShift cluster):
-
-  1. Add created BuildConfig template.
-  2. Add created ImageStream template.
-  3. All solver jobs are registered in a template called ``solver`` in infra namespace - make sure you add labels ``component=solver`` and label ``solver-type`` which matches name of the solver so that the solver is correctly registered and visible in a Thoth deployment.
-
-6. Once all templates are installed, you can check ``/solvers`` endpoint on Management API which exposes information about installed solvers.
-7. System will automatically schedule new solver jobs of packages known to Thoth to gather observations - you can check exposed metrics to verify it.
+<https://github.com/thoth-station/solver>`__. Check
+`thoth-station/thoth-application
+<https://github.com/thoth-station/thoth-application>`__ repository for
+deployment and installation instructions.
 
 Running solver locally
 ======================
