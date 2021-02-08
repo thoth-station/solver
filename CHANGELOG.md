@@ -747,3 +747,19 @@
 * :pushpin: Automatic update of dependency pytest from 6.0.1 to 6.0.2
 * :pushpin: Automatic update of dependency thoth-common from 0.18.3 to 0.19.0
 * :pushpin: Automatic update of dependency thoth-common from 0.17.3 to 0.18.3
+
+## Release 1.7.0 (2021-02-08T18:14:57)
+### Features
+* Adjust tests to cover pre-releases correctly
+* Explicitly turn on pre-releases in Python dependency parser
+* Remove old Fedora S2I images
+* :arrow_up: Automatic update of dependencies by kebechet. (#664)
+* Adjust links and link to solvers built on quay (#656)
+* :arrow_up: Automatic update of dependencies by kebechet. (#653)
+* update .thoth.yaml (#651)
+* port to python 38 (#650)
+### Improvements
+* Update README and remove old build section
+* Add bits needed for s2i integration (#662)
+### Non-functional
+* Add pull request template for the repo (#658)
