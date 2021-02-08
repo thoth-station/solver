@@ -67,7 +67,10 @@ class PythonDependencyParser(DependencyParser):
         :param spec: str, for example "Django>=1.5,<1.8"
         :return: requirement for the Python package
         """
-        return Requirement(spec)
+        req = Requirement(spec)
+        # We explictly allow pre-releases here as we want to handle them in resolver's pipeline units.
+        req.specifier.prereleases = True
+        return req
 
     def parse(self, specs):  # type: (List[str]) -> List[Requirement]
         """Parse specs."""
