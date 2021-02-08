@@ -52,7 +52,19 @@ class TestPythonSolver(SolverTestCase):
         "package_specification,resolved_versions",
         [
             (
-                "selinon>=0.1.0rc0,<1.1.0",
+                "selinon>=1.0.0rc1,<1.1.0",
+                {
+                    "selinon": {
+                        ("1.0.0rc1", "https://pypi.org/simple"),
+                        ("1.0.0rc2", "https://pypi.org/simple"),
+                        ("1.0.0rc3", "https://pypi.org/simple"),
+                        ("1.0.0rc4", "https://pypi.org/simple"),
+                        ("1.0.0", "https://pypi.org/simple"),
+                    },
+                },
+            ),
+            (
+                "selinon<=1.1.0",
                 {
                     "selinon": {
                         ("0.1.0rc2", "https://pypi.org/simple"),
@@ -68,12 +80,9 @@ class TestPythonSolver(SolverTestCase):
                         ("1.0.0rc3", "https://pypi.org/simple"),
                         ("1.0.0rc4", "https://pypi.org/simple"),
                         ("1.0.0", "https://pypi.org/simple"),
+                        ("1.1.0", "https://pypi.org/simple"),
                     },
                 },
-            ),
-            (
-                "selinon<=1.1.0",
-                {"selinon": {("1.0.0", "https://pypi.org/simple"), ("1.1.0", "https://pypi.org/simple")}},
             ),
             ("tensorflow==2.0.0", {"tensorflow": {("2.0.0", "https://pypi.org/simple")}}),
         ],
