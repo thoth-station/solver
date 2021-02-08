@@ -1,4 +1,4 @@
 check:
-  - thoth-pytest
+  - thoth-pytest-py38
   - thoth-precommit
   - thoth-custom-build
