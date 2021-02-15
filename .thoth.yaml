@@ -10,7 +10,7 @@ runtime_environments:
       version: "31"
     python_version: "3.7"
     recommendation_type: latest
-    base_image: quay.io/thoth-station/s2i-thoth-f31-py37:v0.23.2
+    base_image: quay.io/thoth-station/s2i-thoth-f31-py37:v0.24.2
 
   - name: solver-fedora-31-py38
     operating_system:
@@ -18,7 +18,7 @@ runtime_environments:
       version: "31"
     python_version: "3.8"
     recommendation_type: latest
-    base_image: quay.io/thoth-station/s2i-thoth-f31-py38:v0.23.2
+    base_image: quay.io/thoth-station/s2i-thoth-f31-py38:v0.24.2
 
   - name: solver-fedora-32-py37
     operating_system:
@@ -26,7 +26,7 @@ runtime_environments:
       version: "32"
     python_version: "3.7"
     recommendation_type: latest
-    base_image: quay.io/thoth-station/s2i-thoth-f32-py37:v0.23.2
+    base_image: quay.io/thoth-station/s2i-thoth-f32-py37:v0.24.2
 
   - name: solver-fedora-32-py38
     operating_system:
@@ -34,7 +34,7 @@ runtime_environments:
       version: "32"
     python_version: "3.8"
     recommendation_type: latest
-    base_image: quay.io/thoth-station/s2i-thoth-f32-py38:v0.23.2
+    base_image: quay.io/thoth-station/s2i-thoth-f32-py38:v0.24.2
 
   - name: solver-rhel-8-py36
     operating_system:
@@ -42,7 +42,7 @@ runtime_environments:
       version: "8"
     python_version: "3.6"
     recommendation_type: latest
-    base_image: quay.io/thoth-station/s2i-thoth-ubi8-py36:v0.23.2
+    base_image: quay.io/thoth-station/s2i-thoth-ubi8-py36:v0.24.2
 
   - name: solver-rhel-8-py38
     operating_system:
@@ -50,7 +50,7 @@ runtime_environments:
       version: "8"
     python_version: "3.8"
     recommendation_type: latest
-    base_image: quay.io/thoth-station/s2i-thoth-ubi8-py38:v0.23.2
+    base_image: quay.io/thoth-station/s2i-thoth-ubi8-py38:v0.24.2
 
 managers:
   - name: pipfile-requirements

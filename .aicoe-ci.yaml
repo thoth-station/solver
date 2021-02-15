@@ -36,7 +36,7 @@ overlays:
 
   - name: solver-fedora-32-py38
     build:
-      base-image: quay.io/thoth-station/s2i-thoth-f32-py38:v0.23.2
+      base-image: quay.io/thoth-station/s2i-thoth-f32-py38:v0.24.2
       build-stratergy: 'Source'
       custom-tag: 'latest'
       registry: quay.io
@@ -51,7 +51,7 @@ overlays:
 
   - name: solver-fedora-32-py37
     build:
-      base-image: quay.io/thoth-station/s2i-thoth-f32-py37:v0.23.2
+      base-image: quay.io/thoth-station/s2i-thoth-f32-py37:v0.24.2
       build-stratergy: 'Source'
       custom-tag: 'latest'
       registry: quay.io
@@ -66,7 +66,7 @@ overlays:
 
   - name: solver-fedora-31-py38
     build:
-      base-image: quay.io/thoth-station/s2i-thoth-f31-py38:v0.23.2
+      base-image: quay.io/thoth-station/s2i-thoth-f31-py38:v0.24.2
       build-stratergy: 'Source'
       custom-tag: 'latest'
       registry: quay.io
@@ -81,7 +81,7 @@ overlays:
 
   - name: solver-fedora-31-py37
     build:
-      base-image: quay.io/thoth-station/s2i-thoth-f31-py37:v0.23.2
+      base-image: quay.io/thoth-station/s2i-thoth-f31-py37:v0.24.2
       build-stratergy: 'Source'
       custom-tag: 'latest'
       registry: quay.io
