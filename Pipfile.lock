@@ -569,11 +569,11 @@
         },
         "rsa": {
             "hashes": [
-                "sha256:69805d6b69f56eb05b62daea3a7dbd7aa44324ad1306445e05da8060232d00f4",
-                "sha256:a8774e55b59fd9fc893b0d05e9bfc6f47081f46ff5b46f39ccf24631b7be356b"
+                "sha256:74ba16e7ef58920b80b5c54c1c1066d391a2c1e812c466773f74c634eb12253b",
+                "sha256:9d74d1ff850745c9802cd6b53382bfeec7f6dbe4e26ee2759241ed1e7b0ecf5d"
             ],
             "markers": "python_version >= '3.6'",
-            "version": "==4.7"
+            "version": "==4.7.1"
         },
         "ruamel.yaml": {
             "hashes": [
@@ -629,9 +629,10 @@
         },
         "sentry-sdk": {
             "hashes": [
-                "sha256:3693cb47ba8d90c004ac002425770b32aaf0c83a846ec48e2d1364e7db1d072d"
+                "sha256:9044b616ec6663cd50794fb3362efd87586e476e7b51ef2439a711d6569aede7",
+                "sha256:efc65e5ffd38324797a7e1dfc8a4e74b62ea6f56a59df5bb03217b84d58dff6a"
             ],
-            "version": "==0.20.1"
+            "version": "==0.20.2"
         },
         "six": {
             "hashes": [
@@ -659,11 +660,11 @@
         },
         "thoth-python": {
             "hashes": [
-                "sha256:26ae99f5ddeabe719843debd93beff0cf825dc32019df86ff23b713eaa19eb0d",
-                "sha256:f8ea20a38f5e62be1f7dd7c3f9938e4c3f4fec87168e38218adda596dce39b06"
+                "sha256:d0a3312c0e7ad30ade787a04dbd3d3783e1823d4165fddefece1b586a61405a6",
+                "sha256:e01755362a8fdd84199cf685330271bbfc776fac50a5efdb735988c8995e46e3"
             ],
             "index": "pypi",
-            "version": "==0.12.0"
+            "version": "==0.13.0"
         },
         "toml": {
             "hashes": [
