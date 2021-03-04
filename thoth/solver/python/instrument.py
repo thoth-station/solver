@@ -69,7 +69,7 @@ def _get_importlib_metadata_metadata(package_name):  # type: (str) -> None
         import importlib.metadata as importlib_metadata  # type: ignore
     import json
 
-    result = dict(importlib_metadata.metadata(package_name).items())
+    result = dict(importlib_metadata.metadata(package_name).items())  # type: ignore
 
     # As metadata are encoded as email.message, it's not possible to implicitly expose information about which keys
     # keep multiple values and which are single-value. Let's explicitly maintain a list for metadata keys that
@@ -105,7 +105,7 @@ def _get_importlib_metadata_version(package_name):  # type: (str) -> None
     except ImportError:
         import importlib.metadata as importlib_metadata  # type: ignore
 
-    print(importlib_metadata.version(package_name), end="")
+    print(importlib_metadata.version(package_name), end="")  # type: ignore
     sys.exit(0)
 
 
@@ -118,7 +118,7 @@ def _get_importlib_metadata_requires(package_name):  # type: (str) -> None
         import importlib.metadata as importlib_metadata  # type: ignore
     import json
 
-    print(json.dumps(importlib_metadata.requires(package_name)))
+    print(json.dumps(importlib_metadata.requires(package_name)))  # type: ignore
     sys.exit(0)
 
 
@@ -131,7 +131,7 @@ def _get_importlib_metadata_entry_points(package_name):  # type: (str) -> None
         import importlib.metadata as importlib_metadata  # type: ignore
     import json
 
-    entry_points = importlib_metadata.distribution(package_name).entry_points
+    entry_points = importlib_metadata.distribution(package_name).entry_points  # type: ignore
     print(json.dumps([{"name": ep.name, "value": ep.value, "group": ep.group} for ep in entry_points]))
     sys.exit(0)
 
@@ -149,7 +149,7 @@ def _get_importlib_metadata_files(package_name):  # type: (str) -> None
         json.dumps(
             [
                 {"hash": f.hash.__dict__ if f.hash else None, "size": f.size, "path": str(f)}
-                for f in importlib_metadata.files(package_name)
+                for f in importlib_metadata.files(package_name)  # type: ignore
             ],
         ),
     )

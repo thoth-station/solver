@@ -129,7 +129,7 @@ class TestInstrument(SolverTestCase):
 
     @pytest.mark.parametrize(
         "package_version, package_name, metadata",
-        [("delegator.py==0.1.1", "delegator.py", _DELEGATOR_PY_METADATA), ("click==7.0", "click", _CLICK_METADATA)],
+        [("delegator.py===0.1.1", "delegator.py", _DELEGATOR_PY_METADATA), ("click===7.0", "click", _CLICK_METADATA)],
     )
     def test_get_package_metadata(self, venv, package_version, package_name, metadata):
         """Test getting package metadata."""
@@ -145,7 +145,7 @@ class TestInstrument(SolverTestCase):
         import click
 
         assert click.__version__ != "3.0"
-        venv.install("click==3.0")
+        venv.install("click===3.0")
         discovered_metadata = get_package_metadata(venv.python, "click")
         assert discovered_metadata.get("version") == "3.0"
 
