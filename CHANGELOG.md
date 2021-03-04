@@ -763,3 +763,14 @@
 * Add bits needed for s2i integration (#662)
 ### Non-functional
 * Add pull request template for the repo (#658)
+
+## Release 1.7.1 (2021-03-04T19:36:46)
+### Features
+* :arrow_up: Automatic update of dependencies by Kebechet (#680)
+* Fix CI failures (#679)
+* Execute solvers with app script to call solver python cli
+* :arrow_up: Automatic update of dependencies by Kebechet (#675)
+* :arrow_up: Automatic update of dependencies by Kebechet (#674)
+* update the base image with new version for solvers
+* update aicoe-ci configuration to support overlays build (#673)
+* Run pytest with Python 3.8 (#672)
