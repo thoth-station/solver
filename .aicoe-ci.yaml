@@ -1,6 +1,4 @@
 check:
-  - thoth-pytest-py38
-  - thoth-precommit
   - overlays-build
 overlays_dir: overlays
 overlays:
