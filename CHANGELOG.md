@@ -774,3 +774,7 @@
 * update the base image with new version for solvers
 * update aicoe-ci configuration to support overlays build (#673)
 * Run pytest with Python 3.8 (#672)
+
+## Release 1.7.2 (2021-03-05T16:38:34)
+### Features
+* Skip thoth-solver in the environment packages report
