@@ -54,6 +54,13 @@ def get_environment_packages(python_bin):  # type: (str) -> List[Dict[str, str]]
 
     result = []
     for line in output:
+        if line.startswith("thoth-solver"):
+            # We do not report thoth-solver itself. The version information is
+            # available in the report metadata produced and the split line can
+            # cause issues when building thoth-solver in s2i.
+            # see thoth-station/solver#684
+            continue
+
         package_name, package_version = line.split("==", maxsplit=1)
         result.append({"package_name": package_name, "package_version": package_version})
 
