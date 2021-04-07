@@ -1,7 +1,8 @@
 Thoth Solver
 ------------
 
-Dependency solver used in `Thoth project <https://thoth-station.ninja>`__.
+Python dependency solver used in `Thoth project
+<https://thoth-station.ninja>`__.
 
 As Python is a dynamic programming language, Thoth runs several types of
 solvers that differ in software environment (operating system, native packages
@@ -63,8 +64,8 @@ Imagine you have an application that has one dependency:
   $ cat requirements.txt
   tensorflow
 
-
-Tool provided by this project will tell you how dependencies could be resolved:
+Tool provided by this project will tell you what dependencies will be
+considered during resolution (the whole dependency graph):
 
 .. code-block:: console
 
@@ -74,18 +75,22 @@ The output of this solver is a dependency analysis for the given software stack
 - in the example above, package ``tensorflow`` in any release with analysis of
 its all dependencies (direct and indirect ones) with additional information
 from Python ecosystem needed for a Python resolver to perform the actual
-``TensorFlow`` installation.
+``tensorflow`` resolution.
 
 The tool also allows specifying custom Python package indexes which conform to
 `PEP-503 <https://www.python.org/dev/peps/pep-0503/>`__ - see the ``--index``
 option for analyzing your custom Python packages provided by your repositories.
 
+It is also possible to restrict version using standard Python version range
+specifiers and/or limit the output just to direct dependencies.
+
 Produced output
 ===============
 
-This tool (unless ``--no-transitive`` is specified) analyzes recursively all the
-dependencies of the desired project. Dependencies to be analyzed can be defined
-in similar to ``requirements.txt`` file or as a string in a form of:
+This tool (unless ``--no-transitive`` is specified) analyzes recursively all
+the dependencies of the desired package inside specific environment.
+Dependencies to be analyzed can be defined in similar to ``requirements.txt``
+file or as a string in a form of:
 
 .. code-block:: console
 
@@ -94,11 +99,10 @@ in similar to ``requirements.txt`` file or as a string in a form of:
 Where ``<package-name>`` is the analyzed package name (as present on PyPI for
 example), part ``<version-cmp><version-identifier>`` is optional and creates
 version specifier for the given package (if not specified, all versions are
-considered). As the solver analysis the project, other parts (such as extras)
-are not supported.
+considered).
 
-An example output shown bellow can be reproduced by running the tool with the following
-arguments (with an example of produced log):
+An example output shown bellow can be reproduced by running the tool with the
+following arguments (with an example of produced log):
 
 .. code-block:: console
 
@@ -150,7 +154,7 @@ interesting parts of the output using JSONPath:
 * ``.metadata`` - metadata assigned to the solver run - these metadata are especially useful within project Thoth, where analyzer is run in a cluster, the purpose of metadata is to capture information which could be beneficial when debugging issues which arise in the cluster due to different container environment (e.g. Python version)
 * ``.result`` - the actual result as produced by this tool
 * ``.result.unparsed`` - a list of requirements that failed to be parsed (wrong dependency specification not conforming to Python standards)
-* ``.result.unresolved`` - a list of requirements that failed to be resolved - a reason behind failure can be for example non-existing package or its version on the given Python package index, or for example incompatibility of package distribution with the solver's software environment (Python version, environment markers, ...), or bogus distribution (e.g. forgotten `requirements.txt` in the distribution required by `setup.py` on package build).
+* ``.result.unresolved`` - a list of requirements that failed to be resolved - the reason behind failure can be for example non-existing package or its version on the given Python package index, or for example incompatibility of package distribution with the solver's software environment (Python version, environment markers, ...), or bogus distribution (e.g. forgotten ``requirements.txt`` in the distribution required by ``setup.py`` on package build).
 * ``.result.tree`` - the actual serialized dependency tree (broken dependency graph as cyclic dependencies are possible in Python ecosystem)
 * ``.result.tree[*].package_name`` - name of the analyzed package
 * ``.result.tree[*].package_version`` - version of the analyzed package
@@ -348,12 +352,11 @@ specification, specifically the following section:
   handling is taking place, the "extra" variable should result in an error like
   all other unknown variables.
 
-
 Installation and Deployment
 ===========================
 
-This project is also released on
-`PyPI <https://pypi.org/project/thoth-solver>`__, so the latest release can be
+This project is also released on `PyPI
+<https://pypi.org/project/thoth-solver>`__, so the latest release can be
 installed via pip or `Pipenv <https://pipenv.readthedocs.io>`__:
 
 .. code-block:: console
@@ -361,10 +364,7 @@ installed via pip or `Pipenv <https://pipenv.readthedocs.io>`__:
   pipenv install thoth-solver
 
 Solver is run in `project Thoth <https://thoth-station.ninja>`__ to gather
-information about package dependencies. You can find deployment templates in
-the ``openshift/`` directory present in the root of `solver's Git repository
-<https://github.com/thoth-station/solver>`__. Check
-`thoth-station/thoth-application
+information about package dependencies. Check `thoth-station/thoth-application
 <https://github.com/thoth-station/thoth-application>`__ repository for
 deployment and installation instructions.
 
@@ -385,8 +385,3 @@ Now you can run the solver:
 .. code-block:: console
 
   pipenv run python3 ./thoth-solver --verbose python -r 'selinon==1.0.0' -i https://pypi.org/simple --no-transitive
-
-Follow follow the developer's guide docs to get `more
-information about developer's setup
-<https://github.com/thoth-station/thoth/blob/master/docs/developers_guide.rst>`__
-if you plan to develop this utility.
