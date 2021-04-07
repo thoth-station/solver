@@ -87,8 +87,8 @@ specifiers and/or limit the output just to direct dependencies.
 Produced output
 ===============
 
-This tool (unless ``--no-transitive`` is specified) analyzes recursively all
-the dependencies of the desired package inside specific environment.
+This tool (unless ``--no-transitive`` is specified) recursively analyzes all
+the dependencies of the desired package inside a specific environment.
 Dependencies to be analyzed can be defined in similar to ``requirements.txt``
 file or as a string in a form of:
 
