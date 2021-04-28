@@ -112,6 +112,13 @@ def cli(ctx=None, verbose=0):
     metavar="VENV",
     help="Virtual environment to be used - if not provided a new one is created in the current directory.",
 )
+@click.option(
+    "--limited-output",
+    "-l",
+    is_flag=True,
+    envvar="THOTH_SOLVER_LIMITED_OUTPUT",
+    help="Produce limited output that states only dependencies.",
+)
 def python(
     click_ctx,
     requirements,
@@ -122,6 +129,7 @@ def python(
     no_transitive=True,
     no_pretty=False,
     virtualenv=None,
+    limited_output=False,
 ):
     """Manipulate with dependency requirements using PyPI."""
     start_time = time.monotonic()
@@ -138,7 +146,9 @@ def python(
         transitive=not no_transitive,
         exclude_packages=set(map(str.strip, (exclude_packages or "").split(","))),
         virtualenv=virtualenv,
+        limited_output=limited_output,
     )
+
     print_command_result(
         click_ctx,
         result,

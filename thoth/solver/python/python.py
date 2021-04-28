@@ -45,6 +45,24 @@ if MYPY_CHECK_RUNNING:  # pragma: no cover
 
 
 _LOGGER = logging.getLogger(__name__)
+_UNRESTRICTED_METADATA_KEYS = frozenset(
+    {
+        "classifier",
+        "metadata-version",
+        "name",
+        "obsoletes-dist",
+        "platform",
+        "provides-dist",
+        "provides-extra",
+        "provides-extra",
+        "requires-dist",
+        "requires-dist",
+        "requires-external",
+        "requires-python",
+        "supported-platform",
+        "version",
+    },
+)
 
 
 def get_environment_packages(python_bin):  # type: (str) -> List[Dict[str, str]]
@@ -348,8 +366,8 @@ def _do_resolve_index(python_bin, solver, all_solvers, requirements, exclude_pac
     return {"tree": packages, "errors": errors, "unparsed": unparsed, "unresolved": unresolved}
 
 
-def resolve(requirements, index_urls, python_version, exclude_packages, transitive, virtualenv):
-    # type: (List[str], List[str], int, Optional[Set[str]], bool, Optional[str]) -> Dict[str, Any]
+def resolve(requirements, *, index_urls, python_version, exclude_packages, transitive, virtualenv, limited_output=True):
+    # type: (List[str], List[str], int, Optional[Set[str]], bool, Optional[str], bool) -> Dict[str, Any]
     """Resolve given requirements for the given Python version."""
     assert python_version in (2, 3), "Unknown Python version"
 
@@ -398,5 +416,16 @@ def resolve(requirements, index_urls, python_version, exclude_packages, transiti
         result["errors"].extend(solver_result["errors"])  # type: ignore
         result["unparsed"].extend(solver_result["unparsed"])  # type: ignore
         result["unresolved"].extend(solver_result["unresolved"])  # type: ignore
+
+    if limited_output:
+        for entry in result["tree"]:
+            importlib_metadata = entry["importlib_metadata"]
+            importlib_metadata.pop("files", None)
+
+            # Drop any metadata such as author, home page, contact e-mail that can be sensitive.
+            for key in list(importlib_metadata["metadata"].keys()):
+                if key.lower() not in _UNRESTRICTED_METADATA_KEYS:
+                    _LOGGER.debug("Removing %r from output based on limited output option", key)
+                    importlib_metadata["metadata"].pop(key)
 
     return result
