@@ -778,3 +778,11 @@
 ## Release 1.7.2 (2021-03-05T16:38:34)
 ### Features
 * Skip thoth-solver in the environment packages report
+
+## Release 1.8.0 (2021-05-06T13:35:35)
+### Features
+* Provide an ability to limit output
+* :arrow_up: Automatic update of dependencies by Kebechet (#695)
+* Address review comments
+* Improvements to docs
+* :arrow_up: Automatic update of dependencies by Kebechet (#693)
