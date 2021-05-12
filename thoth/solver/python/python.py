@@ -41,7 +41,7 @@ from .instrument import find_distribution_name
 from .._typing import MYPY_CHECK_RUNNING
 
 if MYPY_CHECK_RUNNING:  # pragma: no cover
-    from typing import List, Tuple, Dict, Generator, Optional, Any, Set, Deque, Union
+    from typing import List, Tuple, Dict, Generator, Optional, Any, Set, Deque
 
 
 _LOGGER = logging.getLogger(__name__)
@@ -389,7 +389,7 @@ def resolve(requirements, *, index_urls, python_version, exclude_packages, trans
         "environment": default_environment(),
         "environment_packages": environment_packages,
         "platform": sysconfig.get_platform(),
-    }
+    }  # type: Dict[str, Any]
 
     all_solvers = []
     for index_url in index_urls:
@@ -412,10 +412,21 @@ def resolve(requirements, *, index_urls, python_version, exclude_packages, trans
             transitive=transitive,
         )
 
-        result["tree"].extend(solver_result["tree"])  # type: ignore
-        result["errors"].extend(solver_result["errors"])  # type: ignore
-        result["unparsed"].extend(solver_result["unparsed"])  # type: ignore
-        result["unresolved"].extend(solver_result["unresolved"])  # type: ignore
+        result["tree"].extend(solver_result["tree"])
+        result["errors"].extend(solver_result["errors"])
+        result["unparsed"].extend(solver_result["unparsed"])
+        result["unresolved"].extend(solver_result["unresolved"])
+
+    for item in result["tree"]:
+        packages = []
+        for file_info in item.get("importlib_metadata", {}).get("files") or []:
+            path = file_info["path"]
+            parts = path.split(os.path.sep)
+            if parts[-1] == "__init__.py":
+                packages.append(".".join(parts[:-1]))
+
+        packages.sort(key=lambda p: (p.count("."), p))
+        item["packages"] = packages
 
     if limited_output:
         for entry in result["tree"]:  # type: ignore
