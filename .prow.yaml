@@ -6,15 +6,11 @@ presubmits:
     context: aicoe-ci/prow/pre-commit
     spec:
       containers:
-        - image: quay.io/thoth-station/thoth-precommit-py38:v0.12.5
+        - image: quay.io/thoth-station/thoth-precommit-py38:v0.12.7
           command:
             - "pre-commit"
             - "run"
             - "--all-files"
-          resources:
-            requests:
-              memory: "2Gi"
-              cpu: "2"
 
   - name: thoth-pytest-py38
     decorate: true
@@ -26,7 +22,3 @@ presubmits:
         - image: quay.io/goern/thoth-pytest:v0.13.0-dev
           command:
             - "/bin/run-pytest"
-          resources:
-            requests:
-              memory: "2Gi"
-              cpu: "2"
