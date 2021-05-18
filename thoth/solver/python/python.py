@@ -45,6 +45,7 @@ if MYPY_CHECK_RUNNING:  # pragma: no cover
 
 
 _LOGGER = logging.getLogger(__name__)
+_RAISE_ON_SYSTEM_EXIT_CODE  = bool(int(os.getenv("THOTH_SOLVER_RAISE_ON_SYSTEM_EXIT_CODES", 0)))
 _UNRESTRICTED_METADATA_KEYS = frozenset(
     {
         "classifier",
@@ -297,6 +298,9 @@ def _do_resolve_index(python_bin, solver, all_solvers, requirements, exclude_pac
                 _LOGGER.exception("An exception occurred during package metadata gathering")
                 details = {"message": str(exc)}
             else:
+                if _RAISE_ON_SYSTEM_EXIT_CODE and exc.return_code == -9:
+                    # Raise if the given exit code was a signal sent by the operating system.
+                    raise
                 details = exc.to_dict()
 
             errors.append(
@@ -381,7 +385,7 @@ def resolve(requirements, *, index_urls, python_version, exclude_packages, trans
 
     environment_packages = get_environment_packages(python_bin)
 
-    result = {
+    result: Dict[str, Any] = {
         "tree": [],
         "errors": [],
         "unparsed": [],
@@ -412,10 +416,10 @@ def resolve(requirements, *, index_urls, python_version, exclude_packages, trans
             transitive=transitive,
         )
 
-        result["tree"].extend(solver_result["tree"])  # type: ignore
-        result["errors"].extend(solver_result["errors"])  # type: ignore
-        result["unparsed"].extend(solver_result["unparsed"])  # type: ignore
-        result["unresolved"].extend(solver_result["unresolved"])  # type: ignore
+        result["tree"].extend(solver_result["tree"])
+        result["errors"].extend(solver_result["errors"])
+        result["unparsed"].extend(solver_result["unparsed"])
+        result["unresolved"].extend(solver_result["unresolved"])
 
     if limited_output:
         for entry in result["tree"]:  # type: ignore
