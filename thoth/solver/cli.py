@@ -33,7 +33,7 @@ from thoth.solver.python import resolve as resolve_python
 
 init_logging()
 
-_LOG = logging.getLogger(__name__)
+_LOG = logging.getLogger("thoth.solver")
 
 
 def _print_version(ctx, _, value):
