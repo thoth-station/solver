@@ -385,7 +385,7 @@ def resolve(requirements, *, index_urls, python_version, exclude_packages, trans
 
     environment_packages = get_environment_packages(python_bin)
 
-    result: Dict[str, Any] = {
+    result = {
         "tree": [],
         "errors": [],
         "unparsed": [],
