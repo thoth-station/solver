@@ -786,3 +786,17 @@
 * Address review comments
 * Improvements to docs
 * :arrow_up: Automatic update of dependencies by Kebechet (#693)
+
+## Release 1.9.0 (2021-05-24T20:41:38)
+### Features
+* :arrow_up: Automatic update of dependencies by Kebechet (#705)
+* Compute packages available in analyzed Python package release
+* Metadata now gather also description (#707)
+* :hatched_chick: update the prow resource limits
+* :arrow_up: remove resources spec so that namespace defaults are used
+* :arrow_up: Automatic update of dependencies by Kebechet (#698)
+* Use thoth.solver logger in the CLI setup
+### Improvements
+* Remove unused ignore comment
+### Other
+* Raise on exit code propagating a signal from operating system (#704)
