@@ -61,16 +61,18 @@ class TestInstrument(SolverTestCase):
         assert find_distribution_name(venv.python, package_name) == distribution_name
 
     @pytest.mark.parametrize(
-        "package_version, package_name, metadata_file",
-        [("delegator.py===0.1.1", "delegator.py", "delegator-py.json"), ("click===7.0", "click", "click.json")],
+        "package_name,package_version,metadata_file",
+        [("delegator.py", "0.1.1", "delegator-py.json"), ("click", "7.0", "click.json")],
     )
     def test_get_package_metadata(self, venv, package_version, package_name, metadata_file):
         """Test getting package metadata."""
         with open(os.path.join(self.data_dir, "metadata", metadata_file)) as f:
             metadata = json.load(f)
 
-        venv.install(package_version)
+        venv.install(f"{package_name}==={package_version}")
         discovered_metadata = get_package_metadata(venv.python, package_name)
+        # Check the correct version is picked during the test run.
+        assert discovered_metadata.get("version") == package_version
         # We don't care about files present now, just check we have some files in the output.
         assert "files" in discovered_metadata
         discovered_metadata.pop("files")
