@@ -18,6 +18,8 @@
 
 """Test instrumentation inside a virtual environment."""
 
+import json
+import os
 import pytest
 from tests.base_test import SolverTestCase
 
@@ -49,75 +51,6 @@ def _func_env():
 class TestInstrument(SolverTestCase):
     """Test instrumentation of running custom functions inside a virtual environment."""
 
-    _DELEGATOR_PY_METADATA = {
-        "entry_points": [],
-        "metadata": {
-            "Author": "Kenneth Reitz",
-            "Author-email": "me@kennethreitz.com",
-            "Classifier": [
-                "Programming Language :: Python",
-                "Programming Language :: Python :: 2.6",
-                "Programming Language :: Python :: 2.7",
-                "Programming Language :: Python :: 3",
-                "Programming Language :: Python :: 3.3",
-                "Programming Language :: Python :: 3.4",
-                "Programming Language :: Python :: 3.5",
-                "Programming Language :: Python :: 3.6",
-                "Programming Language :: Python :: Implementation :: CPython",
-                "Programming Language :: Python :: Implementation :: PyPy",
-            ],
-            "Home-page": "https://github.com/kennethreitz/delegator",
-            "License": "MIT",
-            "Metadata-Version": "2.1",
-            "Name": "delegator.py",
-            "Platform": ["UNKNOWN"],
-            "Requires-Dist": ["pexpect (>=4.1.0)"],
-            "Summary": "Subprocesses for Humans 2.0.",
-            "Version": "0.1.1",
-        },
-        "requires": ["pexpect (>=4.1.0)"],
-        "version": "0.1.1",
-    }
-
-    _CLICK_METADATA = {
-        "entry_points": [],
-        "metadata": {
-            "Author": "Armin Ronacher",
-            "Author-email": "armin.ronacher@active-4.com",
-            "Classifier": [
-                "Development Status :: 5 - Production/Stable",
-                "Intended Audience :: Developers",
-                "License :: OSI Approved :: BSD License",
-                "Operating System :: OS Independent",
-                "Programming Language :: Python",
-                "Programming Language :: Python :: 2",
-                "Programming Language :: Python :: 2.7",
-                "Programming Language :: Python :: 3",
-                "Programming Language :: Python :: 3.4",
-                "Programming Language :: Python :: 3.5",
-                "Programming Language :: Python :: 3.6",
-                "Programming Language :: Python :: 3.7",
-            ],
-            "Home-page": "https://palletsprojects.com/p/click/",
-            "License": "BSD",
-            "Maintainer": "Pallets Team",
-            "Maintainer-email": "contact@palletsprojects.com",
-            "Metadata-Version": "2.1",
-            "Name": "Click",
-            "Platform": ["UNKNOWN"],
-            "Project-URL": [
-                "Documentation, https://click.palletsprojects.com/",
-                "Code, https://github.com/pallets/click",
-                "Issue tracker, https://github.com/pallets/click/issues",
-            ],
-            "Requires-Python": ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*",
-            "Summary": "Composable command line interface toolkit",
-            "Version": "7.0",
-        },
-        "requires": None,
-        "version": "7.0",
-    }
-
     @pytest.mark.parametrize(
         "package_version,package_name,distribution_name",
         [("selinon==1.1.0", "selinon", "selinon"), ("backports.weakref", "backports-weakref", "backports.weakref")],
@@ -128,11 +61,14 @@ class TestInstrument(SolverTestCase):
         assert find_distribution_name(venv.python, package_name) == distribution_name
 
     @pytest.mark.parametrize(
-        "package_version, package_name, metadata",
-        [("delegator.py===0.1.1", "delegator.py", _DELEGATOR_PY_METADATA), ("click===7.0", "click", _CLICK_METADATA)],
+        "package_version, package_name, metadata_file",
+        [("delegator.py===0.1.1", "delegator.py", "delegator-py.json"), ("click===7.0", "click", "click.json")],
     )
-    def test_get_package_metadata(self, venv, package_version, package_name, metadata):
+    def test_get_package_metadata(self, venv, package_version, package_name, metadata_file):
         """Test getting package metadata."""
+        with open(os.path.join(self.data_dir, "metadata", metadata_file)) as f:
+            metadata = json.load(f)
+
         venv.install(package_version)
         discovered_metadata = get_package_metadata(venv.python, package_name)
         # We don't care about files present now, just check we have some files in the output.

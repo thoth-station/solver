@@ -1,0 +1,36 @@
+{
+  "entry_points": [],
+  "metadata": {
+    "Author": "Kenneth Reitz",
+    "Author-email": "me@kennethreitz.com",
+    "Classifier": [
+      "Programming Language :: Python",
+      "Programming Language :: Python :: 2.6",
+      "Programming Language :: Python :: 2.7",
+      "Programming Language :: Python :: 3",
+      "Programming Language :: Python :: 3.3",
+      "Programming Language :: Python :: 3.4",
+      "Programming Language :: Python :: 3.5",
+      "Programming Language :: Python :: 3.6",
+      "Programming Language :: Python :: Implementation :: CPython",
+      "Programming Language :: Python :: Implementation :: PyPy"
+    ],
+    "Description": "\nDelegator.py \u2014\u00a0Subprocesses for Humans 2.0\n=======================================\n\n\n.. image:: https://img.shields.io/pypi/v/delegator.py.svg\n    :target: https://pypi.python.org/pypi/delegator.py\n\n.. image:: https://img.shields.io/pypi/l/delegator.py.svg\n    :target: https://pypi.python.org/pypi/delegator.py\n\n.. image:: https://img.shields.io/pypi/wheel/delegator.py.svg\n    :target: https://pypi.python.org/pypi/delegator.py\n\n.. image:: https://img.shields.io/pypi/pyversions/delegator.py.svg\n    :target: https://pypi.python.org/pypi/delegator.py\n\n.. image:: https://img.shields.io/badge/SayThanks.io-\u263c-1EAEDB.svg\n    :target: https://saythanks.io/to/kennethreitz\n\n\n**Delegator.py** is a simple library for dealing with subprocesses, inspired\nby both `envoy <https://github.com/kennethreitz/envoy>`_ and `pexpect <http://pexpect.readthedocs.io>`_ (in fact, it depends on it!).\n\nThis module features two main functions ``delegator.run()`` and ``delegator.chain()``. One runs commands, blocking or non-blocking, and the other runs a chain of commands, separated by the standard unix pipe operator: ``|``.\n\nIf you're interested in financially supporting Kenneth Reitz open source, consider `visiting this link <https://cash.me/$KennethReitz>`_. Your support helps tremendously with sustainability of motivation, as Open Source is no longer part of my day job.\n\nBasic Usage\n-----------\n\nBasic run functionality:\n\n.. code:: pycon\n\n    >>> c = delegator.run('ls')\n    >>> print c.out\n    README.rst   delegator.py\n\n    >>> c = delegator.run('long-running-process', block=False)\n    >>> c.pid\n    35199\n    >>> c.block()\n    >>> c.return_code\n    0\n\nCommands can be passed in as lists as well (e.g. ``['ls', '-lrt']``), for parameterization.\n\nBasic chain functionality:\n\n.. code:: pycon\n\n   # Can also be called with ([['fortune'], ['cowsay']]).\n   # or, delegator.run('fortune').pipe('cowsay')\n\n   >>> c = delegator.chain('fortune | cowsay')\n   >>> print c.out\n     _______________________________________\n    / Our swords shall play the orators for \\\n    | us.                                   |\n    |                                       |\n    \\ -- Christopher Marlowe                /\n     ---------------------------------------\n            \\   ^__^\n             \\  (oo)\\_______\n                (__)\\       )\\/\\\n                    ||----w |\n                    ||     ||\n\n\nExpect functionality is built-in too, on non-blocking commands:\n\n.. code:: pycon\n\n    >>> c.expect('Password:')\n    >>> c.send('PASSWORD')\n    >>> c.block()\n\nOther functions:\n\n.. code:: pycon\n\n    >>> c.kill()\n    >>> c.send('SIGTERM', signal=True)\n\n    # Only available when block=True, otherwise, use c.out.\n    >>> c.err\n    ''\n\n    # Direct access to pipes.\n    >>> c.std_err\n    <open file '<fdopen>', mode 'rU' at 0x10a5351e0>\n\n    # Adjust environment variables for the command (existing will be overwritten).\n    >>> c = delegator.chain('env | grep NEWENV', env={'NEWENV': 'FOO_BAR'})\n    >>> c.out\n    NEWENV=FOO_BAR\n\n\n\nInstallation\n------------\n\n::\n\n    $ pip install delegator.py\n\n\u2728\ud83c\udf70\u2728\n\n\n",
+    "Home-page": "https://github.com/kennethreitz/delegator",
+    "License": "MIT",
+    "Metadata-Version": "2.1",
+    "Name": "delegator.py",
+    "Platform": [
+      "UNKNOWN"
+    ],
+    "Requires-Dist": [
+      "pexpect (>=4.1.0)"
+    ],
+    "Summary": "Subprocesses for Humans 2.0.",
+    "Version": "0.1.1"
+  },
+  "requires": [
+    "pexpect (>=4.1.0)"
+  ],
+  "version": "0.1.1"
+}
