@@ -209,9 +209,13 @@ def get_package_metadata(python_bin, package_name):
     # a dependency of this package, but it is not installed in the created virtual environment.
     # Inject the current path to the created environment. Note however, the path configured in
     # the virtual environment needs to take precedence.
+    #
+    # The reversed list is used to make tests happy as pytest-venv injects the current path at the
+    # beginning. This *SHOULD NOT* affect how solver behaves when run as a data aggregation task in
+    # the cluster.
     venv_path = [
         f
-        for f in execute_env_function(python_bin, _get_import_path, is_json=True)["path"]  # type: ignore
+        for f in reversed(execute_env_function(python_bin, _get_import_path, is_json=True)["path"])  # type: ignore
         if f and f not in sys.path
     ]
 
