@@ -429,7 +429,7 @@ def resolve(requirements, *, index_urls, python_version, exclude_packages, trans
         item["packages"] = packages
 
     if limited_output:
-        for entry in result["tree"]:  # type: ignore
+        for entry in result["tree"]:
             importlib_metadata = entry["importlib_metadata"]
             importlib_metadata.pop("files", None)
 
