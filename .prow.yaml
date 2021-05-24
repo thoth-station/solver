@@ -19,6 +19,13 @@ presubmits:
     context: aicoe-ci/prow/pytest
     spec:
       containers:
-        - image: quay.io/goern/thoth-pytest:v0.13.0-dev
+        - image: quay.io/thoth-station/thoth-pytest-py38:v0.12.8
           command:
             - "/bin/run-pytest"
+          resources:
+            requests:
+              memory: "1Gi"
+              cpu: "500m"
+            limits:
+              memory: "2Gi"
+              cpu: "1"
