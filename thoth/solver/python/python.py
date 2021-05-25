@@ -45,7 +45,7 @@ if MYPY_CHECK_RUNNING:  # pragma: no cover
 
 
 _LOGGER = logging.getLogger(__name__)
-_RAISE_ON_SYSTEM_EXIT_CODE  = bool(int(os.getenv("THOTH_SOLVER_RAISE_ON_SYSTEM_EXIT_CODES", 0)))
+_RAISE_ON_SYSTEM_EXIT_CODE = bool(int(os.getenv("THOTH_SOLVER_RAISE_ON_SYSTEM_EXIT_CODES", 0)))
 _UNRESTRICTED_METADATA_KEYS = frozenset(
     {
         "classifier",
