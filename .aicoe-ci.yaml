@@ -34,7 +34,7 @@ overlays:
 
   - name: solver-fedora-34-py39
     build:
-      base-image: quay.io/thoth-station/s2i-thoth-f34-py39:v0.24.2
+      base-image: quay.io/thoth-station/s2i-thoth-f34-py39:v0.29.0
       build-stratergy: 'Source'
       custom-tag: 'latest'
       registry: quay.io
