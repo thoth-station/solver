@@ -42,7 +42,7 @@ runtime_environments:
       version: "34"
     python_version: "3.9"
     recommendation_type: latest
-    base_image: quay.io/thoth-station/s2i-thoth-f34-py39:v0.28.0
+    base_image: quay.io/thoth-station/s2i-thoth-f34-py39:v0.29.0
 
   - name: solver-rhel-8-py36
     operating_system:
