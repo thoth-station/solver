@@ -32,6 +32,21 @@ overlays:
       project-name: thoth-application
       project-org: thoth-station
 
+  - name: solver-fedora-34-py39
+    build:
+      base-image: quay.io/thoth-station/s2i-thoth-f34-py39:v0.29.0
+      build-stratergy: 'Source'
+      custom-tag: 'latest'
+      registry: quay.io
+      registry-org: thoth-station
+      registry-project: 'solver-fedora-34-py39'
+      registry-secret: thoth-station-thoth-pusher-secret
+    deploy:
+      image-name: 'solver-fedora-34-py39'
+      overlay-contextpath: 'solver/overlays/test/imagestreamtag.yaml'
+      project-name: thoth-application
+      project-org: thoth-station
+
   - name: solver-fedora-32-py38
     build:
       base-image: quay.io/thoth-station/s2i-thoth-f32-py38:v0.24.2

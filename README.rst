@@ -19,6 +19,8 @@ See the listing built solvers used in Thoth:
 
 * `quay.io/thoth-station/solver-rhel-8-py36 <https://quay.io/repository/thoth-station/solver-rhel-8-py36>`__
 
+* `quay.io/thoth-station/solver-fedora-34-py39 <https://quay.io/repository/thoth-station/solver-fedora-34-py39>`__
+
 * `quay.io/thoth-station/solver-fedora-32-py38 <https://quay.io/repository/thoth-station/solver-fedora-32-py38>`__
 
 * `quay.io/thoth-station/solver-fedora-32-py37 <https://quay.io/repository/thoth-station/solver-fedora-32-py37>`__
