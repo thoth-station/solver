@@ -800,3 +800,11 @@
 * Remove unused ignore comment
 ### Other
 * Raise on exit code propagating a signal from operating system (#704)
+
+## Release 1.10.0 (2021-06-03T18:56:18)
+### Features
+* :arrow_up: Automatic update of dependencies by Kebechet
+* Update .thoth.yaml
+* Update .aicoe-ci.yaml
+* Add Fedora 34 based on Python 3.9 solver
+* Remove unecessary whitespace (#710)
