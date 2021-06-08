@@ -808,3 +808,8 @@
 * Update .aicoe-ci.yaml
 * Add Fedora 34 based on Python 3.9 solver
 * Remove unecessary whitespace (#710)
+
+## Release 1.10.1 (2021-06-08T14:21:17)
+### Features
+* :panda_face: support solver fedora 34 python 3.9 with thoth services
+* :arrow_up: Automatic update of dependencies by Kebechet
