@@ -25,22 +25,6 @@ See the listing built solvers used in Thoth:
 
 * `quay.io/thoth-station/solver-fedora-32-py37 <https://quay.io/repository/thoth-station/solver-fedora-32-py37>`__
 
-* `quay.io/thoth-station/solver-fedora-31-py38 <https://quay.io/repository/thoth-station/solver-fedora-31-py38>`__
-
-* `quay.io/thoth-station/solver-fedora-31-py37 <https://quay.io/repository/thoth-station/solver-fedora-31-py37>`__
-
-* `quay.io/thoth-station/solver-fedora-31-py36 <https://quay.io/repository/thoth-station/solver-fedora-31-py36>`__
-
-* `quay.io/thoth-station/solver-fedora-30-py37 <https://quay.io/repository/thoth-station/solver-fedora-30-py37>`__
-
-* `quay.io/thoth-station/solver-fedora-30-py36 <https://quay.io/repository/thoth-station/solver-fedora-30-py36>`__
-
-* `quay.io/thoth-station/solver-fedora-29-py37 <https://quay.io/repository/thoth-station/solver-fedora-29-py37>`__ (no longer used)
-
-* `quay.io/thoth-station/solver-fedora-29-py36 <https://quay.io/repository/thoth-station/solver-fedora-29-py36>`__ (no longer used)
-
-* `quay.io/thoth-station/solver-fedora-28-py36 <https://quay.io/repository/thoth-station/solver-fedora-28-py36>`__ (no longer used)
-
 For a `detailed explanation see this blog post
 <https://dev.to/fridex/how-to-beat-python-s-pip-solving-python-dependencies-2d6e>`__.
 
