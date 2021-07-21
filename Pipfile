@@ -23,6 +23,7 @@ pytest-cov = "*"
 pytest-venv = "*"
 mypy = "*"
 pytest-mypy = "*"
+types-setuptools = "*"
 
 [requires]
 python_version = "3.8"
