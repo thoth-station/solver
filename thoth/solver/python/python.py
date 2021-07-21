@@ -30,7 +30,7 @@ from packaging.markers import default_environment
 from thoth.analyzer import CommandError
 from thoth.analyzer import run_command
 from thoth.python import Source
-from thoth.python.exceptions import NotFound
+from thoth.python.exceptions import NotFoundError
 from thoth.python.helpers import parse_requirement_str
 
 from .python_solver import PythonDependencyParser
@@ -187,7 +187,7 @@ def _resolve_versions(solver, source, package_name, version_spec):
     # type: (PythonSolver, Source, str, str) -> List[str]
     try:
         resolved_versions = solver.solve([package_name + (version_spec or "")])
-    except NotFound:
+    except NotFoundError:
         _LOGGER.info(
             "No versions were resolved for %r with version specification %r for package index %r",
             package_name,
@@ -213,7 +213,7 @@ def _fill_hashes(source, package_name, package_version, extracted_metadata):
     extracted_metadata["sha256"] = []
     try:
         package_hashes = source.get_package_hashes(package_name, package_version)
-    except NotFound:
+    except NotFoundError:
         # Some older packages have different version on PyPI (considering simple API) than the ones
         # stated in metadata.
         package_hashes = source.get_package_hashes(package_name, extracted_metadata["version"])
