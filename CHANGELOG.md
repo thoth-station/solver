@@ -813,3 +813,18 @@
 ### Features
 * :panda_face: support solver fedora 34 python 3.9 with thoth services
 * :arrow_up: Automatic update of dependencies by Kebechet
+
+## Release 1.10.2 (2021-07-21T19:08:44)
+### Features
+* Add types-setuptools
+* Fix import statement
+* :arrow_up: Automatic update of dependencies by Kebechet
+* :arrow_up: Automatic update of dependencies by Kebechet
+* kebechet issue templates for ease trigger
+* :arrow_up: Automatic update of dependencies by Kebechet (#724)
+* :arrow_up: Automatic update of dependencies by Kebechet (#721)
+* add priority/critical-urgent label to all bot related issue templates
+* Adjust copyright notice in headers
+* Remove Fedora 31 + Python 3.7 it went EOL
+### Bug Fixes
+* Import statement fix
