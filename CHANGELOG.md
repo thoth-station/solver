@@ -1,4 +1,8 @@
 
+## Release 1.10.3 (2021-08-03T18:18:56)
+### Features
+* update the dependencies of the overlays (#734)
+
 ## Release 1.2.0 (2019-06-20T12:31:22)
 * :pushpin: Automatic update of dependency thoth-common from 0.8.11 to 0.9.0
 * Add build trigger with generic webhook
