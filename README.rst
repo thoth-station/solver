@@ -36,6 +36,9 @@ packages being present in the environment). An example could be UBI 8 specific
 solver running Python 3.8 or UBI 8 running Python 3.6 with gcc tooling for
 building native extensions.
 
+The source code is based on the original solver code that was implemented by
+Pavel Odvody in project CuCoS.
+
 Project Scope
 =============
 

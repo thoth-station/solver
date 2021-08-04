@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 # thoth-solver
+# Copyright(C) 2018 Pavel Odvody
 # Copyright(C) 2018 - 2021 Fridolin Pokorny
 #
 # This program is free software: you can redistribute it and / or modify
