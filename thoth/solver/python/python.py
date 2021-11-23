@@ -33,6 +33,7 @@ from thoth.analyzer import run_command
 from thoth.python import Source
 from thoth.python.exceptions import NotFoundError
 from thoth.python.helpers import parse_requirement_str
+from thoth.license_solver import detect_license
 
 from .python_solver import PythonDependencyParser
 from .python_solver import PythonSolver
@@ -316,6 +317,10 @@ def _do_resolve_index(python_bin, solver, all_solvers, requirements, exclude_pac
                 },
             )
             continue
+
+        # license solver
+        extracted_metadata["package_license"] = detect_license(extracted_metadata["importlib_metadata"]["metadata"])
+        print(extracted_metadata["package_license"])
 
         packages.append(extracted_metadata)
         if package_version != extracted_metadata["package_version"]:
