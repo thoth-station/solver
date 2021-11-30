@@ -320,14 +320,14 @@ def _do_resolve_index(python_bin, solver, all_solvers, requirements, exclude_pac
         # license solver
         extracted_metadata["package_license"] = detect_license(
             extracted_metadata["importlib_metadata"]["metadata"],
-            raise_on_error=False
+            raise_on_error=False,
         )
 
         _LOGGER.debug(
             "Resolved license for package %r in version %r is %r",
             package_name,
             package_version,
-            extracted_metadata["package_license"]
+            extracted_metadata["package_license"],
         )
 
         packages.append(extracted_metadata)
