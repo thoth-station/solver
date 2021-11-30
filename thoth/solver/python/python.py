@@ -45,7 +45,6 @@ from .._typing import MYPY_CHECK_RUNNING
 if MYPY_CHECK_RUNNING:  # pragma: no cover
     from typing import List, Tuple, Dict, Generator, Optional, Any, Set, Deque
 
-
 _LOGGER = logging.getLogger(__name__)
 _RAISE_ON_SYSTEM_EXIT_CODE = bool(int(os.getenv("THOTH_SOLVER_RAISE_ON_SYSTEM_EXIT_CODES", 0)))
 _UNRESTRICTED_METADATA_KEYS = frozenset(
@@ -319,8 +318,17 @@ def _do_resolve_index(python_bin, solver, all_solvers, requirements, exclude_pac
             continue
 
         # license solver
-        extracted_metadata["package_license"] = detect_license(extracted_metadata["importlib_metadata"]["metadata"])
-        print(extracted_metadata["package_license"])
+        extracted_metadata["package_license"] = detect_license(
+            extracted_metadata["importlib_metadata"]["metadata"],
+            raise_on_error=False
+        )
+
+        _LOGGER.debug(
+            "Resolved license for package %r in version %r is %r",
+            package_name,
+            package_version,
+            extracted_metadata["package_license"]
+        )
 
         packages.append(extracted_metadata)
         if package_version != extracted_metadata["package_version"]:
