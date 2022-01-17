@@ -326,11 +326,11 @@
         },
         "importlib-metadata": {
             "hashes": [
-                "sha256:92a8b58ce734b2a4494878e0ecf7d79ccd7a128b5fc6014c401e0b61f006f0f6",
-                "sha256:b7cf7d3fef75f1e4c80a96ca660efbd51473d7e8f39b5ab9210febc7809012a4"
+                "sha256:899e2a40a8c4a1aec681feef45733de8a6c58f3f6a0dbed2eb6574b4387a77b6",
+                "sha256:951f0d8a5b7260e9db5e41d429285b5f451e928479f19d80818878527d36e95e"
             ],
             "index": "pypi",
-            "version": "==4.10.0"
+            "version": "==4.10.1"
         },
         "jinja2": {
             "hashes": [
@@ -873,11 +873,11 @@
         },
         "thoth-common": {
             "hashes": [
-                "sha256:09032ee49cc78e1a18276703f0f0a5f55bff889c33ca51863b3a89c9cb9120e6",
-                "sha256:c19bc2990393181d268a4ed6de350e903f99a779d3822120bda15e0c17e00006"
+                "sha256:4773480d24c72162be72d5777b5f69312f436316da45d83c27080243ffca9129",
+                "sha256:daae81830122b1f35ad5314cd5a7d9d7d86ed5fe77c39d01fc95623dd20248d6"
             ],
             "index": "pypi",
-            "version": "==0.33.1"
+            "version": "==0.34.0"
         },
         "thoth-python": {
             "hashes": [
