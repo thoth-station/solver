@@ -43,7 +43,7 @@ _LOGGER = logging.getLogger(__name__)
 def _find_distribution_name(package_name):  # type: (str) -> None
     """Find the given distribution based on package name and print out distribution's project name.
 
-    For example, `backports-weakref' has distribution's project nmae `backports.weakref'. This is also
+    For example, `backports-weakref' has distribution's project name `backports.weakref'. This is also
     applicable to all namespace'd packages - we need to find the actual name. based on distribution discovery.
     """
     import sys

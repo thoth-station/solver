@@ -21,6 +21,7 @@
 from collections import deque
 from contextlib import contextmanager
 import logging
+from operator import index
 import os
 from shlex import quote
 import sysconfig
@@ -90,12 +91,15 @@ def get_environment_packages(python_bin):  # type: (str) -> List[Dict[str, str]]
 
 @contextmanager
 def _install_requirement(python_bin, package, version=None, index_url=None, clean=True):
-    # type: (str, str, Optional[str], Optional[str], bool) -> Generator[None, None, None]
+    # type: (str, str, Optional[str], Optional[str], bool) -> Generator[Dict[str, str], None, None]
     """Install requirements specified using suggested pip binary."""
     previous_version = _pipdeptree(python_bin, package)
 
+    index = urlparse(index_url).netloc
+    index = index[0:index.rindex('.')]
+
     try:
-        cmd = "{} -m pip install --force-reinstall --no-cache-dir --no-deps {}".format(python_bin, quote(package))
+        cmd = "{} -m pip install --force-reinstall --no-cache-dir --no-deps -vv {}".format(python_bin, quote(package))
         if version:
             cmd += "==={}".format(quote(version))
         if index_url:
@@ -107,8 +111,16 @@ def _install_requirement(python_bin, package, version=None, index_url=None, clea
 
         _LOGGER.debug("Installing requirement %r in version %r", package, version)
         result = run_command(cmd)
-        _LOGGER.debug("Log during installation:\nstdout: %s\nstderr:%s", result.stdout, result.stderr)
-        yield
+        for line in result.stdout.split("\n"):
+            if "Added {}==={}".format(package, version) in line:
+                linkstart = line.index("http")
+                linkend=line.index(" ", linkstart)
+                link = line[linkstart:linkend]
+                link = urlparse(link)
+                sha = link.fragment
+                thoth_wheel= {"{}-{}-{}".format(index, package, version): sha}
+                _LOGGER.info("wheel artififact to served to thoth: %s", thoth_wheel)
+        yield thoth_wheel
     finally:
         if clean:
             _LOGGER.debug("Removing installed package %r", package)
@@ -246,6 +258,7 @@ def _do_resolve_index(python_bin, solver, all_dependency_solvers, requirements, 
     unparsed = []
     exclude_packages = exclude_packages or set()
     queue = deque()  # type: Deque[Tuple[str, str]]
+    thoth_wheels = []
 
     for requirement in requirements:
         _LOGGER.debug("Parsing requirement %r", requirement)
@@ -294,8 +307,9 @@ def _do_resolve_index(python_bin, solver, all_dependency_solvers, requirements, 
         package_name, package_version = queue.pop()
         _LOGGER.info("Using index %r to discover package %r in version %r", index_url, package_name, package_version)
         try:
-            with _install_requirement(python_bin, package_name, package_version, index_url):
+            with _install_requirement(python_bin, package_name, package_version, index_url) as _thoth_wheel:
                 # Translate to distribution name - e.g. thoth-solver is actually distribution thoth.solver.
+                thoth_wheels.append(_thoth_wheel)
                 package_name = find_distribution_name(python_bin, package_name)
                 package_metadata = get_package_metadata(python_bin, package_name)
                 extracted_metadata = extract_metadata(package_metadata, index_url)
@@ -387,7 +401,7 @@ def _do_resolve_index(python_bin, solver, all_dependency_solvers, requirements, 
                         packages_seen.add(seen_entry)
                         queue.append((dependency_name, version))
 
-    return {"tree": packages, "errors": errors, "unparsed": unparsed, "unresolved": unresolved}
+    return {"tree": packages, "errors": errors, "unparsed": unparsed, "unresolved": unresolved, "thoth_wheels": thoth_wheels}
 
 
 def resolve(
@@ -401,7 +415,7 @@ def resolve(
     virtualenv,
     limited_output=True,
 ):
-    # type: (List[str], List[str], Optional[List[str]], int, Optional[Set[str]], bool, Optional[str], bool) -> Dict[str, Any]
+    # type: (List[str], List[str], Optional[List[str]], int, Optional[Set[str]], bool, Optional[str], bool, bool) -> Dict[str, Any]
     """Resolve given requirements for the given Python version."""
     assert python_version in (2, 3), "Unknown Python version"
 
@@ -423,6 +437,7 @@ def resolve(
         "environment": default_environment(),
         "environment_packages": environment_packages,
         "platform": sysconfig.get_platform(),
+        "thoth_wheels": [],
     }  # type: Dict[str, Any]
 
     all_solvers = []
@@ -460,6 +475,13 @@ def resolve(
         result["errors"].extend(solver_result["errors"])
         result["unparsed"].extend(solver_result["unparsed"])
         result["unresolved"].extend(solver_result["unresolved"])
+        result["thoth_wheels"].extend(solver_result["thoth_wheels"])
+
+    for wheelIndex, wheel in enumerate(result["thoth_wheels"]):
+        wheelkey = list(wheel.keys())[0]
+        wheelval = list(wheel.values())[0]
+        wheelkey ="{}-{}-py{}".format(wheelkey, result["platform"], result["environment"]["python_version"])
+        result["thoth_wheels"][wheelIndex] = {wheelkey: wheelval}
 
     for item in result["tree"]:
         packages = []
