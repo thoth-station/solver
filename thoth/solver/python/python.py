@@ -184,8 +184,8 @@ def extract_metadata(metadata, index_url):
     return result
 
 
-def _resolve_versions(solver, source, package_name, version_spec):
-    # type: (PythonSolver, Source, str, str) -> List[str]
+def _resolve_versions(solver, package_name, version_spec):
+    # type: (PythonSolver, str, str) -> List[str]
     try:
         resolved_versions = solver.solve([package_name + (version_spec or "")])
     except NotFoundError:
@@ -193,7 +193,7 @@ def _resolve_versions(solver, source, package_name, version_spec):
             "No versions were resolved for %r with version specification %r for package index %r",
             package_name,
             version_spec,
-            source.url,
+            solver.releases_fetcher.source.url
         )
         return []
     except Exception:  # pylint: disable=broad-except
@@ -252,7 +252,7 @@ def _do_resolve_index(python_bin, solver, all_solvers, requirements, exclude_pac
         _LOGGER.info(
             "Resolving package %r with version specifier %r from %r", dependency.name, version_spec, source.url,
         )
-        resolved_versions = _resolve_versions(solver, source, dependency.name, version_spec)
+        resolved_versions = _resolve_versions(solver, dependency.name, version_spec)
         if not resolved_versions:
             _LOGGER.warning("No versions were resolved for dependency %r in version %r", dependency.name, version_spec)
             error_report = {
@@ -343,7 +343,7 @@ def _do_resolve_index(python_bin, solver, all_solvers, requirements, exclude_pac
                     dep_solver.releases_fetcher.index_url,
                 )
                 resolved_versions = _resolve_versions(
-                    dep_solver, dep_solver.releases_fetcher.source, dependency_name, dependency_specifier or "",
+                    dep_solver, dependency_name, dependency_specifier or "",
                 )
                 _LOGGER.debug(
                     "Resolved versions for package %r with range specifier %r: %s",
