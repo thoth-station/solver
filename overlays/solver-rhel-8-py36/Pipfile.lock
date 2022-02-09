@@ -918,19 +918,19 @@
         },
         "thoth-common": {
             "hashes": [
-                "sha256:4773480d24c72162be72d5777b5f69312f436316da45d83c27080243ffca9129",
-                "sha256:daae81830122b1f35ad5314cd5a7d9d7d86ed5fe77c39d01fc95623dd20248d6"
+                "sha256:660f67ee7f60be420663c9cd04aa2b85efb64a4534c6b20c1960460f22fb669c",
+                "sha256:95563f05ccc08691aa87c7a25b43f2778a6c35b119e2377574584f78872f7f52"
             ],
             "index": "pypi",
-            "version": "==0.34.0"
+            "version": "==0.34.1"
         },
         "thoth-python": {
             "hashes": [
-                "sha256:1b4725bbad28a9d3c9648ed7615589e603efb739c514390b4266ed72ec94d05f",
-                "sha256:23f67ca4450ffb0fea0b80d92c69e31aca1526ccf9856e135992fc821fcc14ca"
+                "sha256:121fcd3805ad913ddf706acf542857c3510a5095a44a531962c2f5d356e25b04",
+                "sha256:66634659578a4be5a5be0dd2cb63fc7e88a649eb8e38311b1f89b6a2ec196e85"
             ],
             "index": "pypi",
-            "version": "==0.16.6"
+            "version": "==0.16.7"
         },
         "toml": {
             "hashes": [
@@ -1269,11 +1269,11 @@
         },
         "pytest-mypy": {
             "hashes": [
-                "sha256:4f2a08d4ff34737eb6ad6402df1e424f43c9213181b32d675e4e3cafbda67bbd",
-                "sha256:f8b5c6be405c8605959d1c79f20dcdeb2b3667fce8f264ff32bc854e5249f161"
+                "sha256:9ffa3bf405c12c5c6be9e92e22bebb6ab2c91b9c32f45b0f0c93af473269ab5c",
+                "sha256:a2505fcf61f1c0c51f950d4623ea8ca2daf6fb2101a5603554bad2e130202083"
             ],
             "index": "pypi",
-            "version": "==0.9.0"
+            "version": "==0.9.1"
         },
         "pytest-timeout": {
             "hashes": [
