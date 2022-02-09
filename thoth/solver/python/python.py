@@ -33,6 +33,7 @@ from thoth.analyzer import run_command
 from thoth.python import Source
 from thoth.python.exceptions import NotFoundError
 from thoth.python.helpers import parse_requirement_str
+from .python_solver import PythonReleasesFetcher
 
 from .python_solver import PythonDependencyParser
 from .python_solver import PythonSolver
@@ -124,11 +125,15 @@ def _install_requirement(python_bin, package, version=None, index_url=None, clea
                 )
 
             _LOGGER.debug(
-                "Restoring previous environment setup after installation of %r (%s)", package, previous_version,
+                "Restoring previous environment setup after installation of %r (%s)",
+                package,
+                previous_version,
             )
             if previous_version:
                 cmd = "{} -m pip install --force-reinstall --no-cache-dir --no-deps {}=={}".format(
-                    python_bin, quote(package), quote(previous_version["package"]["installed_version"]),
+                    python_bin,
+                    quote(package),
+                    quote(previous_version["package"]["installed_version"]),
                 )
                 _LOGGER.debug("Running %r", cmd)
                 result = run_command(cmd, raise_on_error=False)
@@ -193,14 +198,17 @@ def _resolve_versions(solver, package_name, version_spec):
             "No versions were resolved for %r with version specification %r for package index %r",
             package_name,
             version_spec,
-            solver.releases_fetcher.source.url
+            solver.releases_fetcher.source.url,
         )
         return []
     except Exception:  # pylint: disable=broad-except
         _LOGGER.exception("Failed to resolve versions for %r with version spec %r", package_name, version_spec)
         return []
 
-    assert len(resolved_versions.keys()) == 1, "Resolution of one package version ended with multiple packages."
+    assert len(resolved_versions.keys()) <= 1, "Resolution of one package version ended with multiple packages."
+
+    if not resolved_versions:
+        return []
 
     result = []
     for item in list(resolved_versions.values())[0]:
@@ -222,7 +230,7 @@ def _fill_hashes(source, package_name, package_version, extracted_metadata):
         extracted_metadata["sha256"].append(item["sha256"])
 
 
-def _do_resolve_index(python_bin, solver, all_solvers, requirements, exclude_packages, transitive):
+def _do_resolve_index(python_bin, solver, all_dependency_solvers, requirements, exclude_packages, transitive):
     # type: (str, PythonSolver, List[PythonSolver], List[str], Optional[Set[str]], bool) -> Dict[str, Any]
     """Perform resolution of requirements against the given solver."""
     index_url = solver.releases_fetcher.index_url
@@ -250,7 +258,10 @@ def _do_resolve_index(python_bin, solver, all_solvers, requirements, exclude_pac
 
         version_spec = str(dependency.specifier)
         _LOGGER.info(
-            "Resolving package %r with version specifier %r from %r", dependency.name, version_spec, source.url,
+            "Resolving package %r with version specifier %r from %r",
+            dependency.name,
+            version_spec,
+            source.url,
         )
         resolved_versions = _resolve_versions(solver, dependency.name, version_spec)
         if not resolved_versions:
@@ -264,7 +275,8 @@ def _do_resolve_index(python_bin, solver, all_solvers, requirements, exclude_pac
             }
             if version_spec.startswith("=="):
                 error_report["is_provided_package_version"] = source.provides_package_version(
-                    dependency.name, version_spec[len("=="):],
+                    dependency.name,
+                    version_spec[len("==") :],
                 )
 
             unresolved.append(error_report)
@@ -335,7 +347,7 @@ def _do_resolve_index(python_bin, solver, all_solvers, requirements, exclude_pac
                 dependency["specifier"],  # type: ignore
             )
 
-            for dep_solver in all_solvers:
+            for dep_solver in all_dependency_solvers:
                 _LOGGER.info(
                     "Resolving dependency versions for %r with range %r from %r",
                     dependency_name,
@@ -343,7 +355,9 @@ def _do_resolve_index(python_bin, solver, all_solvers, requirements, exclude_pac
                     dep_solver.releases_fetcher.index_url,
                 )
                 resolved_versions = _resolve_versions(
-                    dep_solver, dependency_name, dependency_specifier or "",
+                    dep_solver,
+                    dependency_name,
+                    dependency_specifier or "",
                 )
                 _LOGGER.debug(
                     "Resolved versions for package %r with range specifier %r: %s",
@@ -363,7 +377,9 @@ def _do_resolve_index(python_bin, solver, all_solvers, requirements, exclude_pac
                     seen_entry = (dependency_name, version)
                     if seen_entry not in packages_seen:
                         _LOGGER.debug(
-                            "Adding package %r in version %r for next resolution round", dependency_name, version,
+                            "Adding package %r in version %r for next resolution round",
+                            dependency_name,
+                            version,
                         )
                         packages_seen.add(seen_entry)
                         queue.append((dependency_name, version))
@@ -371,8 +387,18 @@ def _do_resolve_index(python_bin, solver, all_solvers, requirements, exclude_pac
     return {"tree": packages, "errors": errors, "unparsed": unparsed, "unresolved": unresolved}
 
 
-def resolve(requirements, *, index_urls, python_version, exclude_packages, transitive, virtualenv, limited_output=True):
-    # type: (List[str], List[str], int, Optional[Set[str]], bool, Optional[str], bool) -> Dict[str, Any]
+def resolve(
+    requirements,
+    *,
+    index_urls,
+    dependency_index_urls,
+    python_version,
+    exclude_packages,
+    transitive,
+    virtualenv,
+    limited_output=True
+):
+    # type: (List[str], List[str], Optional[List[str]], int, Optional[Set[str]], bool, Optional[str], bool) -> Dict[str, Any]
     """Resolve given requirements for the given Python version."""
     assert python_version in (2, 3), "Unknown Python version"
 
@@ -398,20 +424,30 @@ def resolve(requirements, *, index_urls, python_version, exclude_packages, trans
 
     all_solvers = []
     for index_url in index_urls:
-        source = Source(index_url)
-        from .python_solver import PythonReleasesFetcher
-
         all_solvers.append(
             PythonSolver(
-                dependency_parser=PythonDependencyParser(), releases_fetcher=PythonReleasesFetcher(source=source),
+                dependency_parser=PythonDependencyParser(),
+                releases_fetcher=PythonReleasesFetcher(source=Source(index_url)),
             ),
         )
+
+    all_dependency_solvers = []
+    if dependency_index_urls:
+        for index_url in dependency_index_urls:
+            all_dependency_solvers.append(
+                PythonSolver(
+                    dependency_parser=PythonDependencyParser(),
+                    releases_fetcher=PythonReleasesFetcher(source=Source(index_url)),
+                ),
+            )
+    else:
+        all_dependency_solvers = all_solvers
 
     for solver in all_solvers:
         solver_result = _do_resolve_index(
             python_bin=python_bin,
             solver=solver,
-            all_solvers=all_solvers,
+            all_dependency_solvers=all_dependency_solvers,
             requirements=requirements,
             exclude_packages=exclude_packages,
             transitive=transitive,

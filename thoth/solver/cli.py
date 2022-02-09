@@ -70,7 +70,12 @@ def cli(ctx=None, verbose=0):
 @cli.command()
 @click.pass_context
 @click.option(
-    "--requirements", "-r", type=str, envvar="THOTH_SOLVER_PACKAGES", required=True, help="Requirements to be solved.",
+    "--requirements",
+    "-r",
+    type=str,
+    envvar="THOTH_SOLVER_PACKAGES",
+    required=True,
+    help="Requirements to be solved.",
 )
 @click.option(
     "--index",
@@ -80,6 +85,16 @@ def cli(ctx=None, verbose=0):
     show_default=True,
     default="https://pypi.org/simple",
     help="A comma separated list of Python indexes to be used when resolving version ranges.",
+)
+@click.option(
+    "--dependency-index",
+    "-d",
+    type=str,
+    envvar="THOTH_SOLVER_DEPENDENCY_INDEXES",
+    show_default=True,
+    default=None,
+    help="A comma separated list of Python indexes to be used when checking dependency versions, "
+    "defaults to --index if not provided explicitly.",
 )
 @click.option(
     "--output",
@@ -123,6 +138,7 @@ def python(
     click_ctx,
     requirements,
     index=None,
+    dependency_index=None,
     python_version=3,
     exclude_packages=None,
     output=None,
@@ -139,9 +155,13 @@ def python(
         _LOG.error("No requirements specified, exiting")
         sys.exit(1)
 
+    index_urls = index.split(",") if index else ("https://pypi.org/simple",)
+    dependency_index_urls = dependency_index.split(",") if dependency_index else index_urls
+
     result = resolve_python(
         requirements,
-        index_urls=index.split(",") if index else ("https://pypi.org/simple",),
+        index_urls=index_urls,
+        dependency_index_urls=dependency_index_urls,
         python_version=int(python_version),
         transitive=not no_transitive,
         exclude_packages=set(map(str.strip, (exclude_packages or "").split(","))),
