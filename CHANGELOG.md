@@ -1,4 +1,80 @@
 
+## Release 1.11.0 (2022-02-10T00:35:40)
+* Increase pytest timeout
+* :arrow_up: Automatic update of dependencies by Kebechet for the solver-rhel-8-py38 environment
+* :arrow_up: Automatic update of dependencies by Kebechet for the solver-rhel-8-py38 environment
+* :arrow_up: Automatic update of dependencies by Kebechet for the solver-rhel-8-py36 environment
+* :arrow_up: Automatic update of dependencies by Kebechet for the solver-fedora-34-py39 environment
+* Look for dependency versions on separate dependency indexes
+* Remove redundant parameter that can be obtained internally
+* :arrow_up: Automatic update of dependencies by Kebechet for the solver-rhel-8-py36 environment
+* :arrow_up: Automatic update of dependencies by Kebechet for the solver-fedora-34-py39 environment
+* :arrow_up: Automatic update of dependencies by Kebechet for the solver-rhel-8-py36 environment (#5109)
+* :arrow_up: Automatic update of dependencies by Kebechet for the solver-fedora-34-py39 environment (#5108)
+* :arrow_up: Automatic update of dependencies by Kebechet for the solver-rhel-8-py38 environment (#5107)
+* :arrow_up: Automatic update of dependencies by Kebechet for the solver-rhel-8-py38 environment
+* :arrow_up: Automatic update of dependencies by Kebechet for the solver-rhel-8-py36 environment
+* :arrow_up: Automatic update of dependencies by Kebechet for the solver-fedora-34-py39 environment
+* Enable TLS verification
+* :arrow_up: Automatic update of dependencies by Kebechet for the solver-rhel-8-py38 environment
+* :arrow_up: Automatic update of dependencies by Kebechet for the solver-rhel-8-py36 environment
+* :arrow_up: Automatic update of dependencies by Kebechet for the solver-fedora-34-py39 environment (#5097)
+* Automatic update of dependencies by Kebechet for the solver-rhel-8-py36 environment (#5099)
+* Automatic update of dependencies by Kebechet for the solver-rhel-8-py38 environment (#5098)
+* :arrow_up: Automatic update of dependencies by Kebechet for the solver-rhel-8-py36 environment
+* :arrow_up: Automatic update of dependencies by Kebechet for the solver-fedora-34-py39 environment (#5095)
+* :arrow_up: Automatic update of dependencies by Kebechet for the solver-fedora-34-py39 environment
+* :arrow_up: Automatic update of dependencies by Kebechet for the solver-fedora-34-py39 environment (#5092)
+* Automatic update of dependencies by Kebechet for the solver-rhel-8-py36 environment (#5093)
+* Automatic update of dependencies by Kebechet for the solver-rhel-8-py38 environment (#5094)
+* Remove Fedora that is EOL
+* :arrow_up: Automatic update of dependencies by Kebechet for the solver-rhel-8-py38 environment
+* :arrow_up: Automatic update of dependencies by Kebechet for the solver-rhel-8-py36 environment
+* :arrow_up: Automatic update of dependencies by Kebechet for the solver-fedora-34-py39 environment
+* :arrow_up: Automatic update of dependencies by Kebechet for the solver-rhel-8-py38 environment
+* :arrow_up: Automatic update of dependencies by Kebechet for the solver-rhel-8-py36 environment
+* :arrow_up: Automatic update of dependencies by Kebechet for the solver-fedora-34-py39 environment
+* :arrow_up: Automatic update of dependencies by Kebechet for the solver-rhel-8-py38 environment
+* :arrow_up: Automatic update of dependencies by Kebechet for the solver-rhel-8-py36 environment
+* :arrow_up: Automatic update of dependencies by Kebechet for the solver-fedora-34-py39 environment
+* :arrow_up: Automatic update of dependencies by Kebechet for the solver-fedora-32-py38 environment
+* :arrow_up: Automatic update of dependencies by Kebechet for the solver-fedora-31-py38 environment
+* :arrow_up: Automatic update of dependencies by Kebechet for the solver-fedora-32-py38 environment
+* :arrow_up: Automatic update of dependencies by Kebechet for the solver-fedora-31-py38 environment
+* update urls (#5069)
+* :arrow_up: Automatic update of dependencies by Kebechet for the solver-rhel-8-py38 environment
+* :arrow_up: Automatic update of dependencies by Kebechet for the solver-rhel-8-py36 environment
+* :arrow_up: Automatic update of dependencies by Kebechet for the solver-rhel-8-py38 environment
+* :arrow_up: Automatic update of dependencies by Kebechet for the solver-fedora-34-py39 environment
+* :arrow_up: Automatic update of dependencies by Kebechet for the solver-fedora-32-py38 environment
+* :arrow_up: Automatic update of dependencies by Kebechet for the solver-rhel-8-py36 environment
+* Automatic update of dependencies by Kebechet for the solver-rhel-8-py36 environment (#5061)
+* Automatic update of dependencies by Kebechet for the solver-fedora-32-py38 environment (#5059)
+* Automatic update of dependencies by Kebechet for the solver-fedora-34-py39 environment (#5060)
+* :arrow_up: Automatic update of dependencies by Kebechet for the solver-fedora-34-py39 environment
+* :arrow_up: Automatic update of dependencies by Kebechet for the solver-fedora-32-py38 environment
+* :arrow_up: Automatic update of dependencies by Kebechet for the solver-fedora-31-py38 environment
+* add kebechet to crossroads in docs (#5055)
+* Automatic update of dependencies by Kebechet for the solver-rhel-8-py38 environment (#3515)
+* Automatic update of dependencies by Kebechet for the solver-rhel-8-py36 environment (#3495)
+* :arrow_up: Automatic update of dependencies by Kebechet for the solver-fedora-31-py38 environment (#3498)
+* Automatic update of dependencies by Kebechet for the solver-fedora-32-py38 environment (#3496)
+* Automatic update of dependencies by Kebechet for the solver-rhel-8-py38 environment (#3494)
+* Automatic update of dependencies by Kebechet for the solver-rhel-8-py38 environment (#1716)
+* Automatic update of dependencies by Kebechet for the solver-fedora-32-py38 environment (#1867)
+* :arrow_up: Automatic update of dependencies by Kebechet for the solver-fedora-31-py38 environment (#1870)
+* Automatic update of dependencies by Kebechet for the solver-rhel-8-py36 environment (#1871)
+* :arrow_up: Automatic update of dependencies by Kebechet for the solver-rhel-8-py36 environment
+* :arrow_up: Automatic update of dependencies by Kebechet for the solver-fedora-32-py38 environment
+* :arrow_up: Automatic update of dependencies by Kebechet for the solver-fedora-32-py38 environment
+* :arrow_up: Automatic update of dependencies by Kebechet for the solver-fedora-31-py38 environment
+* :arrow_up: Automatic update of dependencies by Kebechet for the solver-fedora-31-py38 environment
+* :arrow_up: Automatic update of dependencies by Kebechet for the solver-rhel-8-py38 environment
+* :arrow_up: Automatic update of dependencies by Kebechet for the solver-rhel-8-py36 environment
+* :arrow_up: Automatic update of dependencies by Kebechet for the solver-fedora-32-py38 environment
+* :arrow_up: Automatic update of dependencies by Kebechet for the solver-fedora-31-py38 environment
+* State Pavel as the author of the original solver implementation
+
 ## Release 1.10.3 (2021-08-03T18:18:56)
 ### Features
 * update the dependencies of the overlays (#734)
