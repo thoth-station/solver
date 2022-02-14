@@ -877,11 +877,11 @@
         },
         "thoth-python": {
             "hashes": [
-                "sha256:121fcd3805ad913ddf706acf542857c3510a5095a44a531962c2f5d356e25b04",
-                "sha256:66634659578a4be5a5be0dd2cb63fc7e88a649eb8e38311b1f89b6a2ec196e85"
+                "sha256:ee06164bd41f3f7c011eb6c2b883075984f5edc509ea1c773fa730e12dfc8689",
+                "sha256:ff2cdd72cb68b73e31768513c4b0676edb8d1484ed4d7dd301cb568a2f35932e"
             ],
             "index": "pypi",
-            "version": "==0.16.7"
+            "version": "==0.16.8"
         },
         "toml": {
             "hashes": [
