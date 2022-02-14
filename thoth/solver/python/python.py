@@ -229,6 +229,9 @@ def _fill_hashes(source, package_name, package_version, extracted_metadata):
     for item in package_hashes:
         extracted_metadata["sha256"].append(item["sha256"])
 
+    if not extracted_metadata["sha256"]:
+        raise ValueError(f"No artifact hashes were found for {package_name}=={package_version} on {source.url}")
+
 
 def _do_resolve_index(python_bin, solver, all_dependency_solvers, requirements, exclude_packages, transitive):
     # type: (str, PythonSolver, List[PythonSolver], List[str], Optional[Set[str]], bool) -> Dict[str, Any]
@@ -396,7 +399,7 @@ def resolve(
     exclude_packages,
     transitive,
     virtualenv,
-    limited_output=True
+    limited_output=True,
 ):
     # type: (List[str], List[str], Optional[List[str]], int, Optional[Set[str]], bool, Optional[str], bool) -> Dict[str, Any]
     """Resolve given requirements for the given Python version."""
