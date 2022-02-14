@@ -1,4 +1,14 @@
 
+## Release 1.11.1 (2022-02-14T15:13:40)
+* :arrow_up: Automatic update of dependencies by Kebechet for the solver-rhel-8-py38 environment
+* :arrow_up: Automatic update of dependencies by Kebechet for the solver-rhel-8-py36 environment
+* :arrow_up: Automatic update of dependencies by Kebechet for the solver-rhel-8-py38 environment
+* :arrow_up: Automatic update of dependencies by Kebechet for the solver-fedora-34-py39 environment
+* :arrow_up: Automatic update of dependencies by Kebechet for the solver-rhel-8-py38 environment
+* :arrow_up: Automatic update of dependencies by Kebechet for the solver-rhel-8-py36 environment
+* :arrow_up: Automatic update of dependencies by Kebechet for the solver-fedora-34-py39 environment
+* Raise an error if no artifact hashes are found
+
 ## Release 1.11.0 (2022-02-10T00:35:40)
 * Increase pytest timeout
 * :arrow_up: Automatic update of dependencies by Kebechet for the solver-rhel-8-py38 environment
