@@ -21,10 +21,6 @@ See the listing built solvers used in Thoth:
 
 * `quay.io/thoth-station/solver-fedora-34-py39 <https://quay.io/repository/thoth-station/solver-fedora-34-py39>`__
 
-* `quay.io/thoth-station/solver-fedora-32-py38 <https://quay.io/repository/thoth-station/solver-fedora-32-py38>`__
-
-* `quay.io/thoth-station/solver-fedora-32-py37 <https://quay.io/repository/thoth-station/solver-fedora-32-py37>`__
-
 For a `detailed explanation see this blog post
 <https://dev.to/fridex/how-to-beat-python-s-pip-solving-python-dependencies-2d6e>`__.
 
