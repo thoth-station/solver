@@ -8,4 +8,5 @@ requests
 thoth-analyzer
 thoth-common
 thoth-python
+thoth-license-solver
 virtualenv

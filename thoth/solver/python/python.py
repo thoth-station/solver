@@ -320,6 +320,8 @@ def _do_resolve_index(python_bin, solver, all_solvers, requirements, exclude_pac
         # license solver
         extracted_metadata["package_license"] = detect_license(
             extracted_metadata["importlib_metadata"]["metadata"],
+            package_name=package_name,
+            package_version=package_version,
             raise_on_error=False,
         )
 
