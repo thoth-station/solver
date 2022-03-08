@@ -15,6 +15,7 @@ thoth-analyzer = "*"
 thoth-common = "*"
 thoth-python = "*"
 virtualenv = "*"
+thoth-license-solver = "*"
 
 [dev-packages]
 pytest = "*"
