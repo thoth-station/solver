@@ -18,11 +18,14 @@
 
 """Dependency requirements solving for Python ecosystem."""
 
+import sys
 from collections import deque
 from contextlib import contextmanager
 import logging
 from operator import index
 import os
+from platform import python_version
+from platform import system
 from shlex import quote
 import sysconfig
 from urllib.parse import urlparse
@@ -90,36 +93,52 @@ def get_environment_packages(python_bin):  # type: (str) -> List[Dict[str, str]]
 
 
 @contextmanager
-def _install_requirement(python_bin, package, version=None, index_url=None, clean=True):
-    # type: (str, str, Optional[str], Optional[str], bool) -> Generator[Dict[str, str], None, None]
+def _install_requirement(python_bin, python_version_major_minor, os_platform, package, version=None, index_url=None, clean=True):
+    # type: (str, Optional[str], Optional[str], str, Optional[str], Optional[str], bool) -> Generator[Dict[str, str], None, None]
     """Install requirements specified using suggested pip binary."""
     previous_version = _pipdeptree(python_bin, package)
 
-    index = urlparse(index_url).netloc
+    index = str(urlparse(index_url).netloc)
     index = index[0:index.rindex('.')]
 
+    deps_dir = "{}/.deps".format(sys.prefix)
+
     try:
-        cmd = "{} -m pip install --force-reinstall --no-cache-dir --no-deps -vv {}".format(python_bin, quote(package))
+        cmd = "{} -m pip download --python-version {} --platform {} --no-deps -d {} ".format(python_bin, python_version_major_minor, os_platform, deps_dir)
         if version:
-            cmd += "==={}".format(quote(version))
+            cmd += " {}=={} ".format(quote(package), quote(version))
+        if not version:
+          cmd += quote(package)
         if index_url:
             cmd += ' --index-url "{}" '.format(quote(index_url))
             # Supply trusted host by default so we do not get errors - it safe to
             # do it here as package indexes are managed by Thoth.
             trusted_host = urlparse(index_url).netloc
-            cmd += " --trusted-host {}".format(trusted_host)
+            cmd += " --trusted-host {} ".format(trusted_host)
+        run_command(cmd)
+
+        file_name = os.listdir(deps_dir)[0]
+        file_path = "{}/{}".format(deps_dir, file_name)
+
+        cmd = " {} -m pip hash {} -a sha256 ".format(python_bin, file_path)
+        hash = run_command(cmd).stdout
+
+        sha = ""
+        for line in hash.split("\n"):
+            if 'sha256:' in line:
+                sha = line[line.index("sha256:"):]
+
+        cmd = " {} -m pip install --force-reinstall --no-cache-dir --no-deps {} ".format(python_bin, file_path)
 
         _LOGGER.debug("Installing requirement %r in version %r", package, version)
         result = run_command(cmd)
-        for line in result.stdout.split("\n"):
-            if "Added {}==={}".format(package, version) in line:
-                linkstart = line.index("http")
-                linkend=line.index(" ", linkstart)
-                link = line[linkstart:linkend]
-                link = urlparse(link)
-                sha = link.fragment
-                thoth_wheel= {"{}-{}-{}".format(index, package, version): sha}
-                _LOGGER.info("wheel artififact to served to thoth: %s", thoth_wheel)
+        _LOGGER.debug("Log during installation:\nstdout: %s\nstderr:%s", result.stdout, result.stderr)
+
+        cmd = " rm {} ".format(file_path)
+        run_command(cmd)
+
+        wheel = "{}-{}-{}".format(index, package, version)
+        thoth_wheel = {wheel: sha}
         yield thoth_wheel
     finally:
         if clean:
@@ -245,8 +264,8 @@ def _fill_hashes(source, package_name, package_version, extracted_metadata):
         raise ValueError(f"No artifact hashes were found for {package_name}=={package_version} on {source.url}")
 
 
-def _do_resolve_index(python_bin, solver, all_dependency_solvers, requirements, exclude_packages, transitive):
-    # type: (str, PythonSolver, List[PythonSolver], List[str], Optional[Set[str]], bool) -> Dict[str, Any]
+def _do_resolve_index(python_bin, python_version_major_minor, os_platform, solver, all_dependency_solvers, requirements, exclude_packages, transitive):
+    # type: (str, str, str, PythonSolver, List[PythonSolver], List[str], Optional[Set[str]], bool) -> Dict[str, Any]
     """Perform resolution of requirements against the given solver."""
     index_url = solver.releases_fetcher.index_url
     source = solver.releases_fetcher.source
@@ -258,7 +277,7 @@ def _do_resolve_index(python_bin, solver, all_dependency_solvers, requirements, 
     unparsed = []
     exclude_packages = exclude_packages or set()
     queue = deque()  # type: Deque[Tuple[str, str]]
-    thoth_wheels = []
+    thoth_wheels = [] # type: List[Dict[str, str]]
 
     for requirement in requirements:
         _LOGGER.debug("Parsing requirement %r", requirement)
@@ -307,9 +326,9 @@ def _do_resolve_index(python_bin, solver, all_dependency_solvers, requirements, 
         package_name, package_version = queue.pop()
         _LOGGER.info("Using index %r to discover package %r in version %r", index_url, package_name, package_version)
         try:
-            with _install_requirement(python_bin, package_name, package_version, index_url) as _thoth_wheel:
+            with _install_requirement(python_bin, python_version_major_minor, os_platform, package_name, package_version, index_url) as thoth_wheel:
                 # Translate to distribution name - e.g. thoth-solver is actually distribution thoth.solver.
-                thoth_wheels.append(_thoth_wheel)
+                thoth_wheels.append(thoth_wheel)
                 package_name = find_distribution_name(python_bin, package_name)
                 package_metadata = get_package_metadata(python_bin, package_name)
                 extracted_metadata = extract_metadata(package_metadata, index_url)
@@ -415,7 +434,7 @@ def resolve(
     virtualenv,
     limited_output=True,
 ):
-    # type: (List[str], List[str], Optional[List[str]], int, Optional[Set[str]], bool, Optional[str], bool, bool) -> Dict[str, Any]
+    # type: (List[str], List[str], Optional[List[str]], int, Optional[Set[str]], bool, Optional[str], bool) -> Dict[str, Any]
     """Resolve given requirements for the given Python version."""
     assert python_version in (2, 3), "Unknown Python version"
 
@@ -428,6 +447,8 @@ def resolve(
         python_bin = os.path.join(virtualenv, "bin", python_bin)
 
     environment_packages = get_environment_packages(python_bin)
+    python_version_major_minor = "{}.{}".format(sys.version_info.major, sys.version_info.minor)
+    os_platform = system()
 
     result = {
         "tree": [],
@@ -464,6 +485,8 @@ def resolve(
     for solver in all_solvers:
         solver_result = _do_resolve_index(
             python_bin=python_bin,
+            python_version_major_minor=python_version_major_minor,
+            os_platform=os_platform,
             solver=solver,
             all_dependency_solvers=all_dependency_solvers,
             requirements=requirements,
@@ -477,11 +500,11 @@ def resolve(
         result["unresolved"].extend(solver_result["unresolved"])
         result["thoth_wheels"].extend(solver_result["thoth_wheels"])
 
-    for wheelIndex, wheel in enumerate(result["thoth_wheels"]):
-        wheelkey = list(wheel.keys())[0]
-        wheelval = list(wheel.values())[0]
-        wheelkey ="{}-{}-py{}".format(wheelkey, result["platform"], result["environment"]["python_version"])
-        result["thoth_wheels"][wheelIndex] = {wheelkey: wheelval}
+    for wheel_index, wheel in enumerate(result["thoth_wheels"]):
+        wheel_key = list(wheel.keys())[0]
+        wheel_val = list(wheel.values())[0]
+        wheel_key ="{}-{}-py{}".format(wheel_key, result["platform"], result["environment"]["python_version"])
+        result["thoth_wheels"][wheel_index] = {wheel_key: wheel_val}
 
     for item in result["tree"]:
         packages = []
