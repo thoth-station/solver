@@ -12,6 +12,14 @@ runtime_environments:
     recommendation_type: latest
     base_image: quay.io/thoth-station/s2i-thoth-f34-py39:v0.29.0
 
+  - name: solver-fedora-35-py310
+    operating_system:
+      name: "fedora"
+      version: "35"
+    python_version: "3.10"
+    recommendation_type: latest
+    base_image: quay.io/thoth-station/s2i-thoth-f35-py310:v0.32.3
+
   - name: solver-rhel-8-py36
     operating_system:
       name: "rhel"

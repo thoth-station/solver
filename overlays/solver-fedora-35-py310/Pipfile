@@ -1,0 +1,28 @@
+[[source]]
+url = "https://pypi.python.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[packages]
+attr = "*"
+"autopep8" = "*"
+click = "*"
+importlib-metadata = "*"
+packaging = "*"
+pipdeptree = "*"
+requests = "*"
+thoth-analyzer = "*"
+thoth-common = "*"
+thoth-python = "*"
+virtualenv = "*"
+
+[dev-packages]
+pytest = "*"
+pytest-timeout = "*"
+pytest-cov = "*"
+pytest-venv = "*"
+mypy = "*"
+pytest-mypy = "*"
+
+[requires]
+python_version = "3.10"
