@@ -1,4 +1,11 @@
 
+## Release 1.12.0 (2022-03-21T07:44:52)
+* :arrow_up: Automatic update of dependencies by Kebechet for the solver-rhel-8-py38 environment
+* :arrow_up: Automatic update of dependencies by Kebechet for the solver-rhel-8-py36 environment
+* :arrow_up: Automatic update of dependencies by Kebechet for the solver-fedora-34-py39 environment
+* creating deployment overlay for solver-f35-py310
+* :arrow_up: Automatic update of dependencies by Kebechet for the solver-rhel-8-py38 environment
+
 ## Release 1.11.2 (2022-02-28T12:40:39)
 * :arrow_up: Automatic update of dependencies by Kebechet for the solver-rhel-8-py38 environment
 * :arrow_up: Automatic update of dependencies by Kebechet for the solver-rhel-8-py36 environment
