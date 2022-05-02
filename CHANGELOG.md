@@ -1,4 +1,24 @@
 
+## Release 1.13.0 (2022-05-02T11:11:54)
+* 9d86076 :arrow_up: Automatic update of dependencies by Kebechet for the solver-fedora-34-py39 environment
+* 33492bc :arrow_up: Automatic update of dependencies by Kebechet for the solver-rhel-8-py38 environment
+* c1c6433 :arrow_up: Automatic update of dependencies by Kebechet for the solver-rhel-8-py38 environment
+* 8fc186d :arrow_up: Automatic update of dependencies by Kebechet for the solver-rhel-8-py36 environment
+* 2734d51 :arrow_up: Automatic update of dependencies by Kebechet for the solver-rhel-8-py36 environment
+* 271f511 :arrow_up: Automatic update of dependencies by Kebechet for the solver-fedora-34-py39 environment
+* a3e65c3 Adjust doc to current CLI implementation
+* f01e5b7 :arrow_up: Automatic update of dependencies by Kebechet for the solver-rhel-8-py36 environment
+* 47ce3b6 :arrow_up: Automatic update of dependencies by Kebechet for the solver-rhel-8-py38 environment
+* 46567d0 fix mypi.ini error v2
+* d023609 fix mypi.ini error
+* 7528998 update pipfile
+* afb931b Revert "update pipfile"
+* 98a2788 update pipfile
+* 09041b4 update detect_license()
+* 6d9e0de fix pre-commit
+* f021d99 added logger
+* 4612d37 added license-solver
+
 ## Release 1.12.0 (2022-03-21T07:44:52)
 * :arrow_up: Automatic update of dependencies by Kebechet for the solver-rhel-8-py38 environment
 * :arrow_up: Automatic update of dependencies by Kebechet for the solver-rhel-8-py36 environment
