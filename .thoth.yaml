@@ -10,7 +10,7 @@ runtime_environments:
       version: "34"
     python_version: "3.9"
     recommendation_type: latest
-    base_image: quay.io/thoth-station/s2i-thoth-f34-py39:v0.29.0
+    base_image: quay.io/thoth-station/s2i-thoth-f34-py39:v0.35.0
 
   - name: solver-fedora-35-py310
     operating_system:
@@ -18,7 +18,7 @@ runtime_environments:
       version: "35"
     python_version: "3.10"
     recommendation_type: latest
-    base_image: quay.io/thoth-station/s2i-thoth-f35-py310:v0.32.3
+    base_image: quay.io/thoth-station/s2i-thoth-f35-py310:v0.35.0
 
   - name: solver-rhel-8-py36
     operating_system:
@@ -26,7 +26,7 @@ runtime_environments:
       version: "8"
     python_version: "3.6"
     recommendation_type: latest
-    base_image: quay.io/thoth-station/s2i-thoth-ubi8-py36:v0.24.2
+    base_image: quay.io/thoth-station/s2i-thoth-ubi8-py36:v0.35.0
 
   - name: solver-rhel-8-py38
     operating_system:
@@ -34,7 +34,15 @@ runtime_environments:
       version: "8"
     python_version: "3.8"
     recommendation_type: latest
-    base_image: quay.io/thoth-station/s2i-thoth-ubi8-py38:v0.24.2
+    base_image: quay.io/thoth-station/s2i-thoth-ubi8-py38:v0.35.0
+
+  - name: solver-rhel-9-py39
+    operating_system:
+      name: "rhel"
+      version: "9"
+    python_version: "3.9"
+    recommendation_type: latest
+    base_image: quay.io/thoth-station/s2i-thoth-ubi9-py39:v0.35.0
 
 managers:
   - name: pipfile-requirements
@@ -44,10 +52,6 @@ managers:
   - name: info
   - name: version
     configuration:
-      maintainers:
-        - goern
-        - fridex
-        - harshad16
       assignees:
         - sesheta
       labels: [bot]

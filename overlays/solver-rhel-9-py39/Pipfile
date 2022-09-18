@@ -13,9 +13,9 @@ pipdeptree = "*"
 requests = "*"
 thoth-analyzer = "*"
 thoth-common = "*"
+thoth-license-solver = "*"
 thoth-python = "*"
 virtualenv = "*"
-thoth-license-solver = "*"
 
 [dev-packages]
 pytest = "*"
@@ -24,8 +24,6 @@ pytest-cov = "*"
 pytest-venv = "*"
 mypy = "*"
 pytest-mypy = "*"
-types-setuptools = "*"
-pipdeptree = "*"
 
 [requires]
-python_version = "3.8"
+python_version = "3.9"

@@ -2,9 +2,24 @@ check:
   - overlays-build
 overlays_dir: overlays
 overlays:
+  - name: solver-rhel-9-py39
+    build:
+      base-image: quay.io/thoth-station/s2i-thoth-ubi9-py39:v0.35.0
+      build-stratergy: 'Source'
+      custom-tag: 'latest'
+      registry: quay.io
+      registry-org: thoth-station
+      registry-project: 'solver-rhel-9-py39'
+      registry-secret: thoth-station-thoth-pusher-secret
+    deploy:
+      image-name: 'solver-rhel-9-py39'
+      overlay-contextpath: 'solver/overlays/test/imagestreamtag.yaml'
+      project-name: thoth-application
+      project-org: thoth-station
+
   - name: solver-rhel-8-py38
     build:
-      base-image: quay.io/thoth-station/s2i-thoth-ubi8-py38:v0.24.2
+      base-image: quay.io/thoth-station/s2i-thoth-ubi8-py38:v0.35.0
       build-stratergy: 'Source'
       custom-tag: 'latest'
       registry: quay.io
@@ -19,7 +34,7 @@ overlays:
 
   - name: solver-rhel-8-py36
     build:
-      base-image: quay.io/thoth-station/s2i-thoth-ubi8-py36:v0.24.2
+      base-image: quay.io/thoth-station/s2i-thoth-ubi8-py36:v0.35.0
       build-stratergy: 'Source'
       custom-tag: 'latest'
       registry: quay.io
@@ -34,7 +49,7 @@ overlays:
 
   - name: solver-fedora-34-py39
     build:
-      base-image: quay.io/thoth-station/s2i-thoth-f34-py39:v0.29.0
+      base-image: quay.io/thoth-station/s2i-thoth-f34-py39:v0.35.0
       build-stratergy: 'Source'
       custom-tag: 'latest'
       registry: quay.io
@@ -49,7 +64,7 @@ overlays:
 
   - name: solver-fedora-35-py310
     build:
-      base-image: quay.io/thoth-station/s2i-thoth-f35-py310:v0.32.3
+      base-image: quay.io/thoth-station/s2i-thoth-f35-py310:v0.35.0
       build-stratergy: 'Source'
       custom-tag: 'latest'
       registry: quay.io
