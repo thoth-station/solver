@@ -1,4 +1,17 @@
 
+## Release 1.14.1 (2022-10-20T18:50:07)
+* b5cef28 Update the dependency for pytest fix
+* 67acc0e Catch the 403 from the index which are forbidden
+* 9fb4882 :arrow_up: Automatic update of dependencies by Kebechet for the solver-fedora-34-py39 environment
+* 02071c7 :arrow_up: Automatic update of dependencies by Kebechet for the solver-rhel-9-py39 environment
+* bf04f26 :arrow_up: Automatic update of dependencies by Kebechet for the solver-rhel-8-py38 environment
+* fff607b :arrow_up: Automatic update of dependencies by Kebechet for the solver-rhel-8-py36 environment
+* 2d7db42 :arrow_up: Automatic update of dependencies by Kebechet for the solver-fedora-34-py39 environment
+* d9b7456 :arrow_up: Automatic update of dependencies by Kebechet for the solver-rhel-9-py39 environment
+* 6eb5ff4 :arrow_up: Automatic update of dependencies by Kebechet for the solver-rhel-8-py38 environment
+* 13aaa9f :arrow_up: Automatic update of dependencies by Kebechet for the solver-rhel-8-py36 environment
+* d605b69 :arrow_up: Automatic update of dependencies by Kebechet for the solver-fedora-34-py39 environment
+
 ## Release 1.14.0 (2022-09-19T19:30:37)
 * 0d8f0b0 Upgrade the dependencies for the solver overlays (#5218)
 * 40c7515 Introduce new solver for ubi9 python 39 stack
