@@ -32,6 +32,7 @@ from thoth.analyzer import CommandError
 from thoth.analyzer import run_command
 from thoth.python import Source
 from thoth.python.exceptions import NotFoundError
+from thoth.python.exceptions import HTTPError
 from thoth.python.helpers import parse_requirement_str
 from thoth.license_solver import detect_license
 from .python_solver import PythonReleasesFetcher
@@ -199,6 +200,14 @@ def _resolve_versions(solver, package_name, version_spec):
             package_name,
             version_spec,
             solver.releases_fetcher.source.url,
+        )
+        return []
+    except HTTPError:
+        _LOGGER.info(
+            "Forbidden index %r for package %r with version specification %r",
+            solver.releases_fetcher.source.url,
+            package_name,
+            version_spec,
         )
         return []
     except Exception:  # pylint: disable=broad-except
