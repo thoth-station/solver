@@ -1,4 +1,15 @@
 
+## Release 2.0.0 (2023-01-16T15:38:24)
+* 3825f0f :pushpin: Update overlay fedora-34-py3.9 dependencies
+* e878d42 :pushpin: Update overlay fedora-35-py3.10 dependencies
+* 1ebee15 ':arrow_up: Automatic update of dependencies by Kebechet for the solver-fedora-34-py39 environment'
+* 8d78ff6 ':arrow_up: Automatic update of dependencies by Kebechet for the solver-rhel-9-py39 environment'
+* 94ca99e ':arrow_up: Automatic update of dependencies by Kebechet for the solver-rhel-8-py38 environment'
+* 5d8136a ':arrow_up: Automatic update of dependencies by Kebechet for the solver-rhel-8-py36 environment'
+* 0207c59 Limit memory usage based on cgroup info
+* 13affc5 :arrow_up: Automatic update of dependencies by Kebechet for the solver-fedora-34-py39 environment
+* 933d0bf :arrow_up: Automatic update of dependencies by Kebechet for the solver-fedora-34-py39 environment
+
 ## Release 1.14.1 (2022-10-20T18:50:07)
 * b5cef28 Update the dependency for pytest fix
 * 67acc0e Catch the 403 from the index which are forbidden
