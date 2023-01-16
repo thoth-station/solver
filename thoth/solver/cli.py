@@ -22,6 +22,8 @@ import sys
 
 import click
 import logging
+import os
+import resource
 import time
 
 from thoth.analyzer import print_command_result
@@ -65,6 +67,30 @@ def cli(ctx=None, verbose=0):
 
     _LOG.info("Thoth Dependency Solver v%s", analyzer_version)
     _LOG.debug("Debug mode is on")
+
+
+def _limit_memory() -> None:
+    """Limit memory to cgroup limit if we're inside a container.
+
+    This turn OOM killer errors into python MemoryError exceptions.
+    """
+    for file in [
+        '/sys/fs/cgroup/memory/memory.soft_limit_in_bytes', #  cgroups v1
+        '/sys/fs/cgroup/memory/memory.limit_in_bytes',
+        '/sys/fs/cgroup/memory.high', #  cgroups v2
+        '/sys/fs/cgroup/memory.max',
+    ]:
+        try:
+            with open(file) as limit:
+                memory = limit.read()
+                if memory == "max": # memory.high might contain "max" -> indicates to use the memory.max value
+                    continue
+                value = int(memory)
+                resource.setrlimit(resource.RLIMIT_AS, (value, value))
+                _LOG.info("Limiting memory to %i bytes based on cgroup limit", value)
+                break
+        except FileNotFoundError:
+            pass
 
 
 @cli.command()
@@ -154,6 +180,8 @@ def python(
     if not requirements:
         _LOG.error("No requirements specified, exiting")
         sys.exit(1)
+
+    _limit_memory()
 
     index_urls = index.split(",") if index else ("https://pypi.org/simple",)
     dependency_index_urls = dependency_index.split(",") if dependency_index else index_urls
