@@ -36,7 +36,9 @@ from thoth.analyzer import CommandError
 from thoth.analyzer import run_command
 from thoth.python import Source
 from thoth.python.exceptions import NotFoundError
+from thoth.python.exceptions import HTTPError
 from thoth.python.helpers import parse_requirement_str
+from thoth.license_solver import detect_license
 from .python_solver import PythonReleasesFetcher
 
 from .python_solver import PythonDependencyParser
@@ -48,7 +50,6 @@ from .._typing import MYPY_CHECK_RUNNING
 
 if MYPY_CHECK_RUNNING:  # pragma: no cover
     from typing import List, Tuple, Dict, Generator, Optional, Any, Set, Deque
-
 
 _LOGGER = logging.getLogger(__name__)
 _RAISE_ON_SYSTEM_EXIT_CODE = bool(int(os.getenv("THOTH_SOLVER_RAISE_ON_SYSTEM_EXIT_CODES", 0)))
@@ -232,6 +233,14 @@ def _resolve_versions(solver, package_name, version_spec):
             solver.releases_fetcher.source.url,
         )
         return []
+    except HTTPError:
+        _LOGGER.info(
+            "Forbidden index %r for package %r with version specification %r",
+            solver.releases_fetcher.source.url,
+            package_name,
+            version_spec,
+        )
+        return []
     except Exception:  # pylint: disable=broad-except
         _LOGGER.exception("Failed to resolve versions for %r with version spec %r", package_name, version_spec)
         return []
@@ -364,6 +373,21 @@ def _do_resolve_index(python_bin, python_version_major_minor, os_platform, solve
                 },
             )
             continue
+
+        # license solver
+        extracted_metadata["package_license"] = detect_license(
+            extracted_metadata["importlib_metadata"]["metadata"],
+            package_name=package_name,
+            package_version=package_version,
+            raise_on_error=False,
+        )
+
+        _LOGGER.debug(
+            "Resolved license for package %r in version %r is %r",
+            package_name,
+            package_version,
+            extracted_metadata["package_license"],
+        )
 
         packages.append(extracted_metadata)
         if package_version != extracted_metadata["package_version"]:

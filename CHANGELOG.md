@@ -1,4 +1,79 @@
 
+## Release 1.15.0 (2023-01-16T16:04:52)
+* 3825f0f :pushpin: Update overlay fedora-34-py3.9 dependencies
+* e878d42 :pushpin: Update overlay fedora-35-py3.10 dependencies
+* 1ebee15 ':arrow_up: Automatic update of dependencies by Kebechet for the solver-fedora-34-py39 environment'
+* 8d78ff6 ':arrow_up: Automatic update of dependencies by Kebechet for the solver-rhel-9-py39 environment'
+* 94ca99e ':arrow_up: Automatic update of dependencies by Kebechet for the solver-rhel-8-py38 environment'
+* 5d8136a ':arrow_up: Automatic update of dependencies by Kebechet for the solver-rhel-8-py36 environment'
+* 0207c59 Limit memory usage based on cgroup info
+* 13affc5 :arrow_up: Automatic update of dependencies by Kebechet for the solver-fedora-34-py39 environment
+* 933d0bf :arrow_up: Automatic update of dependencies by Kebechet for the solver-fedora-34-py39 environment
+
+## Release 1.14.1 (2022-10-20T18:50:07)
+* b5cef28 Update the dependency for pytest fix
+* 67acc0e Catch the 403 from the index which are forbidden
+* 9fb4882 :arrow_up: Automatic update of dependencies by Kebechet for the solver-fedora-34-py39 environment
+* 02071c7 :arrow_up: Automatic update of dependencies by Kebechet for the solver-rhel-9-py39 environment
+* bf04f26 :arrow_up: Automatic update of dependencies by Kebechet for the solver-rhel-8-py38 environment
+* fff607b :arrow_up: Automatic update of dependencies by Kebechet for the solver-rhel-8-py36 environment
+* 2d7db42 :arrow_up: Automatic update of dependencies by Kebechet for the solver-fedora-34-py39 environment
+* d9b7456 :arrow_up: Automatic update of dependencies by Kebechet for the solver-rhel-9-py39 environment
+* 6eb5ff4 :arrow_up: Automatic update of dependencies by Kebechet for the solver-rhel-8-py38 environment
+* 13aaa9f :arrow_up: Automatic update of dependencies by Kebechet for the solver-rhel-8-py36 environment
+* d605b69 :arrow_up: Automatic update of dependencies by Kebechet for the solver-fedora-34-py39 environment
+
+## Release 1.14.0 (2022-09-19T19:30:37)
+* 0d8f0b0 Upgrade the dependencies for the solver overlays (#5218)
+* 40c7515 Introduce new solver for ubi9 python 39 stack
+* ea67b8c Update the pre-commit ci check
+* d3fa64b :arrow_up: Automatic update of dependencies by Kebechet for the solver-rhel-8-py38 environment (#5212)
+* d77165c Automatic update of dependencies by Kebechet for the solver-rhel-8-py38 environment (#5211)
+* 1623603 Automatic update of dependencies by Kebechet for the solver-rhel-8-py36 environment (#5210)
+* 312898c :arrow_up: Automatic update of dependencies by Kebechet for the solver-fedora-34-py39 environment (#5209)
+* 5d6dfe8 :arrow_up: Automatic update of dependencies by Kebechet for the solver-rhel-8-py38 environment
+* 5629217 :arrow_up: Automatic update of dependencies by Kebechet for the solver-rhel-8-py36 environment
+* a7124b9 :arrow_up: Automatic update of dependencies by Kebechet for the solver-fedora-34-py39 environment
+* d270cb3 :arrow_up: Automatic update of dependencies by Kebechet for the solver-rhel-8-py36 environment (#5203)
+* 6077abc Automatic update of dependencies by Kebechet for the solver-rhel-8-py38 environment (#5204)
+* c3d2bfc :arrow_up: Automatic update of dependencies by Kebechet for the solver-fedora-34-py39 environment (#5201)
+* 8ac0b00 :arrow_up: Automatic update of dependencies by Kebechet for the solver-rhel-8-py38 environment
+* fdfae3f :arrow_up: Automatic update of dependencies by Kebechet for the solver-rhel-8-py36 environment
+* 892e53a :arrow_up: Automatic update of dependencies by Kebechet for the solver-rhel-8-py36 environment
+* 28baa1e :arrow_up: Automatic update of dependencies by Kebechet for the solver-fedora-34-py39 environment
+* c3df987 :arrow_up: Automatic update of dependencies by Kebechet for the solver-rhel-8-py38 environment
+* 601565e :arrow_up: Automatic update of dependencies by Kebechet for the solver-rhel-8-py36 environment
+* 2533fd5 :arrow_up: Automatic update of dependencies by Kebechet for the solver-fedora-34-py39 environment
+* fb03927 :arrow_up: Automatic update of dependencies by Kebechet for the solver-rhel-8-py38 environment
+* 6b9e9e9 :arrow_up: Automatic update of dependencies by Kebechet for the solver-rhel-8-py36 environment
+* a32970d :arrow_up: Automatic update of dependencies by Kebechet for the solver-fedora-34-py39 environment
+* 43cbf10 :arrow_up: Automatic update of dependencies by Kebechet for the solver-rhel-8-py38 environment
+* 6d2f64e :arrow_up: Automatic update of dependencies by Kebechet for the solver-rhel-8-py36 environment
+* 039ec21 :arrow_up: Automatic update of dependencies by Kebechet for the solver-fedora-34-py39 environment
+* 8836dae adding documentation on creating new solver overlays (#5177)
+* 83a4dc1 :arrow_up: Automatic update of dependencies by Kebechet for the solver-rhel-8-py38 environment
+* 8f55b7e :arrow_up: Automatic update of dependencies by Kebechet for the solver-rhel-8-py36 environment
+
+## Release 1.13.0 (2022-05-02T11:11:54)
+* 9d86076 :arrow_up: Automatic update of dependencies by Kebechet for the solver-fedora-34-py39 environment
+* 33492bc :arrow_up: Automatic update of dependencies by Kebechet for the solver-rhel-8-py38 environment
+* c1c6433 :arrow_up: Automatic update of dependencies by Kebechet for the solver-rhel-8-py38 environment
+* 8fc186d :arrow_up: Automatic update of dependencies by Kebechet for the solver-rhel-8-py36 environment
+* 2734d51 :arrow_up: Automatic update of dependencies by Kebechet for the solver-rhel-8-py36 environment
+* 271f511 :arrow_up: Automatic update of dependencies by Kebechet for the solver-fedora-34-py39 environment
+* a3e65c3 Adjust doc to current CLI implementation
+* f01e5b7 :arrow_up: Automatic update of dependencies by Kebechet for the solver-rhel-8-py36 environment
+* 47ce3b6 :arrow_up: Automatic update of dependencies by Kebechet for the solver-rhel-8-py38 environment
+* 46567d0 fix mypi.ini error v2
+* d023609 fix mypi.ini error
+* 7528998 update pipfile
+* afb931b Revert "update pipfile"
+* 98a2788 update pipfile
+* 09041b4 update detect_license()
+* 6d9e0de fix pre-commit
+* f021d99 added logger
+* 4612d37 added license-solver
+
 ## Release 1.12.0 (2022-03-21T07:44:52)
 * :arrow_up: Automatic update of dependencies by Kebechet for the solver-rhel-8-py38 environment
 * :arrow_up: Automatic update of dependencies by Kebechet for the solver-rhel-8-py36 environment

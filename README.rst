@@ -46,7 +46,6 @@ Imagine you have an application that has one dependency:
 
 .. code-block:: console
 
-  $ cat requirements.txt
   tensorflow
 
 Tool provided by this project will tell you what dependencies will be
@@ -54,7 +53,7 @@ considered during resolution (the whole dependency graph):
 
 .. code-block:: console
 
-  thoth-solver -vvv pypi -r requirements.txt
+  thoth-solver --verbose python -r tensorflow
 
 The output of this solver is a dependency analysis for the given software stack
 - in the example above, package ``tensorflow`` in any release with analysis of
