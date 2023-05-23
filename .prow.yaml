@@ -3,7 +3,7 @@ presubmits:
     decorate: true
     skip_report: false
     always_run: true
-    context: aicoe-ci/prow/pre-commit
+    context: op1st/prow/pre-commit
     spec:
       containers:
         - image: quay.io/thoth-station/thoth-precommit-py38:v0.15.0
@@ -16,7 +16,7 @@ presubmits:
     decorate: true
     skip_report: false
     always_run: true
-    context: aicoe-ci/prow/pytest
+    context: op1st/prow/pytest
     spec:
       containers:
         - image: quay.io/thoth-station/thoth-pytest-py38:v0.15.0
